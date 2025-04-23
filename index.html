@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Caverna BJJ</title>
+  <link rel="manifest" href="manifest.json" />
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      margin: 0;
+      padding: 20px;
+      color: #222;
+    }
+    h1 {
+      text-align: center;
+      color: #002b5c;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      max-width: 500px;
+      margin: 20px auto;
+    }
+    select, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      background: #004085;
+      color: white;
+      font-weight: bold;
+      border: none;
+    }
+    button:hover {
+      background: #002b5c;
+    }
+    .treino {
+      margin-top: 20px;
+    }
+    .treino ul {
+      padding-left: 20px;
+    }
+    .checklist input {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Caverna BJJ</h1>
+  <div class="card">
+    <label for="tempo">Quanto tempo você tem hoje?</label>
+    <select id="tempo">
+      <option value="15">15 minutos</option>
+      <option value="30">30 minutos</option>
+      <option value="45">45 minutos</option>
+    </select>
+
+    <label for="intensidade">Qual intensidade você quer?</label>
+    <select id="intensidade">
+      <option value="leve">Leve</option>
+      <option value="media">Média</option>
+      <option value="intensa">Intensa</option>
+    </select>
+
+    <button onclick="gerarTreino()">Gerar Treino do Dia</button>
+    <button onclick="exportarTreino()">Exportar Histórico</button>
+
+    <div class="treino" id="treino"></div>
+  </div>
+
+  <script>
+    const treinos = {
+      ombro: ["Rotação com elástico", "Wall Angels", "Shrug com halteres", "Elevação lateral com tornozeleira"],
+      core: ["Prancha frontal", "Abdominal inclinado", "Canivete", "Prancha com toque no ombro"],
+      pernas: ["Agachamento com halteres", "Passada com tornozeleira", "Stiff com kettlebell", "Adutor com elástico"],
+      fullbody: ["Burpee + socos no saco", "Jumping Jack + corda", "Agachamento + prancha", "Treino livre no quintal"]
+    };
+
+    function grupoMaisDescansado() {
+      const ordem = ["ombro", "core", "pernas", "fullbody"];
+      return ordem[Math.floor(Math.random() * ordem.length)];
+    }
+
+    function gerarTreino() {
+      const tempo = parseInt(document.getElementById("tempo").value);
+      const intensidade = document.getElementById("intensidade").value;
+      const grupo = grupoMaisDescansado();
+      const base = treinos[grupo];
+      const dia = new Date().toISOString().slice(0, 10);
+
+      let qtd = tempo <= 15 ? 2 : tempo <= 30 ? 3 : 4;
+      if (intensidade === "intensa") qtd += 1;
+
+      const selecionados = base.slice(0, qtd);
+      localStorage.setItem("treino_" + dia, JSON.stringify({tempo, intensidade, grupo, feitos: [], lista: selecionados}));
+
+      mostrarTreino(dia);
+    }
+
+    function mostrarTreino(dia) {
+      const treino = JSON.parse(localStorage.getItem("treino_" + dia));
+      if (!treino) return;
+
+      const lista = treino.lista.map((ex, i) => {
+        const checked = treino.feitos.includes(i) ? "checked" : "";
+        return `<li><label><input type="checkbox" onchange="checkItem(${i})" ${checked}/> ${ex}</label></li>`;
+      }).join("");
+
+      document.getElementById("treino").innerHTML = `
+        <h3>${dia} - Foco: ${treino.grupo.toUpperCase()}</h3>
+        <p>Tempo: ${treino.tempo}min | Intensidade: ${treino.intensidade}</p>
+        <ul class="checklist">${lista}</ul>
+      `;
+    }
+
+    function checkItem(idx) {
+      const dia = new Date().toISOString().slice(0, 10);
+      const treino = JSON.parse(localStorage.getItem("treino_" + dia));
+      if (!treino.feitos.includes(idx)) treino.feitos.push(idx);
+      else treino.feitos = treino.feitos.filter(i => i !== idx);
+      localStorage.setItem("treino_" + dia, JSON.stringify(treino));
+      mostrarTreino(dia);
+    }
+
+    function exportarTreino() {
+      let txt = "";
+      Object.keys(localStorage).filter(k => k.startsWith("treino_")).sort().forEach(key => {
+        const dia = key.replace("treino_", "");
+        const t = JSON.parse(localStorage.getItem(key));
+        txt += `=== ${dia} ===\nGrupo: ${t.grupo}\nTempo: ${t.tempo}min | Intensidade: ${t.intensidade}\n`;
+        t.lista.forEach((ex, i) => {
+          const mark = t.feitos.includes(i) ? "✓" : "☐";
+          txt += `${mark} ${ex}\n`;
+        });
+        txt += `\n`;
+      });
+
+      const blob = new Blob([txt], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "historico_caverna_bjj.txt";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    window.onload = () => {
+      const hoje = new Date().toISOString().slice(0, 10);
+      if (localStorage.getItem("treino_" + hoje)) {
+        mostrarTreino(hoje);
+      }
+    }
+  </script>
+</body>
+</html>
