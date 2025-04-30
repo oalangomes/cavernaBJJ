@@ -66,6 +66,7 @@
       <option value="15">15 minutos</option>
       <option value="30">30 minutos</option>
       <option value="45">45 minutos</option>
+      <option value="60">60 minutos</option>
     </select>
 
     <label for="intensidade">Qual intensidade você quer?</label>
@@ -95,8 +96,22 @@
 
 
     function grupoMaisDescansado() {
-      const ordem = ["ombro", "core", "pernas", "fullbody"];
-      return ordem[Math.floor(Math.random() * ordem.length)];
+      const ordem = ["ombro", "core", "pernas", "fullbody", "joelho", "dedos", "cardio"];
+      const hoje = new Date().toISOString().slice(0, 10);
+      const treinosFeitos = Object.keys(localStorage).filter(k => k.startsWith("treino_") && k !== "treino_" + hoje);
+      const gruposFeitos = treinosFeitos.map(k => JSON.parse(localStorage.getItem(k)).grupo);
+      const gruposRestantes = ordem.filter(g => !gruposFeitos.includes(g));
+      if (gruposRestantes.length === 0) {
+        alert("Você treinou todos os grupos. Bora Reiniciar o Ciclo!");
+        return ordem[Math.floor(Math.random() * ordem.length)];
+      }
+      const gruposContados = gruposRestantes.reduce((acc, g) => {
+        acc[g] = (acc[g] || 0) + 1;
+        return acc;
+      }, {});
+      const gruposOrdenados = Object.entries(gruposContados).sort((a, b) => a[1] - b[1]);
+      const menosFeito = gruposOrdenados[0][0];
+      return menosFeito;
     }
 
     function gerarTreino() {
@@ -106,8 +121,23 @@
       const base = treinos[grupo];
       const dia = new Date().toISOString().slice(0, 10);
 
-      let qtd = tempo <= 15 ? 2 : tempo <= 30 ? 3 : 4;
-      if (intensidade === "intensa") qtd += 1;
+      let qtd;
+      if (tempo <= 15) {
+        qtd = 2;
+      } else if (tempo <= 30) {
+        qtd = 3;
+      } else if (tempo <= 45){
+        qtd = 4;
+      } else {
+        qtd = 5; // Add this line to handle cases above 45 minutes
+      }
+      if (intensidade === "leve") qtd -= 1;
+      else if (intensidade === "media") qtd += 0;
+      else
+        qtd += 1; // For "intensa"
+      if (tempo > 30) qtd += 1;
+      if (tempo > 45) qtd += 1;
+      if (tempo > 60) qtd += 1; // Adjusting for times above 60 minutes
 
       const selecionados = base.slice(0, qtd);
       localStorage.setItem("treino_" + dia, JSON.stringify({tempo, intensidade, grupo, feitos: [], lista: selecionados}));
