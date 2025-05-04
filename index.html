@@ -303,7 +303,300 @@ input[type="text"] {
 </div>
   
   <script>
-    let dadosTreinos = {
+    let dadosTreinos = await getdados();
+
+    async function carregarDados() {
+    return dadosTreinos
+    }
+
+    function getPerfil() {
+      return JSON.parse(localStorage.getItem("perfil_usuario") || "{}");
+    }
+
+    function getUltimosTreinos() {
+      const dias = Object.keys(localStorage)
+        .filter(k => k.startsWith("treino_"))
+        .map(k => ({ data: k.replace("treino_", ""), grupo: JSON.parse(localStorage[k]).grupo }))
+        .sort((a,b)=> b.data.localeCompare(a.data));
+      return dias.slice(0, 2).map(t => t.grupo);
+    }
+
+    async function sugerirGrupo() {
+      const tempo = parseInt(document.getElementById("tempo").value);
+      const intensidade = document.getElementById("intensidade").value;
+      const fatorI = { leve: 1, media: 2, intensa: 3 }[intensidade];
+      const fatorT = tempo / 15;
+      const perfil = getPerfil();
+      const cooldown = getUltimosTreinos();
+
+      const score = {};
+      for (const grupo in dadosTreinos) {
+        score[grupo] = 0;
+      }
+
+      Object.keys(localStorage).filter(k => k.startsWith("treino_")).forEach(k => {
+        const t = JSON.parse(localStorage.getItem(k));
+        if (t?.grupo && t?.lista?.length) {
+          const fi = { leve: 1, media: 2, intensa: 3 }[t.intensidade] || 1;
+          const ft = t.tempo / 15 || 1;
+          score[t.grupo] += t.lista.reduce((sum, ex) => sum + (ex.peso || 2), 0) * fi * ft;
+        }
+      });
+
+      const gruposValidos = Object.keys(dadosTreinos).filter(grupo => !cooldown.includes(grupo));
+      const candidatos = gruposValidos.map(g => ({ grupo: g, score: score[g] }));
+      candidatos.sort((a,b)=> a.score - b.score);
+      const escolhido = candidatos[0]?.grupo || "core";
+
+      window.grupoSugerido = escolhido;
+
+      let saida = `<h3>📌 Grupo Sugerido: ${escolhido.toUpperCase()}</h3>`;
+      saida += `<p>Cooldown ativo: ${cooldown.join(", ") || "nenhum"}</p>`;
+      saida += "<ul>";
+      candidatos.forEach(c => saida += `<li>${c.grupo.toUpperCase()}: ${c.score.toFixed(1)}</li>`);
+      saida += "</ul>";
+      document.getElementById("sugestao").innerHTML = saida;
+    }
+
+    function gerarTreino() {
+      const tempo = parseInt(document.getElementById("tempo").value);
+      const intensidade = document.getElementById("intensidade").value;
+      const grupo = window.grupoSugerido || "core";
+      const dia = new Date().toISOString().slice(0,10);
+      const perfil = getPerfil();
+      const fatorI = { leve: 1, media: 2, intensa: 3 }[intensidade];
+
+      const base = dadosTreinos[grupo].filter(ex => {
+        if (perfil.equipamento?.length) {
+          return ex.equipamentos.every(eq => perfil.equipamento.includes(eq));
+        }
+        return true;
+      });
+
+      const qtd = Math.min(Math.ceil((tempo / 15) + fatorI), base.length);
+      const lista = base.slice(0, qtd);
+      localStorage.setItem("treino_" + dia, JSON.stringify({tempo, intensidade, grupo, feitos: [], lista}));
+      mostrarTreino(dia);
+    }
+
+    function mostrarTreino(dia) {
+      const t = JSON.parse(localStorage.getItem("treino_" + dia));
+      const lista = t.lista.map((ex, i) => {
+        const c = t.feitos.includes(i) ? "checked" : "";
+        return `<li><label><input type="checkbox" onchange="check(${i})" ${c}/> ${ex.nome}</label></li>`;
+      }).join("");
+      document.getElementById("treino").innerHTML = `<h3>${dia} - ${t.grupo.toUpperCase()}</h3><p>${t.tempo}min | ${t.intensidade}</p><ul class="checklist">${lista}</ul>`;
+    }
+
+    function check(i) {
+      const dia = new Date().toISOString().slice(0, 10);
+      const t = JSON.parse(localStorage.getItem("treino_" + dia));
+      if (t.feitos.includes(i)) t.feitos = t.feitos.filter(x => x !== i);
+      else t.feitos.push(i);
+      localStorage.setItem("treino_" + dia, JSON.stringify(t));
+      mostrarTreino(dia);
+    }
+
+    function exportarTreino() {
+      let txt = "";
+      Object.keys(localStorage).filter(k => k.startsWith("treino_")).sort().forEach(k => {
+        const dia = k.replace("treino_", "");
+        const t = JSON.parse(localStorage.getItem(k));
+        txt += `=== ${dia} ===\\nGrupo: ${t.grupo}\\nTempo: ${t.tempo}min | Intensidade: ${t.intensidade}\\n`;
+        t.lista.forEach((ex, i) => {
+          const mark = t.feitos.includes(i) ? "✓" : "☐";
+          txt += `${mark} ${ex.nome}\\n`;
+        });
+        txt += `\\n`;
+      });
+      const blob = new Blob([txt], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "historico_caverna_bjj.txt";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    carregarDados().then(() => {
+      const hoje = new Date().toISOString().slice(0, 10);
+      if (localStorage.getItem("treino_" + hoje)) mostrarTreino(hoje);
+    });
+
+    function salvarPerfil() {
+  function getMarcados(id) {
+    return Array.from(document.querySelectorAll(`#${id} input:checked`)).map(el => el.value);
+  }
+
+  const nome = document.getElementById("nomePerfil").value.trim();
+  if (!nome) {
+    alert("Por favor, preencha o campo de nome.");
+    return;
+  }
+
+  const locaisMarcados = getMarcados("locais");
+  if (locaisMarcados.length === 0) {
+    alert("Por favor, selecione pelo menos um local.");
+    return;
+  }
+
+  const equipamentosMarcados = getMarcados("equipamentos");
+  if (equipamentosMarcados.length === 0) {
+    alert("Por favor, selecione pelo menos um equipamento.");
+    return;
+  }
+
+  const objetivosMarcados = getMarcados("objetivos");
+  if (objetivosMarcados.length === 0) {
+    alert("Por favor, selecione pelo menos um objetivo.");
+    return;
+  }
+
+  const perfil = {
+    nome: nome,
+    locais: locaisMarcados,
+    equipamento: equipamentosMarcados,
+    objetivos: objetivosMarcados,
+  };
+
+  localStorage.setItem("perfil_usuario", JSON.stringify(perfil));
+  alert("Perfil salvo com sucesso!");
+  document.getElementById("perfilCard").style.display = "none";
+  document.getElementById("mainCard").style.display = "block";
+}
+
+  function editarPerfil() {
+      const perfil = JSON.parse(localStorage.getItem("perfil_usuario") || "{}");
+      document.getElementById("nomePerfil").value = perfil.nome || "";
+
+      const checkboxes = {
+        locais: perfil.locais || [],
+        equipamentos: perfil.equipamento || [],
+        objetivos: perfil.objetivos || []
+      };
+
+      for (const grupo in checkboxes) {
+        const inputs = document.querySelectorAll(`#${grupo} input[type=checkbox]`);
+        inputs.forEach(input => {
+          input.checked = checkboxes[grupo].includes(input.value);
+        });
+      }
+
+      document.getElementById("perfilCard").style.display = "block";
+      document.getElementById("mainCard").style.display = "none";
+    }
+
+  window.onload = () => {
+    const perfil = JSON.parse(localStorage.getItem("perfil_usuario") || "{}");
+
+    console.log("perfil", !perfil.nome);
+
+    if (!perfil.nome) {
+      console.log("Perfil não encontrado. Exibindo tela de configuração.");
+      document.getElementById("perfilCard").style.display = "block";
+      document.getElementById("mainCard").style.display = "none";
+    } else {
+      document.getElementById("nomePerfil").value = perfil.nome;
+      document.getElementById("perfilCard").style.display = "none";
+      document.getElementById("mainCard").style.display = "block";
+    }
+  };
+
+function carregarHistorico() {
+  const filtroData = document.getElementById("filtroData").value;
+  const filtroMembro = document.getElementById("filtroMembro").value;
+  const filtroObjetivo = document.getElementById("filtroObjetivo").value;
+
+  const historico = Object.keys(localStorage)
+    .filter(k => k.startsWith("treino_"))
+    .map(k => {
+      const data = k.replace("treino_", "");
+      const treino = JSON.parse(localStorage.getItem(k));
+      return { data, ...treino };
+    })
+    .filter(t => {
+      if (filtroData && t.data !== filtroData) return false;
+      if (filtroMembro && t.grupo !== filtroMembro) return false;
+      if (filtroObjetivo && !t.lista.some(e => e.objetivo.includes(filtroObjetivo))) return false;
+      return true;
+    });
+
+  const tabela = document.getElementById("tabelaHistorico");
+  tabela.innerHTML = historico.length
+    ? historico.map(t => `
+      <tr>
+        <td>${t.data}</td>
+        <td>${t.grupo.toUpperCase()}</td>
+        <td>${t.lista.map(e => e.objetivo.join(", ")).join("; ")}</td>
+        <td>${t.tempo} min</td>
+        <td>${t.intensidade}</td>
+      </tr>
+    `).join("")
+    : "<tr><td colspan='5'>Nenhum treino encontrado</td></tr>";
+
+  avaliarHistorico(historico);
+}
+
+function avaliarHistorico(historico) {
+  const totalTempo = historico.reduce((sum, t) => sum + t.tempo, 0);
+  const diasTreinados = new Set(historico.map(t => t.data)).size;
+  const sequenciaDias = calcularSequenciaDias(historico.map(t => t.data));
+
+  const avaliacao = `
+    <strong>Tempo Total:</strong> ${totalTempo} minutos<br>
+    <strong>Dias Treinados:</strong> ${diasTreinados} dias<br>
+    <strong>Maior Sequência:</strong> ${sequenciaDias} dias consecutivos
+  `;
+
+  document.getElementById("avaliacaoResumo").innerHTML = avaliacao;
+}
+
+function calcularSequenciaDias(datas) {
+  const ordenadas = [...new Set(datas)].sort();
+  let maiorSequencia = 0, atual = 1;
+
+  for (let i = 1; i < ordenadas.length; i++) {
+    const diff = new Date(ordenadas[i]) - new Date(ordenadas[i - 1]);
+    if (diff === 86400000) {
+      atual++;
+    } else {
+      maiorSequencia = Math.max(maiorSequencia, atual);
+      atual = 1;
+    }
+  }
+
+  return Math.max(maiorSequencia, atual);
+}
+
+function exportarHistorico() {
+  let txt = "Data,Membro,Objetivo,Tempo,Intensidade\n";
+
+  Object.keys(localStorage)
+    .filter(k => k.startsWith("treino_"))
+    .forEach(k => {
+      const treino = JSON.parse(localStorage.getItem(k));
+      const data = k.replace("treino_", "");
+      const objetivo = treino.lista.map(e => e.objetivo.join(", ")).join("; ");
+      txt += `${data},${treino.grupo},${objetivo},${treino.tempo},${treino.intensidade}\n`;
+    });
+
+  const blob = new Blob([txt], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "historico_treinos.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exibirCard(cardId) {
+      document.querySelectorAll(".card").forEach(card => card.style.display = "none");
+      document.getElementById(cardId).style.display = "block";
+      if (cardId === "historicoCard") carregarHistorico();
+}
+
+async function getDados(){
+ return {
   "ombro": [
     {
       "nome": "Wall Angels (3x15)",
@@ -872,303 +1165,6 @@ input[type="text"] {
   ]
 };
 
-    async function carregarDados() {
-    return dadosTreinos
-    }
-
-    function getPerfil() {
-      return JSON.parse(localStorage.getItem("perfil_usuario") || "{}");
-    }
-
-    function getUltimosTreinos() {
-      const dias = Object.keys(localStorage)
-        .filter(k => k.startsWith("treino_"))
-        .map(k => ({ data: k.replace("treino_", ""), grupo: JSON.parse(localStorage[k]).grupo }))
-        .sort((a,b)=> b.data.localeCompare(a.data));
-      return dias.slice(0, 2).map(t => t.grupo);
-    }
-
-    async function sugerirGrupo() {
-      const tempo = parseInt(document.getElementById("tempo").value);
-      const intensidade = document.getElementById("intensidade").value;
-      const fatorI = { leve: 1, media: 2, intensa: 3 }[intensidade];
-      const fatorT = tempo / 15;
-      const perfil = getPerfil();
-      const cooldown = getUltimosTreinos();
-
-      const score = {};
-      for (const grupo in dadosTreinos) {
-        score[grupo] = 0;
-      }
-
-      Object.keys(localStorage).filter(k => k.startsWith("treino_")).forEach(k => {
-        const t = JSON.parse(localStorage.getItem(k));
-        if (t?.grupo && t?.lista?.length) {
-          const fi = { leve: 1, media: 2, intensa: 3 }[t.intensidade] || 1;
-          const ft = t.tempo / 15 || 1;
-          score[t.grupo] += t.lista.reduce((sum, ex) => sum + (ex.peso || 2), 0) * fi * ft;
-        }
-      });
-
-      const gruposValidos = Object.keys(dadosTreinos).filter(grupo => !cooldown.includes(grupo));
-      const candidatos = gruposValidos.map(g => ({ grupo: g, score: score[g] }));
-      candidatos.sort((a,b)=> a.score - b.score);
-      const escolhido = candidatos[0]?.grupo || "core";
-
-      window.grupoSugerido = escolhido;
-
-      let saida = `<h3>📌 Grupo Sugerido: ${escolhido.toUpperCase()}</h3>`;
-      saida += `<p>Cooldown ativo: ${cooldown.join(", ") || "nenhum"}</p>`;
-      saida += "<ul>";
-      candidatos.forEach(c => saida += `<li>${c.grupo.toUpperCase()}: ${c.score.toFixed(1)}</li>`);
-      saida += "</ul>";
-      document.getElementById("sugestao").innerHTML = saida;
-    }
-
-    function gerarTreino() {
-      const tempo = parseInt(document.getElementById("tempo").value);
-      const intensidade = document.getElementById("intensidade").value;
-      const grupo = window.grupoSugerido || "core";
-      const dia = new Date().toISOString().slice(0,10);
-      const perfil = getPerfil();
-      const fatorI = { leve: 1, media: 2, intensa: 3 }[intensidade];
-
-      const base = dadosTreinos[grupo].filter(ex => {
-        if (perfil.equipamento?.length) {
-          return ex.equipamentos.every(eq => perfil.equipamento.includes(eq));
-        }
-        return true;
-      });
-
-      const qtd = Math.min(Math.ceil((tempo / 15) + fatorI), base.length);
-      const lista = base.slice(0, qtd);
-      localStorage.setItem("treino_" + dia, JSON.stringify({tempo, intensidade, grupo, feitos: [], lista}));
-      mostrarTreino(dia);
-    }
-
-    function mostrarTreino(dia) {
-      const t = JSON.parse(localStorage.getItem("treino_" + dia));
-      const lista = t.lista.map((ex, i) => {
-        const c = t.feitos.includes(i) ? "checked" : "";
-        return `<li><label><input type="checkbox" onchange="check(${i})" ${c}/> ${ex.nome}</label></li>`;
-      }).join("");
-      document.getElementById("treino").innerHTML = `<h3>${dia} - ${t.grupo.toUpperCase()}</h3><p>${t.tempo}min | ${t.intensidade}</p><ul class="checklist">${lista}</ul>`;
-    }
-
-    function check(i) {
-      const dia = new Date().toISOString().slice(0, 10);
-      const t = JSON.parse(localStorage.getItem("treino_" + dia));
-      if (t.feitos.includes(i)) t.feitos = t.feitos.filter(x => x !== i);
-      else t.feitos.push(i);
-      localStorage.setItem("treino_" + dia, JSON.stringify(t));
-      mostrarTreino(dia);
-    }
-
-    function exportarTreino() {
-      let txt = "";
-      Object.keys(localStorage).filter(k => k.startsWith("treino_")).sort().forEach(k => {
-        const dia = k.replace("treino_", "");
-        const t = JSON.parse(localStorage.getItem(k));
-        txt += `=== ${dia} ===\\nGrupo: ${t.grupo}\\nTempo: ${t.tempo}min | Intensidade: ${t.intensidade}\\n`;
-        t.lista.forEach((ex, i) => {
-          const mark = t.feitos.includes(i) ? "✓" : "☐";
-          txt += `${mark} ${ex.nome}\\n`;
-        });
-        txt += `\\n`;
-      });
-      const blob = new Blob([txt], { type: "text/plain" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "historico_caverna_bjj.txt";
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    carregarDados().then(() => {
-      const hoje = new Date().toISOString().slice(0, 10);
-      if (localStorage.getItem("treino_" + hoje)) mostrarTreino(hoje);
-    });
-
-    function salvarPerfil() {
-  function getMarcados(id) {
-    return Array.from(document.querySelectorAll(`#${id} input:checked`)).map(el => el.value);
-  }
-
-  const nome = document.getElementById("nomePerfil").value.trim();
-  if (!nome) {
-    alert("Por favor, preencha o campo de nome.");
-    return;
-  }
-
-  const locaisMarcados = getMarcados("locais");
-  if (locaisMarcados.length === 0) {
-    alert("Por favor, selecione pelo menos um local.");
-    return;
-  }
-
-  const equipamentosMarcados = getMarcados("equipamentos");
-  if (equipamentosMarcados.length === 0) {
-    alert("Por favor, selecione pelo menos um equipamento.");
-    return;
-  }
-
-  const objetivosMarcados = getMarcados("objetivos");
-  if (objetivosMarcados.length === 0) {
-    alert("Por favor, selecione pelo menos um objetivo.");
-    return;
-  }
-
-  const perfil = {
-    nome: nome,
-    locais: locaisMarcados,
-    equipamento: equipamentosMarcados,
-    objetivos: objetivosMarcados,
-  };
-
-  localStorage.setItem("perfil_usuario", JSON.stringify(perfil));
-  alert("Perfil salvo com sucesso!");
-  document.getElementById("perfilCard").style.display = "none";
-  document.getElementById("mainCard").style.display = "block";
-}
-
-  function editarPerfil() {
-    const perfil = JSON.parse(localStorage.getItem("perfil_usuario") || "{}");
-
-    document.getElementById("nomePerfil").value = perfil.nome || "";
-
-    const selects = [
-      { id: "locais", valores: perfil.locais || [] },
-      { id: "equipamentos", valores: perfil.equipamento || [] },
-      { id: "objetivos", valores: perfil.objetivos || [] },
-    ];
-
-    selects.forEach(sel => {
-      const el = document.getElementById(sel.id);
-      Array.from(el.options).forEach(opt => {
-        opt.selected = sel.valores.includes(opt.value);
-      });
-    });
-
-    document.getElementById("perfilCard").style.display = "block";
-    document.getElementById("mainCard").style.display = "none";
-
-  }
-
-  window.onload = () => {
-    const perfil = JSON.parse(localStorage.getItem("perfil_usuario") || "{}");
-
-    console.log("perfil", !perfil.nome);
-
-    if (!perfil.nome) {
-      console.log("Perfil não encontrado. Exibindo tela de configuração.");
-      document.getElementById("perfilCard").style.display = "block";
-      document.getElementById("mainCard").style.display = "none";
-    } else {
-      document.getElementById("nomePerfil").value = perfil.nome;
-      document.getElementById("perfilCard").style.display = "none";
-      document.getElementById("mainCard").style.display = "block";
-    }
-  };
-
-function carregarHistorico() {
-  const filtroData = document.getElementById("filtroData").value;
-  const filtroMembro = document.getElementById("filtroMembro").value;
-  const filtroObjetivo = document.getElementById("filtroObjetivo").value;
-
-  const historico = Object.keys(localStorage)
-    .filter(k => k.startsWith("treino_"))
-    .map(k => {
-      const data = k.replace("treino_", "");
-      const treino = JSON.parse(localStorage.getItem(k));
-      return { data, ...treino };
-    })
-    .filter(t => {
-      if (filtroData && t.data !== filtroData) return false;
-      if (filtroMembro && t.grupo !== filtroMembro) return false;
-      if (filtroObjetivo && !t.lista.some(e => e.objetivo.includes(filtroObjetivo))) return false;
-      return true;
-    });
-
-  const tabela = document.getElementById("tabelaHistorico");
-  tabela.innerHTML = historico.length
-    ? historico.map(t => `
-      <tr>
-        <td>${t.data}</td>
-        <td>${t.grupo.toUpperCase()}</td>
-        <td>${t.lista.map(e => e.objetivo.join(", ")).join("; ")}</td>
-        <td>${t.tempo} min</td>
-        <td>${t.intensidade}</td>
-      </tr>
-    `).join("")
-    : "<tr><td colspan='5'>Nenhum treino encontrado</td></tr>";
-
-  avaliarHistorico(historico);
-}
-
-function avaliarHistorico(historico) {
-  const totalTempo = historico.reduce((sum, t) => sum + t.tempo, 0);
-  const diasTreinados = new Set(historico.map(t => t.data)).size;
-  const sequenciaDias = calcularSequenciaDias(historico.map(t => t.data));
-
-  const avaliacao = `
-    <strong>Tempo Total:</strong> ${totalTempo} minutos<br>
-    <strong>Dias Treinados:</strong> ${diasTreinados} dias<br>
-    <strong>Maior Sequência:</strong> ${sequenciaDias} dias consecutivos
-  `;
-
-  document.getElementById("avaliacaoResumo").innerHTML = avaliacao;
-}
-
-function calcularSequenciaDias(datas) {
-  const ordenadas = [...new Set(datas)].sort();
-  let maiorSequencia = 0, atual = 1;
-
-  for (let i = 1; i < ordenadas.length; i++) {
-    const diff = new Date(ordenadas[i]) - new Date(ordenadas[i - 1]);
-    if (diff === 86400000) {
-      atual++;
-    } else {
-      maiorSequencia = Math.max(maiorSequencia, atual);
-      atual = 1;
-    }
-  }
-
-  return Math.max(maiorSequencia, atual);
-}
-
-function exportarHistorico() {
-  let txt = "Data,Membro,Objetivo,Tempo,Intensidade\n";
-
-  Object.keys(localStorage)
-    .filter(k => k.startsWith("treino_"))
-    .forEach(k => {
-      const treino = JSON.parse(localStorage.getItem(k));
-      const data = k.replace("treino_", "");
-      const objetivo = treino.lista.map(e => e.objetivo.join(", ")).join("; ");
-      txt += `${data},${treino.grupo},${objetivo},${treino.tempo},${treino.intensidade}\n`;
-    });
-
-  const blob = new Blob([txt], { type: "text/csv" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "historico_treinos.csv";
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-function exibirCard(cardId) {
-  // Esconde todos os cards
-  document.querySelectorAll(".card").forEach(card => card.style.display = "none");
-  
-  // Exibe o card selecionado
-  document.getElementById(cardId).style.display = "block";
-
-  // Carrega dados do histórico, se necessário
-  if (cardId === "historicoCard") {
-    carregarHistorico();
-  }
 }
   </script>
 </body>
