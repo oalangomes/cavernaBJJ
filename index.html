@@ -1157,6 +1157,19 @@ function exportarHistorico() {
   a.click();
   URL.revokeObjectURL(url);
 }
+
+function exibirCard(cardId) {
+  // Esconde todos os cards
+  document.querySelectorAll(".card").forEach(card => card.style.display = "none");
+  
+  // Exibe o card selecionado
+  document.getElementById(cardId).style.display = "block";
+
+  // Carrega dados do histórico, se necessário
+  if (cardId === "historicoCard") {
+    carregarHistorico();
+  }
+}
   </script>
 </body>
 </html>
