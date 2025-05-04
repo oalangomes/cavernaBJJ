@@ -1067,6 +1067,93 @@ input[type="text"] {
       document.getElementById("mainCard").style.display = "block";
     }
   };
+
+function carregarHistorico() {
+  const filtroData = document.getElementById("filtroData").value;
+  const filtroMembro = document.getElementById("filtroMembro").value;
+  const filtroObjetivo = document.getElementById("filtroObjetivo").value;
+
+  const historico = Object.keys(localStorage)
+    .filter(k => k.startsWith("treino_"))
+    .map(k => {
+      const data = k.replace("treino_", "");
+      const treino = JSON.parse(localStorage.getItem(k));
+      return { data, ...treino };
+    })
+    .filter(t => {
+      if (filtroData && t.data !== filtroData) return false;
+      if (filtroMembro && t.grupo !== filtroMembro) return false;
+      if (filtroObjetivo && !t.lista.some(e => e.objetivo.includes(filtroObjetivo))) return false;
+      return true;
+    });
+
+  const tabela = document.getElementById("tabelaHistorico");
+  tabela.innerHTML = historico.length
+    ? historico.map(t => `
+      <tr>
+        <td>${t.data}</td>
+        <td>${t.grupo.toUpperCase()}</td>
+        <td>${t.lista.map(e => e.objetivo.join(", ")).join("; ")}</td>
+        <td>${t.tempo} min</td>
+        <td>${t.intensidade}</td>
+      </tr>
+    `).join("")
+    : "<tr><td colspan='5'>Nenhum treino encontrado</td></tr>";
+
+  avaliarHistorico(historico);
+}
+
+function avaliarHistorico(historico) {
+  const totalTempo = historico.reduce((sum, t) => sum + t.tempo, 0);
+  const diasTreinados = new Set(historico.map(t => t.data)).size;
+  const sequenciaDias = calcularSequenciaDias(historico.map(t => t.data));
+
+  const avaliacao = `
+    <strong>Tempo Total:</strong> ${totalTempo} minutos<br>
+    <strong>Dias Treinados:</strong> ${diasTreinados} dias<br>
+    <strong>Maior Sequência:</strong> ${sequenciaDias} dias consecutivos
+  `;
+
+  document.getElementById("avaliacaoResumo").innerHTML = avaliacao;
+}
+
+function calcularSequenciaDias(datas) {
+  const ordenadas = [...new Set(datas)].sort();
+  let maiorSequencia = 0, atual = 1;
+
+  for (let i = 1; i < ordenadas.length; i++) {
+    const diff = new Date(ordenadas[i]) - new Date(ordenadas[i - 1]);
+    if (diff === 86400000) {
+      atual++;
+    } else {
+      maiorSequencia = Math.max(maiorSequencia, atual);
+      atual = 1;
+    }
+  }
+
+  return Math.max(maiorSequencia, atual);
+}
+
+function exportarHistorico() {
+  let txt = "Data,Membro,Objetivo,Tempo,Intensidade\n";
+
+  Object.keys(localStorage)
+    .filter(k => k.startsWith("treino_"))
+    .forEach(k => {
+      const treino = JSON.parse(localStorage.getItem(k));
+      const data = k.replace("treino_", "");
+      const objetivo = treino.lista.map(e => e.objetivo.join(", ")).join("; ");
+      txt += `${data},${treino.grupo},${objetivo},${treino.tempo},${treino.intensidade}\n`;
+    });
+
+  const blob = new Blob([txt], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "historico_treinos.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+}
   </script>
 </body>
 </html>
