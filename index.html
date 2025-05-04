@@ -5,241 +5,917 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Caverna BJJ</title>
   <link rel="manifest" href="manifest.json" />
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
-    }
-  </script>
+  <link rel="icon" href="icon-192.png" />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f0f2f5;
-      margin: 0;
-      padding: 20px;
-      color: #222;
-    }
-    h1 {
-      text-align: center;
-      color: #002b5c;
-    }
-    .card {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      max-width: 500px;
-      margin: 20px auto;
-    }
-    select, button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-    }
-    button {
-      background: #004085;
-      color: white;
-      font-weight: bold;
-      border: none;
-    }
-    button:hover {
-      background: #002b5c;
-    }
-    .treino {
-      margin-top: 20px;
-    }
-    .treino ul {
-      padding-left: 20px;
-    }
-    .checklist input {
-      margin-right: 10px;
-    }
+   body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f3f5f8;
+  margin: 0;
+  padding: 10px;
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+  color: #002b5c;
+  margin-bottom: 10px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  max-width: 95%;
+  margin: 15px auto;
+  box-sizing: border-box;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+select {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 15px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-top: 5px;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 12px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  color: white;
+  background: #004085;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #002b5c;
+}
+
+button.secondary {
+  background: #6c757d;
+}
+
+button.secondary:hover {
+  background: #5a6268;
+}
+
+button.icon-button {
+  font-size: 14px;
+  background: #e4e6eb;
+  color: #333;
+  padding: 8px 12px;
+  width: auto;
+  margin-top: 0;
+}
+
+.sugestao, .treino {
+  margin-top: 25px;
+}
+
+.sugestao h3, .treino h3 {
+  margin-bottom: 10px;
+  color: #004085;
+}
+
+ul {
+  padding-left: 20px;
+}
+
+.checklist input {
+  margin-right: 10px;
+  transform: scale(1.3);
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 16px;
+  margin: 8px 0 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.tag-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 20px;
+}
+
+.tag-group label {
+  background: #e7f0ff;
+  border: 1px solid #004085;
+  border-radius: 30px;
+  padding: 8px 12px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tag-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 20px;
+}
+
+.tag-group label {
+  border: 1px solid #004085;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #e7f0ff;
+}
+
+.tag-group input[type="checkbox"] {
+  display: none;
+}
+
+.tag-group span {
+  display: inline-block;
+  padding: 8px 14px;
+  font-size: 14px;
+  color: #004085;
+  border-radius: 30px;
+}
+
+.tag-group input[type="checkbox"]:checked + span {
+  background: #004085;
+  color: #fff;
+}
+
+
   </style>
 </head>
 <body>
   <h1>Caverna BJJ</h1>
-  <div class="card">
-    <label for="tempo">Quanto tempo você tem hoje?</label>
-    <select id="tempo">
-      <option value="15">15 minutos</option>
-      <option value="30">30 minutos</option>
-      <option value="45">45 minutos</option>
-      <option value="60">60 minutos</option>
-    </select>
-
-    <label for="intensidade">Qual intensidade você quer?</label>
-    <select id="intensidade">
-      <option value="leve">Leve</option>
-      <option value="media">Média</option>
-      <option value="intensa">Intensa</option>
-    </select>
-
-    <button onclick="gerarTreino()">Gerar Treino do Dia</button>
-    <button onclick="exportarTreino()">Exportar Histórico</button>
-
-    <div class="treino" id="treino"></div>
-  </div>
-
-  <script>
+  <div class="card" id="perfilCard">
+    <h2>⚙️ Configurar Perfil</h2>
+  
+    <label for="nomePerfil">Seu nome/apelido:</label>
+    <input type="text" id="nomePerfil" placeholder="Ex: Alan" />
+  
+    <label>Onde treina?</label>
+    <div class="tag-group" id="locais">
+      <label><input type="checkbox" value="Casa"><span>🏠 Casa</span></label>
+      <label><input type="checkbox" value="Praça"><span>🌳 Praça</span></label>
+      <label><input type="checkbox" value="Academia"><span>🏋️ Academia</span></label>
+    </div>    
+  
+    <label>Equipamentos disponíveis:</label>
+    <div class="tag-group" id="equipamentos">
+      <label><input type="checkbox" value="Halteres"><span>🏋️ Halteres</span></label>
+      <label><input type="checkbox" value="Elástico"><span>🧵 Elástico</span></label>
+      <label><input type="checkbox" value="Saco de pancada"><span>🥊 Saco de pancada</span></label>
+      <label><input type="checkbox" value="Barra fixa"><span>🚧 Barra fixa</span></label>
+      <label><input type="checkbox" value="Banco abdominal"><span>🪑 Banco abdominal</span></label>
+      <label><input type="checkbox" value="Tornozeleira"><span>🦵 Tornozeleira</span></label>
+    </div>
     
-    const treinos = {
-  ombro: [
-    "Wall Angels (3x15)",
-    "Shrug com halteres (3x12)",
-    "Elevação lateral com tornozeleira (2x15)",
-    "Rotação externa com elástico (2x20)",
-    "Elevação frontal com halteres (2x15)",
-    "Press militar com barra (3x10)",
-    "Pêndulo com peso leve (2x30s)"
+    <label>Objetivos:</label>
+    <div class="tag-group" id="objetivos">
+      <label><input type="checkbox" value="Desempenho no Jiu-Jitsu"><span>🥋 Jiu-Jitsu</span></label>
+      <label><input type="checkbox" value="Força"><span>💪 Força</span></label>
+      <label><input type="checkbox" value="Condicionamento"><span>🏃‍♂️ Condicionamento</span></label>
+      <label><input type="checkbox" value="Mobilidade"><span>🤸 Mobilidade</span></label>
+      <label><input type="checkbox" value="Prevenção de Lesão"><span>🛡️ Prevenção</span></label>
+    </div>
+    
+  
+    <button onclick="salvarPerfil()">💾 Salvar Perfil</button>
+  </div>
+  
+  <div class="card" id="mainCard">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 180px;">
+        <label for="tempo"><strong>⏱️ Tempo disponível:</strong></label>
+        <select id="tempo">
+          <option value="15">15 min</option>
+          <option value="30">30 min</option>
+          <option value="45">45 min</option>
+          <option value="60">60 min</option>
+        </select>
+      </div>
+      <div style="flex: 1; min-width: 180px;">
+        <label for="intensidade"><strong>🔥 Intensidade:</strong></label>
+        <select id="intensidade">
+          <option value="leve">Leve</option>
+          <option value="media">Média</option>
+          <option value="intensa">Intensa</option>
+        </select>
+      </div>
+      <div style="flex: 1; min-width: 180px; text-align: right; margin-top: 28px;">
+        <button onclick="editarPerfil()" style="background: #6c757d;">✏️ Editar Perfil</button>
+      </div>
+    </div>
+  
+    <hr style="margin: 20px 0;"/>
+  
+    <button onclick="sugerirGrupo()">🔍 Sugerir Grupo</button>
+    <div class="sugestao" id="sugestao" style="margin-top: 20px;"></div>
+  
+    <button onclick="gerarTreino()">✅ Gerar Treino do Dia</button>
+    <button onclick="exportarTreino()">⬇️ Exportar Histórico</button>
+  
+    <div class="treino" id="treino" style="margin-top: 20px;"></div>
+  </div>
+  
+  <script>
+    let dadosTreinos = {
+  "ombro": [
+    {
+      "nome": "Wall Angels (3x15)",
+      "subgrupo": "mobilidade",
+      "equipamentos": [],
+      "objetivo": [
+        "mobilidade",
+        "jiujitsu"
+      ],
+      "peso": 1
+    },
+    {
+      "nome": "Shrug com halteres (3x12)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "halteres"
+      ],
+      "objetivo": [
+        "forca"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Elevação lateral (2x15)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "halteres"
+      ],
+      "objetivo": [
+        "forca",
+        "mobilidade"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Rotação externa com elástico (3x15)",
+      "subgrupo": "reabilitação",
+      "equipamentos": [
+        "elastico"
+      ],
+      "objetivo": [
+        "mobilidade"
+      ],
+      "peso": 1
+    },
+    {
+      "nome": "Frontal raise com halteres (2x12)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "halteres"
+      ],
+      "objetivo": [
+        "forca"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Pêndulo com peso (3x20s)",
+      "subgrupo": "reabilitação",
+      "equipamentos": [
+        "halteres"
+      ],
+      "objetivo": [
+        "mobilidade"
+      ],
+      "peso": 1
+    },
+    {
+      "nome": "Press militar (3x10)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "halteres",
+        "barra"
+      ],
+      "objetivo": [
+        "forca"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Remada face pull com elástico (3x12)",
+      "subgrupo": "estabilidade",
+      "equipamentos": [
+        "elastico"
+      ],
+      "objetivo": [
+        "mobilidade",
+        "postura"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Isometria escapular na parede (2x45s)",
+      "subgrupo": "estabilidade",
+      "equipamentos": [],
+      "objetivo": [
+        "mobilidade"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Serrátil ativação + push-up (3x10)",
+      "subgrupo": "estabilidade",
+      "equipamentos": [],
+      "objetivo": [
+        "postura",
+        "mobilidade"
+      ],
+      "peso": 2
+    }
   ],
-  core: [
-    "Prancha frontal (3x30s)",
-    "Canivete (3x15)",
-    "Abdominal inclinado com peso (3x20)",
-    "Prancha com toque no ombro (2x40s)",
-    "Abdominal bicicleta (3x20)",
-    "Prancha lateral (2x30s cada lado)",
-    "Elevação de pernas no banco inclinado (3x12)"
+  "core": [
+    {
+      "nome": "Prancha frontal (3x30s)",
+      "subgrupo": "estabilidade",
+      "equipamentos": [],
+      "objetivo": [
+        "core",
+        "jiujitsu"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Canivete (3x15)",
+      "subgrupo": "forca",
+      "equipamentos": [],
+      "objetivo": [
+        "core"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Abdominal inclinado (3x20)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "banco"
+      ],
+      "objetivo": [
+        "forca"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Prancha com elevação de pernas (3x30s)",
+      "subgrupo": "estabilidade",
+      "equipamentos": [],
+      "objetivo": [
+        "core",
+        "equilibrio"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Dead Bug com halteres (3x10)",
+      "subgrupo": "estabilidade",
+      "equipamentos": [
+        "halteres"
+      ],
+      "objetivo": [
+        "core",
+        "coordenação"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Russian Twist (3x20)",
+      "subgrupo": "forca",
+      "equipamentos": [],
+      "objetivo": [
+        "core"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Prancha lateral (3x30s cada lado)",
+      "subgrupo": "estabilidade",
+      "equipamentos": [],
+      "objetivo": [
+        "core",
+        "equilibrio"
+      ],
+      "peso": 2
+    }
   ],
-  pernas: [
-    "Agachamento com halteres (3x12)",
-    "Passada com tornozeleira (3x10 cada perna)",
-    "Adutor com elástico (3x15)",
-    "Stiff com kettlebell (3x10)",
-    "Agachamento búlgaro com apoio (2x10 cada perna)",
-    "Cadeira imaginária na parede (2x45s)",
-    "Ponte de glúteo com elevação (3x15)"
+  "pernas": [
+    {
+      "nome": "Agachamento com halteres (3x12)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "halteres"
+      ],
+      "objetivo": [
+        "forca",
+        "resistencia"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Passada com tornozeleira (3x10)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "tornozeleira"
+      ],
+      "objetivo": [
+        "forca",
+        "mobilidade"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Adutor com elástico (2x15)",
+      "subgrupo": "isolamento",
+      "equipamentos": [
+        "elastico"
+      ],
+      "objetivo": [
+        "estabilidade"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Avanço frontal com peso (3x10)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "halteres"
+      ],
+      "objetivo": [
+        "forca"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Pistol squat assistido (3x8)",
+      "subgrupo": "controle",
+      "equipamentos": [],
+      "objetivo": [
+        "mobilidade",
+        "controle motor"
+      ],
+      "peso": 4
+    },
+    {
+      "nome": "Elevação de panturrilha (3x20)",
+      "subgrupo": "isolamento",
+      "equipamentos": [],
+      "objetivo": [
+        "resistencia"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Sumô deadlift (3x10)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "halteres",
+        "barra"
+      ],
+      "objetivo": [
+        "forca",
+        "adutores"
+      ],
+      "peso": 4
+    }
   ],
-  fullbody: [
-    "Burpee + saco de pancada (4x30s)",
-    "Jumping Jack + prancha alternada (3x45s)",
-    "Circuito 5 min: agacha + soca + pula corda",
-    "Sprawl explosivo (3x10)",
-    "Escalada no solo (mountain climber 3x40s)",
-    "Corda alternada + prancha (4x1min)",
-    "Agacha + upa (movimento técnico 3x10)"
+  "fullbody": [
+    {
+      "nome": "Burpee + saco de pancada (4x30s)",
+      "subgrupo": "resistencia",
+      "equipamentos": [
+        "saco"
+      ],
+      "objetivo": [
+        "condicionamento"
+      ],
+      "peso": 4
+    },
+    {
+      "nome": "Jumping Jack + prancha (3x45s)",
+      "subgrupo": "cardio",
+      "equipamentos": [],
+      "objetivo": [
+        "condicionamento",
+        "core"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Circuito livre funcional (5 min)",
+      "subgrupo": "misturado",
+      "equipamentos": [],
+      "objetivo": [
+        "resistencia",
+        "agilidade"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Deslocamento com socos no saco (4x1min)",
+      "subgrupo": "agilidade",
+      "equipamentos": [
+        "saco"
+      ],
+      "objetivo": [
+        "coordenação",
+        "agilidade"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Agachamento + puxada elástica (3x12)",
+      "subgrupo": "combinado",
+      "equipamentos": [
+        "elastico"
+      ],
+      "objetivo": [
+        "forca",
+        "core"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Push-up + remo com halteres (3x10)",
+      "subgrupo": "combinado",
+      "equipamentos": [
+        "halteres"
+      ],
+      "objetivo": [
+        "forca",
+        "core"
+      ],
+      "peso": 4
+    },
+    {
+      "nome": "Bear crawl + parada isométrica (4x10m)",
+      "subgrupo": "controle",
+      "equipamentos": [],
+      "objetivo": [
+        "core",
+        "mobilidade"
+      ],
+      "peso": 3
+    }
   ],
-  cardio: [
-    "Corda (3x1min)",
-    "Corrida no lugar (3x2min)",
-    "Socos alternados no saco (4x30s)",
-    "Pular corda com variações (2x2min)",
-    "Trote com mudança de direção (4x1min)",
-    "Escada de agilidade simulada (3x40s)",
-    "Agacha + sprint no quintal (3x ida e volta)"
+  "cardio": [
+    {
+      "nome": "Corda (3x1min)",
+      "subgrupo": "cardio",
+      "equipamentos": [
+        "corda"
+      ],
+      "objetivo": [
+        "condicionamento"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Corrida no lugar (2x2min)",
+      "subgrupo": "cardio",
+      "equipamentos": [],
+      "objetivo": [
+        "resistencia"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Sacos alternados (3x30s)",
+      "subgrupo": "intensidade",
+      "equipamentos": [
+        "saco"
+      ],
+      "objetivo": [
+        "coordenação"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Sprint na praça (5x40m)",
+      "subgrupo": "cardio",
+      "equipamentos": [],
+      "objetivo": [
+        "velocidade"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Burpee com salto (3x12)",
+      "subgrupo": "cardio",
+      "equipamentos": [],
+      "objetivo": [
+        "condicionamento"
+      ],
+      "peso": 4
+    },
+    {
+      "nome": "Deslocamento lateral rápido (4x30s)",
+      "subgrupo": "agilidade",
+      "equipamentos": [],
+      "objetivo": [
+        "explosão"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Corrida com parada e volta (3x1min)",
+      "subgrupo": "resistencia",
+      "equipamentos": [],
+      "objetivo": [
+        "agilidade"
+      ],
+      "peso": 3
+    }
   ],
-  joelho: [
-    "Agachamento isométrico (3x30s)",
-    "Ponte unilateral (2x12)",
-    "Extensão com peso (2x15)",
-    "Agacha + elevação de calcanhar (3x12)",
-    "Descer devagar da ponta do pé (3x10)",
-    "Marcha lenta controlada (2x2min)",
-    "Agacha encostado na parede + contração (3x20s)"
+  "joelho": [
+    {
+      "nome": "Agachamento isométrico (3x30s)",
+      "subgrupo": "forca",
+      "equipamentos": [],
+      "objetivo": [
+        "estabilidade"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Ponte unilateral (2x12)",
+      "subgrupo": "estabilidade",
+      "equipamentos": [],
+      "objetivo": [
+        "controle motor"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Extensão com peso (2x15)",
+      "subgrupo": "isolamento",
+      "equipamentos": [
+        "halteres"
+      ],
+      "objetivo": [
+        "reabilitação"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Agachamento com apoio (3x15)",
+      "subgrupo": "reabilitação",
+      "equipamentos": [],
+      "objetivo": [
+        "estabilidade"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Descida unilateral controlada (3x10)",
+      "subgrupo": "controle",
+      "equipamentos": [],
+      "objetivo": [
+        "reabilitação",
+        "equilibrio"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Avanço isométrico (3x30s)",
+      "subgrupo": "forca",
+      "equipamentos": [],
+      "objetivo": [
+        "controle"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Step up na praça (3x12)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "banco"
+      ],
+      "objetivo": [
+        "forca",
+        "estabilidade"
+      ],
+      "peso": 3
+    }
   ],
-  dedos: [
-    "Pinça manual (2x20s)",
-    "Elástico de dedos (3x15)",
-    "Pegador de mão (até falha x2)",
-    "Toalha enrolada + aperto (3x30s)",
-    "Pegada na barra fixa por tempo (2x até fadiga)",
-    "Espirrar elástico com dedos (3x10)",
-    "Prender bola de tênis contra a parede (3x20s)"
+  "dedos": [
+    {
+      "nome": "Pinça manual (2x20s)",
+      "subgrupo": "pegada",
+      "equipamentos": [
+        "pinça"
+      ],
+      "objetivo": [
+        "pegada"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Elástico de dedos (3x15)",
+      "subgrupo": "pegada",
+      "equipamentos": [
+        "elastico"
+      ],
+      "objetivo": [
+        "mobilidade",
+        "pegada"
+      ],
+      "peso": 1
+    },
+    {
+      "nome": "Pegador de mão (até falha x2)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "pegador"
+      ],
+      "objetivo": [
+        "pegada"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Torção de toalha molhada (3x30s)",
+      "subgrupo": "resistencia",
+      "equipamentos": [
+        "toalha"
+      ],
+      "objetivo": [
+        "pegada",
+        "resistencia"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Isometria de pegada com elástico (3x30s)",
+      "subgrupo": "pegada",
+      "equipamentos": [
+        "elastico"
+      ],
+      "objetivo": [
+        "resistencia"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Pull-up estático (3x10s)",
+      "subgrupo": "pegada",
+      "equipamentos": [
+        "barra"
+      ],
+      "objetivo": [
+        "forca",
+        "resistencia"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Pegada no pano de kimono (3x20s)",
+      "subgrupo": "jiujitsu",
+      "equipamentos": [
+        "kimono"
+      ],
+      "objetivo": [
+        "realismo",
+        "pegada"
+      ],
+      "peso": 2
+    }
   ]
 };
 
+    async function carregarDados() {
+    return dadosTreinos
+    }
 
+    function getPerfil() {
+      return JSON.parse(localStorage.getItem("perfil_usuario") || "{}");
+    }
 
-    function grupoMaisDescansado() {
-      const ordem = ["ombro", "core", "pernas", "fullbody", "joelho", "dedos", "cardio"];
-      const hoje = new Date().toISOString().slice(0, 10);
-      const treinosFeitos = Object.keys(localStorage).filter(k => k.startsWith("treino_") && k !== "treino_" + hoje);
-      const gruposFeitos = treinosFeitos.map(k => JSON.parse(localStorage.getItem(k)).grupo);
-      const gruposRestantes = ordem.filter(g => !gruposFeitos.includes(g));
-      if (gruposRestantes.length === 0) {
-        alert("Você treinou todos os grupos. Bora Reiniciar o Ciclo!");
-        return ordem[Math.floor(Math.random() * ordem.length)];
+    function getUltimosTreinos() {
+      const dias = Object.keys(localStorage)
+        .filter(k => k.startsWith("treino_"))
+        .map(k => ({ data: k.replace("treino_", ""), grupo: JSON.parse(localStorage[k]).grupo }))
+        .sort((a,b)=> b.data.localeCompare(a.data));
+      return dias.slice(0, 2).map(t => t.grupo);
+    }
+
+    async function sugerirGrupo() {
+      const tempo = parseInt(document.getElementById("tempo").value);
+      const intensidade = document.getElementById("intensidade").value;
+      const fatorI = { leve: 1, media: 2, intensa: 3 }[intensidade];
+      const fatorT = tempo / 15;
+      const perfil = getPerfil();
+      const cooldown = getUltimosTreinos();
+
+      const score = {};
+      for (const grupo in dadosTreinos) {
+        score[grupo] = 0;
       }
-      const gruposContados = gruposRestantes.reduce((acc, g) => {
-        acc[g] = (acc[g] || 0) + 1;
-        return acc;
-      }, {});
-      const gruposOrdenados = Object.entries(gruposContados).sort((a, b) => a[1] - b[1]);
-      const menosFeito = gruposOrdenados[0][0];
-      return menosFeito;
+
+      Object.keys(localStorage).filter(k => k.startsWith("treino_")).forEach(k => {
+        const t = JSON.parse(localStorage.getItem(k));
+        if (t?.grupo && t?.lista?.length) {
+          const fi = { leve: 1, media: 2, intensa: 3 }[t.intensidade] || 1;
+          const ft = t.tempo / 15 || 1;
+          score[t.grupo] += t.lista.reduce((sum, ex) => sum + (ex.peso || 2), 0) * fi * ft;
+        }
+      });
+
+      const gruposValidos = Object.keys(dadosTreinos).filter(grupo => !cooldown.includes(grupo));
+      const candidatos = gruposValidos.map(g => ({ grupo: g, score: score[g] }));
+      candidatos.sort((a,b)=> a.score - b.score);
+      const escolhido = candidatos[0]?.grupo || "core";
+
+      window.grupoSugerido = escolhido;
+
+      let saida = `<h3>📌 Grupo Sugerido: ${escolhido.toUpperCase()}</h3>`;
+      saida += `<p>Cooldown ativo: ${cooldown.join(", ") || "nenhum"}</p>`;
+      saida += "<ul>";
+      candidatos.forEach(c => saida += `<li>${c.grupo.toUpperCase()}: ${c.score.toFixed(1)}</li>`);
+      saida += "</ul>";
+      document.getElementById("sugestao").innerHTML = saida;
     }
 
     function gerarTreino() {
       const tempo = parseInt(document.getElementById("tempo").value);
       const intensidade = document.getElementById("intensidade").value;
-      const grupo = grupoMaisDescansado();
-      const base = treinos[grupo];
-      const dia = new Date().toISOString().slice(0, 10);
+      const grupo = window.grupoSugerido || "core";
+      const dia = new Date().toISOString().slice(0,10);
+      const perfil = getPerfil();
+      const fatorI = { leve: 1, media: 2, intensa: 3 }[intensidade];
 
-      let qtd;
-      if (tempo <= 15) {
-        qtd = 2;
-      } else if (tempo <= 30) {
-        qtd = 3;
-      } else if (tempo <= 45){
-        qtd = 4;
-      } else {
-        qtd = 5; // Add this line to handle cases above 45 minutes
-      }
-      if (intensidade === "leve") qtd -= 1;
-      else if (intensidade === "media") qtd += 0;
-      else
-        qtd += 1; // For "intensa"
-      if (tempo > 30) qtd += 1;
-      if (tempo > 45) qtd += 1;
-      if (tempo > 60) qtd += 1; // Adjusting for times above 60 minutes
+      const base = dadosTreinos[grupo].filter(ex => {
+        if (perfil.equipamento?.length) {
+          return ex.equipamentos.every(eq => perfil.equipamento.includes(eq));
+        }
+        return true;
+      });
 
-      const selecionados = base.slice(0, qtd);
-      localStorage.setItem("treino_" + dia, JSON.stringify({tempo, intensidade, grupo, feitos: [], lista: selecionados}));
-
+      const qtd = Math.min(Math.ceil((tempo / 15) + fatorI), base.length);
+      const lista = base.slice(0, qtd);
+      localStorage.setItem("treino_" + dia, JSON.stringify({tempo, intensidade, grupo, feitos: [], lista}));
       mostrarTreino(dia);
     }
 
     function mostrarTreino(dia) {
-      const treino = JSON.parse(localStorage.getItem("treino_" + dia));
-      if (!treino) return;
-
-      const lista = treino.lista.map((ex, i) => {
-        const checked = treino.feitos.includes(i) ? "checked" : "";
-        return `<li><label><input type="checkbox" onchange="checkItem(${i})" ${checked}/> ${ex}</label></li>`;
+      const t = JSON.parse(localStorage.getItem("treino_" + dia));
+      const lista = t.lista.map((ex, i) => {
+        const c = t.feitos.includes(i) ? "checked" : "";
+        return `<li><label><input type="checkbox" onchange="check(${i})" ${c}/> ${ex.nome}</label></li>`;
       }).join("");
-
-      document.getElementById("treino").innerHTML = `
-        <h3>${dia} - Foco: ${treino.grupo.toUpperCase()}</h3>
-        <p>Tempo: ${treino.tempo}min | Intensidade: ${treino.intensidade}</p>
-        <ul class="checklist">${lista}</ul>
-      `;
+      document.getElementById("treino").innerHTML = `<h3>${dia} - ${t.grupo.toUpperCase()}</h3><p>${t.tempo}min | ${t.intensidade}</p><ul class="checklist">${lista}</ul>`;
     }
 
-    function checkItem(idx) {
+    function check(i) {
       const dia = new Date().toISOString().slice(0, 10);
-      const treino = JSON.parse(localStorage.getItem("treino_" + dia));
-      if (!treino.feitos.includes(idx)) treino.feitos.push(idx);
-      else treino.feitos = treino.feitos.filter(i => i !== idx);
-      localStorage.setItem("treino_" + dia, JSON.stringify(treino));
+      const t = JSON.parse(localStorage.getItem("treino_" + dia));
+      if (t.feitos.includes(i)) t.feitos = t.feitos.filter(x => x !== i);
+      else t.feitos.push(i);
+      localStorage.setItem("treino_" + dia, JSON.stringify(t));
       mostrarTreino(dia);
     }
 
     function exportarTreino() {
       let txt = "";
-      Object.keys(localStorage).filter(k => k.startsWith("treino_")).sort().forEach(key => {
-        const dia = key.replace("treino_", "");
-        const t = JSON.parse(localStorage.getItem(key));
-        txt += `=== ${dia} ===\nGrupo: ${t.grupo}\nTempo: ${t.tempo}min | Intensidade: ${t.intensidade}\n`;
+      Object.keys(localStorage).filter(k => k.startsWith("treino_")).sort().forEach(k => {
+        const dia = k.replace("treino_", "");
+        const t = JSON.parse(localStorage.getItem(k));
+        txt += `=== ${dia} ===\\nGrupo: ${t.grupo}\\nTempo: ${t.tempo}min | Intensidade: ${t.intensidade}\\n`;
         t.lista.forEach((ex, i) => {
           const mark = t.feitos.includes(i) ? "✓" : "☐";
-          txt += `${mark} ${ex}\n`;
+          txt += `${mark} ${ex.nome}\\n`;
         });
-        txt += `\n`;
+        txt += `\\n`;
       });
-
       const blob = new Blob([txt], { type: "text/plain" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -249,12 +925,67 @@
       URL.revokeObjectURL(url);
     }
 
-    window.onload = () => {
+    carregarDados().then(() => {
       const hoje = new Date().toISOString().slice(0, 10);
-      if (localStorage.getItem("treino_" + hoje)) {
-        mostrarTreino(hoje);
-      }
+      if (localStorage.getItem("treino_" + hoje)) mostrarTreino(hoje);
+    });
+
+    function salvarPerfil() {
+  function getMarcados(id) {
+    return Array.from(document.querySelectorAll(`#${id} input:checked`)).map(el => el.value);
+  }
+
+  const perfil = {
+    nome: document.getElementById("nomePerfil").value,
+    locais: getMarcados("locais"),
+    equipamento: getMarcados("equipamentos"),
+    objetivos: getMarcados("objetivos"),
+  };
+
+  localStorage.setItem("perfil_usuario", JSON.stringify(perfil));
+  alert("Perfil salvo com sucesso!");
+  document.getElementById("perfilCard").style.display = "none";
+  document.getElementById("mainCard").style.display = "block";
+}
+
+  function editarPerfil() {
+    const perfil = JSON.parse(localStorage.getItem("perfil_usuario") || "{}");
+
+    document.getElementById("nomePerfil").value = perfil.nome || "";
+
+    const selects = [
+      { id: "locais", valores: perfil.locais || [] },
+      { id: "equipamentos", valores: perfil.equipamento || [] },
+      { id: "objetivos", valores: perfil.objetivos || [] },
+    ];
+
+    selects.forEach(sel => {
+      const el = document.getElementById(sel.id);
+      Array.from(el.options).forEach(opt => {
+        opt.selected = sel.valores.includes(opt.value);
+      });
+    });
+
+    document.getElementById("perfilCard").style.display = "block";
+    document.getElementById("mainCard").style.display = "none";
+
+  }
+
+  window.onload = () => {
+    const perfil = JSON.parse(localStorage.getItem("perfil_usuario") || "{}");
+
+    console.log("perfil", !perfil.nome);
+
+    if (!perfil.nome) {
+      console.log("Perfil não encontrado. Exibindo tela de configuração.");
+      document.getElementById("perfilCard").style.display = "block";
+      document.getElementById("mainCard").style.display = "none";
+    } else {
+      document.getElementById("nomePerfil").value = perfil.nome;
+      document.getElementById("perfilCard").style.display = "none";
+      document.getElementById("mainCard").style.display = "block";
     }
+  };
   </script>
 </body>
 </html>

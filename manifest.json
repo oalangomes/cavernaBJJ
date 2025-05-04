@@ -1,6 +1,6 @@
 {
   "name": "Caverna BJJ",
-  "short_name": "Caverna BJJ",
+  "short_name": "CBJJ",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#f0f2f5",
@@ -16,5 +16,11 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "lang": "en-US",
+  "version": "1.0",
+  "description": "Caverna BJJ - Your Ultimate Brazilian Jiu-Jitsu Companion",
+  "author": "Alan Gomes",
+  "homepage": "https://cavernabjj.com",
+  "repository": "https://github.com/your-repo"
 }

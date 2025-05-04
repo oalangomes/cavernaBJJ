@@ -1,0 +1,568 @@
+{
+  "ombro": [
+    {
+      "nome": "Wall Angels (3x15)",
+      "subgrupo": "mobilidade",
+      "equipamentos": [],
+      "objetivo": [
+        "mobilidade",
+        "jiujitsu"
+      ],
+      "peso": 1
+    },
+    {
+      "nome": "Shrug com halteres (3x12)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "halteres"
+      ],
+      "objetivo": [
+        "forca"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Elevação lateral (2x15)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "halteres"
+      ],
+      "objetivo": [
+        "forca",
+        "mobilidade"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Rotação externa com elástico (3x15)",
+      "subgrupo": "reabilitação",
+      "equipamentos": [
+        "elastico"
+      ],
+      "objetivo": [
+        "mobilidade"
+      ],
+      "peso": 1
+    },
+    {
+      "nome": "Frontal raise com halteres (2x12)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "halteres"
+      ],
+      "objetivo": [
+        "forca"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Pêndulo com peso (3x20s)",
+      "subgrupo": "reabilitação",
+      "equipamentos": [
+        "halteres"
+      ],
+      "objetivo": [
+        "mobilidade"
+      ],
+      "peso": 1
+    },
+    {
+      "nome": "Press militar (3x10)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "halteres",
+        "barra"
+      ],
+      "objetivo": [
+        "forca"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Remada face pull com elástico (3x12)",
+      "subgrupo": "estabilidade",
+      "equipamentos": [
+        "elastico"
+      ],
+      "objetivo": [
+        "mobilidade",
+        "postura"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Isometria escapular na parede (2x45s)",
+      "subgrupo": "estabilidade",
+      "equipamentos": [],
+      "objetivo": [
+        "mobilidade"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Serrátil ativação + push-up (3x10)",
+      "subgrupo": "estabilidade",
+      "equipamentos": [],
+      "objetivo": [
+        "postura",
+        "mobilidade"
+      ],
+      "peso": 2
+    }
+  ],
+  "core": [
+    {
+      "nome": "Prancha frontal (3x30s)",
+      "subgrupo": "estabilidade",
+      "equipamentos": [],
+      "objetivo": [
+        "core",
+        "jiujitsu"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Canivete (3x15)",
+      "subgrupo": "forca",
+      "equipamentos": [],
+      "objetivo": [
+        "core"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Abdominal inclinado (3x20)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "banco"
+      ],
+      "objetivo": [
+        "forca"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Prancha com elevação de pernas (3x30s)",
+      "subgrupo": "estabilidade",
+      "equipamentos": [],
+      "objetivo": [
+        "core",
+        "equilibrio"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Dead Bug com halteres (3x10)",
+      "subgrupo": "estabilidade",
+      "equipamentos": [
+        "halteres"
+      ],
+      "objetivo": [
+        "core",
+        "coordenação"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Russian Twist (3x20)",
+      "subgrupo": "forca",
+      "equipamentos": [],
+      "objetivo": [
+        "core"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Prancha lateral (3x30s cada lado)",
+      "subgrupo": "estabilidade",
+      "equipamentos": [],
+      "objetivo": [
+        "core",
+        "equilibrio"
+      ],
+      "peso": 2
+    }
+  ],
+  "pernas": [
+    {
+      "nome": "Agachamento com halteres (3x12)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "halteres"
+      ],
+      "objetivo": [
+        "forca",
+        "resistencia"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Passada com tornozeleira (3x10)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "tornozeleira"
+      ],
+      "objetivo": [
+        "forca",
+        "mobilidade"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Adutor com elástico (2x15)",
+      "subgrupo": "isolamento",
+      "equipamentos": [
+        "elastico"
+      ],
+      "objetivo": [
+        "estabilidade"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Avanço frontal com peso (3x10)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "halteres"
+      ],
+      "objetivo": [
+        "forca"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Pistol squat assistido (3x8)",
+      "subgrupo": "controle",
+      "equipamentos": [],
+      "objetivo": [
+        "mobilidade",
+        "controle motor"
+      ],
+      "peso": 4
+    },
+    {
+      "nome": "Elevação de panturrilha (3x20)",
+      "subgrupo": "isolamento",
+      "equipamentos": [],
+      "objetivo": [
+        "resistencia"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Sumô deadlift (3x10)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "halteres",
+        "barra"
+      ],
+      "objetivo": [
+        "forca",
+        "adutores"
+      ],
+      "peso": 4
+    }
+  ],
+  "fullbody": [
+    {
+      "nome": "Burpee + saco de pancada (4x30s)",
+      "subgrupo": "resistencia",
+      "equipamentos": [
+        "saco"
+      ],
+      "objetivo": [
+        "condicionamento"
+      ],
+      "peso": 4
+    },
+    {
+      "nome": "Jumping Jack + prancha (3x45s)",
+      "subgrupo": "cardio",
+      "equipamentos": [],
+      "objetivo": [
+        "condicionamento",
+        "core"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Circuito livre funcional (5 min)",
+      "subgrupo": "misturado",
+      "equipamentos": [],
+      "objetivo": [
+        "resistencia",
+        "agilidade"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Deslocamento com socos no saco (4x1min)",
+      "subgrupo": "agilidade",
+      "equipamentos": [
+        "saco"
+      ],
+      "objetivo": [
+        "coordenação",
+        "agilidade"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Agachamento + puxada elástica (3x12)",
+      "subgrupo": "combinado",
+      "equipamentos": [
+        "elastico"
+      ],
+      "objetivo": [
+        "forca",
+        "core"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Push-up + remo com halteres (3x10)",
+      "subgrupo": "combinado",
+      "equipamentos": [
+        "halteres"
+      ],
+      "objetivo": [
+        "forca",
+        "core"
+      ],
+      "peso": 4
+    },
+    {
+      "nome": "Bear crawl + parada isométrica (4x10m)",
+      "subgrupo": "controle",
+      "equipamentos": [],
+      "objetivo": [
+        "core",
+        "mobilidade"
+      ],
+      "peso": 3
+    }
+  ],
+  "cardio": [
+    {
+      "nome": "Corda (3x1min)",
+      "subgrupo": "cardio",
+      "equipamentos": [
+        "corda"
+      ],
+      "objetivo": [
+        "condicionamento"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Corrida no lugar (2x2min)",
+      "subgrupo": "cardio",
+      "equipamentos": [],
+      "objetivo": [
+        "resistencia"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Sacos alternados (3x30s)",
+      "subgrupo": "intensidade",
+      "equipamentos": [
+        "saco"
+      ],
+      "objetivo": [
+        "coordenação"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Sprint na praça (5x40m)",
+      "subgrupo": "cardio",
+      "equipamentos": [],
+      "objetivo": [
+        "velocidade"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Burpee com salto (3x12)",
+      "subgrupo": "cardio",
+      "equipamentos": [],
+      "objetivo": [
+        "condicionamento"
+      ],
+      "peso": 4
+    },
+    {
+      "nome": "Deslocamento lateral rápido (4x30s)",
+      "subgrupo": "agilidade",
+      "equipamentos": [],
+      "objetivo": [
+        "explosão"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Corrida com parada e volta (3x1min)",
+      "subgrupo": "resistencia",
+      "equipamentos": [],
+      "objetivo": [
+        "agilidade"
+      ],
+      "peso": 3
+    }
+  ],
+  "joelho": [
+    {
+      "nome": "Agachamento isométrico (3x30s)",
+      "subgrupo": "forca",
+      "equipamentos": [],
+      "objetivo": [
+        "estabilidade"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Ponte unilateral (2x12)",
+      "subgrupo": "estabilidade",
+      "equipamentos": [],
+      "objetivo": [
+        "controle motor"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Extensão com peso (2x15)",
+      "subgrupo": "isolamento",
+      "equipamentos": [
+        "halteres"
+      ],
+      "objetivo": [
+        "reabilitação"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Agachamento com apoio (3x15)",
+      "subgrupo": "reabilitação",
+      "equipamentos": [],
+      "objetivo": [
+        "estabilidade"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Descida unilateral controlada (3x10)",
+      "subgrupo": "controle",
+      "equipamentos": [],
+      "objetivo": [
+        "reabilitação",
+        "equilibrio"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Avanço isométrico (3x30s)",
+      "subgrupo": "forca",
+      "equipamentos": [],
+      "objetivo": [
+        "controle"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Step up na praça (3x12)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "banco"
+      ],
+      "objetivo": [
+        "forca",
+        "estabilidade"
+      ],
+      "peso": 3
+    }
+  ],
+  "dedos": [
+    {
+      "nome": "Pinça manual (2x20s)",
+      "subgrupo": "pegada",
+      "equipamentos": [
+        "pinça"
+      ],
+      "objetivo": [
+        "pegada"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Elástico de dedos (3x15)",
+      "subgrupo": "pegada",
+      "equipamentos": [
+        "elastico"
+      ],
+      "objetivo": [
+        "mobilidade",
+        "pegada"
+      ],
+      "peso": 1
+    },
+    {
+      "nome": "Pegador de mão (até falha x2)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "pegador"
+      ],
+      "objetivo": [
+        "pegada"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Torção de toalha molhada (3x30s)",
+      "subgrupo": "resistencia",
+      "equipamentos": [
+        "toalha"
+      ],
+      "objetivo": [
+        "pegada",
+        "resistencia"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Isometria de pegada com elástico (3x30s)",
+      "subgrupo": "pegada",
+      "equipamentos": [
+        "elastico"
+      ],
+      "objetivo": [
+        "resistencia"
+      ],
+      "peso": 2
+    },
+    {
+      "nome": "Pull-up estático (3x10s)",
+      "subgrupo": "pegada",
+      "equipamentos": [
+        "barra"
+      ],
+      "objetivo": [
+        "forca",
+        "resistencia"
+      ],
+      "peso": 3
+    },
+    {
+      "nome": "Pegada no pano de kimono (3x20s)",
+      "subgrupo": "jiujitsu",
+      "equipamentos": [
+        "kimono"
+      ],
+      "objetivo": [
+        "realismo",
+        "pegada"
+      ],
+      "peso": 2
+    }
+  ]
+}
