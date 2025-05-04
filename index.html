@@ -935,11 +935,35 @@ input[type="text"] {
     return Array.from(document.querySelectorAll(`#${id} input:checked`)).map(el => el.value);
   }
 
+  const nome = document.getElementById("nomePerfil").value.trim();
+  if (!nome) {
+    alert("Por favor, preencha o campo de nome.");
+    return;
+  }
+
+  const locaisMarcados = getMarcados("locais");
+  if (locaisMarcados.length === 0) {
+    alert("Por favor, selecione pelo menos um local.");
+    return;
+  }
+
+  const equipamentosMarcados = getMarcados("equipamentos");
+  if (equipamentosMarcados.length === 0) {
+    alert("Por favor, selecione pelo menos um equipamento.");
+    return;
+  }
+
+  const objetivosMarcados = getMarcados("objetivos");
+  if (objetivosMarcados.length === 0) {
+    alert("Por favor, selecione pelo menos um objetivo.");
+    return;
+  }
+
   const perfil = {
-    nome: document.getElementById("nomePerfil").value,
-    locais: getMarcados("locais"),
-    equipamento: getMarcados("equipamentos"),
-    objetivos: getMarcados("objetivos"),
+    nome: nome,
+    locais: locaisMarcados,
+    equipamento: equipamentosMarcados,
+    objetivos: objetivosMarcados,
   };
 
   localStorage.setItem("perfil_usuario", JSON.stringify(perfil));
