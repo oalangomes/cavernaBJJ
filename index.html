@@ -241,6 +241,63 @@ input[type="text"] {
   
     <div class="treino" id="treino" style="margin-top: 20px;"></div>
   </div>
+
+<div class="card" id="historicoCard" style="display: none;">
+  <h2>📊 Histórico de Treinos</h2>
+
+  <!-- Filtros -->
+  <div style="margin-bottom: 20px;">
+    <label for="filtroData">Filtrar por data:</label>
+    <input type="date" id="filtroData" />
+
+    <label for="filtroMembro" style="margin-left: 20px;">Filtrar por membro:</label>
+    <select id="filtroMembro">
+      <option value="">Todos</option>
+      <option value="ombro">Ombro</option>
+      <option value="core">Core</option>
+      <option value="pernas">Pernas</option>
+      <option value="fullbody">Fullbody</option>
+      <option value="cardio">Cardio</option>
+      <option value="joelho">Joelho</option>
+      <option value="dedos">Dedos</option>
+    </select>
+
+    <label for="filtroObjetivo" style="margin-left: 20px;">Filtrar por objetivo:</label>
+    <select id="filtroObjetivo">
+      <option value="">Todos</option>
+      <option value="forca">Força</option>
+      <option value="mobilidade">Mobilidade</option>
+      <option value="core">Core</option>
+      <option value="condicionamento">Condicionamento</option>
+      <option value="resistencia">Resistência</option>
+    </select>
+  </div>
+
+  <!-- Tabela do Histórico -->
+  <table border="1" width="100%" style="border-collapse: collapse; margin-bottom: 20px;">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Membro</th>
+        <th>Objetivo</th>
+        <th>Tempo</th>
+        <th>Intensidade</th>
+      </tr>
+    </thead>
+    <tbody id="tabelaHistorico">
+      <!-- Conteúdo gerado dinamicamente -->
+    </tbody>
+  </table>
+
+  <!-- Avaliação do Histórico -->
+  <div id="avaliacaoHistorico" style="margin-bottom: 20px;">
+    <h3>📈 Avaliação do Histórico</h3>
+    <p id="avaliacaoResumo"></p>
+  </div>
+
+  <!-- Botão de Exportação -->
+  <button onclick="exportarHistorico()">⬇️ Exportar Histórico</button>
+</div>
   
   <script>
     let dadosTreinos = {
