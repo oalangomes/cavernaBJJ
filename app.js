@@ -10,7 +10,7 @@ async function carregarDados() {
         if (confirmar) {
             sugerirGrupo();
         } else {
-            mostrarTreino(hoje);
+            exibirCard('historicoCard')
         }
     } else {
         sugerirGrupo();
@@ -77,6 +77,7 @@ function editarPerfil() {
 // 📌 Sugerir Grupo
 function getUltimosTreinos() {
     const hoje = new Date().toISOString().slice(0, 10);
+    console.log("hoje", hoje);
     return Object.keys(localStorage)
         .filter(k => k.startsWith("treino_"))
         .map(k => ({
@@ -86,7 +87,6 @@ function getUltimosTreinos() {
         }))
         .filter(t => t.data !== hoje && t.feitos && t.feitos.length > 0)
         .sort((a, b) => b.data.localeCompare(a.data))
-        .slice(0, 2)
         .map(t => t.grupo);
 }
 
@@ -104,6 +104,7 @@ async function sugerirGrupo() {
                 const t = JSON.parse(localStorage.getItem(k));
                 // ✅ Remove se não houver exercícios marcados como feitos
                 if (!t.feitos || t.feitos.length === 0) {
+                    console.log("treino removido", t);
                     localStorage.removeItem(k);
                     return;
                 }
@@ -121,7 +122,14 @@ async function sugerirGrupo() {
 
     const gruposValidos = Object.keys(dadosTreinos).filter(g => !cooldown.includes(g));
     if (gruposValidos.length === 0) {
-        document.getElementById("sugestao").innerHTML = `<p>Nenhum grupo disponível fora do cooldown.</p>`;
+        document.getElementById("sugestao").innerHTML = `<p style="color:#c00"><strong>⚠️ Nenhum grupo disponível fora do cooldown.</strong></p>`;
+
+        // Desabilitar botões e selects
+        document.getElementById("tempo").disabled = true;
+        document.getElementById("intensidade").disabled = true;
+        document.querySelector("button[onclick*='gerarTreino']").disabled = true;
+        document.querySelector("button[onclick*='sugerirGrupo']").disabled = true;
+
         return;
     }
 
@@ -134,8 +142,8 @@ async function sugerirGrupo() {
     window.grupoSugerido = escolhido;
 
     let saida = `<h3>📌 Grupo Sugerido: ${escolhido.toUpperCase()}</h3>`;
-    saida += `<p><strong>Treinos Recentes:</strong> ${cooldown.join(", ") || "nenhum"}</p>`;
-  //  saida += `<p><strong>Grupos com menor score:</strong> ${empatados.map(e => e.grupo.toUpperCase()).join(", ")}</p>`;
+    saida += `<p>📅 <strong> Treinos Recentes:</strong> ${cooldown.join(", ") || "nenhum"}</p>`;
+    //  saida += `<p><strong>Grupos com menor score:</strong> ${empatados.map(e => e.grupo.toUpperCase()).join(", ")}</p>`;
 
     document.getElementById("sugestao").innerHTML = saida;
     limparTreino();
@@ -281,15 +289,25 @@ function carregarHistorico() {
 
 function avaliarHistorico(historico) {
     const totalTempo = historico.reduce((sum, t) => sum + t.tempo, 0);
-    const diasTreinados = new Set(historico.map(t => t.data)).size;
-    const sequenciaDias = calcularSequenciaDias(historico.map(t => t.data));
+    const dias = historico.map(t => t.data);
+    const diasTreinados = new Set(dias).size;
+    const sequenciaDias = calcularSequenciaDias(dias);
+
+    // Pluralização
+    const treinoTxt = diasTreinados === 1 ? "treino" : "treinos";
+    const diaTxt = sequenciaDias === 1 ? "dia" : "dias";
+
     const resumo = `
-    <strong>Tempo Total:</strong> ${totalTempo} minutos<br>
-    <strong>Total de Treinos Feitos:</strong> ${diasTreinados} treinos<br>
-    <strong>Maior Sequência:</strong> ${sequenciaDias} dias consecutivos
-  `;
+      <ul class="resumoHistorico">
+        <li>⏱️ <strong>Tempo Total:</strong> ${totalTempo} minutos</li>
+        <li>📋 <strong>Total de Treinos:</strong> ${diasTreinados} ${treinoTxt}</li>
+        <li>📈 <strong>Maior Sequência:</strong> ${sequenciaDias} ${diaTxt} consecutivo${sequenciaDias > 1 ? "s" : ""}</li>
+      </ul>
+    `;
+
     document.getElementById("avaliacaoResumo").innerHTML = resumo;
 }
+
 
 function calcularSequenciaDias(datas) {
     const ordenadas = [...new Set(datas)].sort();
@@ -328,6 +346,8 @@ function exibirCard(id) {
 
 
 
+
+
 // 🟢 Início
 window.onload = async () => {
     const perfil = getPerfil();
@@ -337,6 +357,11 @@ window.onload = async () => {
     } else {
         document.getElementById("nomePerfil").value = perfil.nome;
         exibirCard("mainCard");
+        document.getElementById("tempo").disabled = false;
+        document.getElementById("intensidade").disabled = false;
+        document.querySelector("button[onclick*='gerarTreino']").disabled = false;
+        document.querySelector("button[onclick*='sugerirGrupo']").disabled = false;
+
         await carregarDados();
     }
 
