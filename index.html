@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Caverna BJJ</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icon-192.png" />
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <div class="app-header">
     <img src="icon-192.png" alt="Ícone do app" class="app-icon" />
     <h1>Caverna BJJ</h1>
   </div>
-  
+
 
   <!-- Card de Configuração de Perfil -->
   <div class="card" id="perfilCard">
@@ -29,36 +31,59 @@
       <label><input type="checkbox" value="Academia"><span>🏋️ Academia</span></label>
     </div>
 
-    <label>Equipamentos disponíveis:</label>
-    <div class="tag-group" id="equipamentos">
-      <label><input type="checkbox" value="Halteres"><span>🏋️ Halteres</span></label>
-      <label><input type="checkbox" value="Elástico"><span>🧵 Elástico</span></label>
-      <label><input type="checkbox" value="Saco de pancada"><span>🥊 Saco de pancada</span></label>
-      <label><input type="checkbox" value="Barra fixa"><span>🚧 Barra fixa</span></label>
-      <label><input type="checkbox" value="Banco abdominal"><span>🪑 Banco abdominal</span></label>
-      <label><input type="checkbox" value="Tornozeleira"><span>🦵 Tornozeleira</span></label>
+    <label for="equipamentosDisponiveis">Equipamentos disponíveis:</label>
+    <div class="tag-group" id="equipamentos" aria-labelledby="equipamentosDisponiveis">
+      <label><input type="checkbox" value="halteres"><span>🏋️ Halteres</span></label>
+      <label><input type="checkbox" value="elastico"><span>🧵 Elástico</span></label>
+      <label><input type="checkbox" value="saco"><span>🥊 Saco de pancada</span></label>
+      <label><input type="checkbox" value="barra"><span>🚧 Barra fixa</span></label>
+      <label><input type="checkbox" value="banco"><span>🪑 Banco abdominal</span></label>
+      <label><input type="checkbox" value="tornozeleira"><span>🦵 Tornozeleira</span></label>
+      <label><input type="checkbox" value="corda"><span>🪢 Corda</span></label>
+      <label><input type="checkbox" value="pegador"><span>✋ Pegador</span></label>
+      <label><input type="checkbox" value="pinça"><span>🧲 Pinça</span></label>
+      <label><input type="checkbox" value="toalha"><span>🧼 Toalha</span></label>
+      <label><input type="checkbox" value="kimono"><span>🥋 Kimono</span></label>
     </div>
 
-    <label>Objetivos:</label>
+
+    <label for="objetivos">Objetivos:</label>
     <div class="tag-group" id="objetivos">
-      <label><input type="checkbox" value="Desempenho no Jiu-Jitsu"><span>🥋 Jiu-Jitsu</span></label>
-      <label><input type="checkbox" value="Força"><span>💪 Força</span></label>
-      <label><input type="checkbox" value="Condicionamento"><span>🏃‍♂️ Condicionamento</span></label>
-      <label><input type="checkbox" value="Mobilidade"><span>🤸 Mobilidade</span></label>
-      <label><input type="checkbox" value="Prevenção de Lesão"><span>🛡️ Prevenção</span></label>
+      <label><input type="checkbox" value="jiujitsu"><span>🥋 Jiu-Jitsu</span></label>
+      <label><input type="checkbox" value="forca"><span>💪 Força</span></label>
+      <label><input type="checkbox" value="condicionamento"><span>🏃‍♂️ Condicionamento</span></label>
+      <label><input type="checkbox" value="mobilidade"><span>🤸 Mobilidade</span></label>
+      <label><input type="checkbox" value="resistencia"><span>🛡️ Resistência</span></label>
+      <label><input type="checkbox" value="postura"><span>🧍 Postura</span></label>
+      <label><input type="checkbox" value="equilibrio"><span>⚖️ Equilíbrio</span></label>
+      <label><input type="checkbox" value="coordenação"><span>🧠 Coordenação</span></label>
+      <label><input type="checkbox" value="agilidade"><span>💨 Agilidade</span></label>
+      <label><input type="checkbox" value="controle motor"><span>🕹️ Controle Motor</span></label>
+      <label><input type="checkbox" value="explosão"><span>💥 Explosão</span></label>
+      <label><input type="checkbox" value="adutores"><span>🦵 Adutores</span></label>
+      <label><input type="checkbox" value="reabilitação"><span>🩹 Reabilitação</span></label>
+      <label><input type="checkbox" value="realismo"><span>🎯 Realismo</span></label>
+      <label><input type="checkbox" value="pegada"><span>✊ Pegada</span></label>
+      <label><input type="checkbox" value="controle"><span>🧘 Controle</span></label>
     </div>
+
 
     <button onclick="salvarPerfil()">💾 Salvar Perfil</button>
   </div>
 
   <!-- Card Principal -->
   <div class="card" id="mainCard">
+    <h2>🏋️‍♂️ Treino do Dia</h2>
+    <div class="sugestao" id="sugestao" style="margin-top: 20px;"></div>
+
+
+    <hr style="margin: 0;" />
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
       <div style="flex: 1; min-width: 180px;">
         <label for="tempo"><strong>⏱️ Tempo disponível:</strong></label>
         <select id="tempo">
           <option value="15">15 min</option>
-          <option value="30">30 min</option>
+          <option value="30" selected>30 min</option>
           <option value="45">45 min</option>
           <option value="60">60 min</option>
         </select>
@@ -67,24 +92,23 @@
         <label for="intensidade"><strong>🔥 Intensidade:</strong></label>
         <select id="intensidade">
           <option value="leve">Leve</option>
-          <option value="media">Média</option>
+          <option value="media" selected>Média</option>
           <option value="intensa">Intensa</option>
         </select>
       </div>
-      <div style="flex: 1; min-width: 180px; text-align: right; margin-top: 28px;">
-        <button onclick="editarPerfil()" class="secondary">✏️ Editar Perfil</button>
-      </div>
+
     </div>
 
-    <hr style="margin: 20px 0;" />
 
-    <button onclick="sugerirGrupo()">🔍 Sugerir Grupo</button>
-    <div class="sugestao" id="sugestao"></div>
 
-    <button onclick="gerarTreino()">✅ Gerar Treino do Dia</button>
-    <button onclick="exibirCard('historicoCard')">📊 Ver Histórico</button>
 
     <div class="treino" id="treino"></div>
+
+    <hr style="margin: 20px 0;" />
+    <button class="refresh" onclick="gerarTreino()">✅ Gerar Novo Treino do Dia</button>
+    <button class="refresh" onclick="sugerirGrupo()">🔄 Sugerir Outro Grupo</button>
+    <button class="refresh" onclick="editarPerfil()">✏️ Editar Perfil</button>
+    <button class="refresh" onclick="exibirCard('historicoCard')">📊 Ver Histórico</button>
   </div>
 
   <!-- Card de Histórico -->
@@ -144,4 +168,5 @@
   <script src="dados.js"></script>
   <script src="app.js"></script>
 </body>
+
 </html>
