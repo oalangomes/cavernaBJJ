@@ -5,7 +5,7 @@ async function carregarDados() {
     dadosTreinos = await getDados();
     const hoje = new Date().toISOString().slice(0, 10);
 
-    if (hasTreinoHoje() ) {
+    if (hasTreinoHoje()) {
         const confirmar = confirm("📌 Você já fez um treino hoje. Deseja criar outro treino?");
         if (confirmar) {
             sugerirGrupo();
@@ -20,18 +20,18 @@ async function carregarDados() {
 function hasTreinoHoje() {
     const hoje = new Date().toISOString().slice(0, 10);
     return Object.keys(localStorage)
-      .filter(k => k.startsWith("treino_" + hoje))
-      .some(k => {
-        try {
-          const t = JSON.parse(localStorage.getItem(k));
-          return t?.feitos && t.feitos.length > 0;
-        } catch (e) {
-          console.warn(`Erro ao processar treino ${k}`, e);
-          return false;
-        }
-      });
-  }
-  
+        .filter(k => k.startsWith("treino_" + hoje))
+        .some(k => {
+            try {
+                const t = JSON.parse(localStorage.getItem(k));
+                return t?.feitos && t.feitos.length > 0;
+            } catch (e) {
+                console.warn(`Erro ao processar treino ${k}`, e);
+                return false;
+            }
+        });
+}
+
 
 
 // 🔐 Perfil
@@ -79,8 +79,12 @@ function getUltimosTreinos() {
     const hoje = new Date().toISOString().slice(0, 10);
     return Object.keys(localStorage)
         .filter(k => k.startsWith("treino_"))
-        .map(k => ({ data: k.replace("treino_", ""), grupo: JSON.parse(localStorage[k]).grupo }))
-        .filter(t => t.data !== hoje)
+        .map(k => ({
+            data: k.replace("treino_", ""),
+            feitos: JSON.parse(localStorage[k]).feitos,
+            grupo: JSON.parse(localStorage[k]).grupo
+        }))
+        .filter(t => t.data !== hoje && t.feitos && t.feitos.length > 0)
         .sort((a, b) => b.data.localeCompare(a.data))
         .slice(0, 2)
         .map(t => t.grupo);
@@ -131,7 +135,7 @@ async function sugerirGrupo() {
 
     let saida = `<h3>📌 Grupo Sugerido: ${escolhido.toUpperCase()}</h3>`;
     saida += `<p><strong>Treinos Recentes:</strong> ${cooldown.join(", ") || "nenhum"}</p>`;
-    saida += `<p><strong>Grupos com menor score:</strong> ${empatados.map(e => e.grupo.toUpperCase()).join(", ")}</p>`;
+  //  saida += `<p><strong>Grupos com menor score:</strong> ${empatados.map(e => e.grupo.toUpperCase()).join(", ")}</p>`;
 
     document.getElementById("sugestao").innerHTML = saida;
     limparTreino();
@@ -151,6 +155,7 @@ function gerarTreino() {
     const intensidade = document.getElementById("intensidade").value;
     const grupo = window.grupoSugerido || "core";
     const dia = new Date().toISOString().slice(0, 10);
+    const chave = "treino_" + dia + grupo;
     const perfil = getPerfil();
     const fatorI = { leve: 1, media: 2, intensa: 3 }[intensidade];
 
@@ -159,32 +164,47 @@ function gerarTreino() {
     });
 
     const qtd = Math.min(Math.ceil((tempo / 15) + fatorI), base.length);
-    const lista = base.slice(0, qtd);
-    localStorage.setItem("treino_" + dia + grupo, JSON.stringify({ tempo, intensidade, grupo, feitos: [], lista }));
-    mostrarTreino(dia);
+    const lista = embaralharArray(base).slice(0, qtd);
+
+    localStorage.setItem(chave, JSON.stringify({ tempo, intensidade, grupo, feitos: [], lista }));
+    mostrarTreino(dia, chave);
 }
 
+function embaralharArray(arr) {
+    const array = [...arr];
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+
+
 // ✅ Exibir treino
-function mostrarTreino(dia) {
-    const t = JSON.parse(localStorage.getItem("treino_" + dia + window.grupoSugerido));
+function mostrarTreino(dia, chave = null) {
+    const grupo = window.grupoSugerido || "core";
+    const chaveFinal = chave || ("treino_" + dia + grupo);
+    const t = JSON.parse(localStorage.getItem(chaveFinal));
     if (!t || !t.lista?.length) {
         document.getElementById("treino").innerHTML = `<h3>${dia} - ${t?.grupo?.toUpperCase() || ""}</h3><p>Nenhum treino encontrado</p>`;
         return;
     }
     const lista = t.lista.map((ex, i) => {
         const c = t.feitos.includes(i) ? "checked" : "";
-        return `<li><label><input type="checkbox" onchange="check(${i})" ${c}/> ${ex.nome}</label></li>`;
+        return `<li><label><input type="checkbox" onchange="check(${i}, '${chaveFinal}')" ${c}/> ${ex.nome}</label></li>`;
     }).join("");
     document.getElementById("treino").innerHTML = `<h3>${dia} - ${t.grupo.toUpperCase()}</h3><p>${t.tempo}min | ${t.intensidade}</p><ul class="checklist">${lista}</ul>`;
 }
 
-function check(i) {
-    const dia = new Date().toISOString().slice(0, 10);
-    const t = JSON.parse(localStorage.getItem("treino_" + dia + window.grupoSugerido));
+
+function check(i, chave) {
+    const t = JSON.parse(localStorage.getItem(chave));
     t.feitos = t.feitos.includes(i) ? t.feitos.filter(x => x !== i) : [...t.feitos, i];
-    localStorage.setItem("treino_" + dia + window.grupoSugerido, JSON.stringify(t));
-    mostrarTreino(dia);
+    localStorage.setItem(chave, JSON.stringify(t));
+    mostrarTreino(new Date().toISOString().slice(0, 10), chave);
 }
+
 
 // ⬇️ Exportar treino
 function exportarTreino() {
@@ -210,39 +230,54 @@ function exportarTreino() {
 
 // 📊 Histórico
 function carregarHistorico() {
-    const dataFiltro = document.getElementById("filtroData").value;
-    const membroFiltro = document.getElementById("filtroMembro").value;
-    const objetivoFiltro = document.getElementById("filtroObjetivo").value;
+    const dataInicio = document.getElementById("filtroDataInicio").value;
+    const dataFim = document.getElementById("filtroDataFim").value;
+    const membroFiltro = document.getElementById("filtroMembro").value.toLowerCase();
+    const objetivoFiltro = document.getElementById("filtroObjetivo").value.toLowerCase();
+    const intensidadeFiltro = document.getElementById("filtroIntensidade").value.toLowerCase();
 
     const historico = Object.keys(localStorage)
         .filter(k => k.startsWith("treino_"))
         .map(k => {
-            const data = k.replace("treino_", "");
-            const treino = JSON.parse(localStorage.getItem(k));
-            return { data, ...treino };
+            const t = JSON.parse(localStorage.getItem(k));
+            const raw = k.replace("treino_", "");
+            const data = raw.slice(0, 10); // ISO date
+            const grupo = t.grupo || raw.slice(10);
+            return { data, grupo, ...t };
         })
         .filter(t => {
-            if (dataFiltro && t.data !== dataFiltro) return false;
-            if (membroFiltro && t.grupo !== membroFiltro) return false;
-            if (objetivoFiltro && !t.lista.some(e => e.objetivo.includes(objetivoFiltro))) return false;
-            return true;
+            const { data, grupo, lista, intensidade } = t;
+
+            const dataValida = (!dataInicio || data >= dataInicio) &&
+                (!dataFim || data <= dataFim);
+
+            const membroValido = !membroFiltro || grupo.toLowerCase() === membroFiltro;
+
+            const objetivoValido = !objetivoFiltro || lista.some(e =>
+                e.objetivo.map(o => o.toLowerCase()).includes(objetivoFiltro)
+            );
+
+            const intensidadeValida = !intensidadeFiltro || intensidade.toLowerCase() === intensidadeFiltro;
+
+            return dataValida && membroValido && objetivoValido && intensidadeValida;
         });
 
     const tabela = document.getElementById("tabelaHistorico");
     tabela.innerHTML = historico.length
         ? historico.map(t => `
-      <tr>
-        <td>${t.data}</td>
-        <td>${t.grupo.toUpperCase()}</td>
-        <td>${t.lista.map(e => e.objetivo.join(", ")).join("; ")}</td>
-        <td>${t.tempo} min</td>
-        <td>${t.intensidade}</td>
-      </tr>
-    `).join("")
+            <tr>
+                <td>${t.data}</td>
+                <td>${t.grupo.toUpperCase()}</td>
+                <td>${t.lista.map(e => e.objetivo.join(", ")).join("; ")}</td>
+                <td>${t.tempo} min</td>
+                <td>${t.intensidade}</td>
+            </tr>
+        `).join("")
         : "<tr><td colspan='5'>Nenhum treino encontrado</td></tr>";
 
     avaliarHistorico(historico);
 }
+
 
 function avaliarHistorico(historico) {
     const totalTempo = historico.reduce((sum, t) => sum + t.tempo, 0);
@@ -250,7 +285,7 @@ function avaliarHistorico(historico) {
     const sequenciaDias = calcularSequenciaDias(historico.map(t => t.data));
     const resumo = `
     <strong>Tempo Total:</strong> ${totalTempo} minutos<br>
-    <strong>Dias Treinados:</strong> ${diasTreinados} dias<br>
+    <strong>Total de Treinos Feitos:</strong> ${diasTreinados} treinos<br>
     <strong>Maior Sequência:</strong> ${sequenciaDias} dias consecutivos
   `;
     document.getElementById("avaliacaoResumo").innerHTML = resumo;
@@ -304,6 +339,15 @@ window.onload = async () => {
         exibirCard("mainCard");
         await carregarDados();
     }
+
+    const hoje = new Date();
+    const seteDiasAtras = new Date();
+    seteDiasAtras.setDate(hoje.getDate() - 6); // Inclui hoje no intervalo
+
+    document.getElementById("filtroDataInicio").value = seteDiasAtras.toISOString().slice(0, 10);
+    document.getElementById("filtroDataFim").value = hoje.toISOString().slice(0, 10);
+
+
 };
 
 // 🔄 Carregar dados ao iniciar  

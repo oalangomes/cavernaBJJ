@@ -174,16 +174,20 @@ body {
     margin-bottom: 20px;
   }
   
-  .tabela-historico th,
-  .tabela-historico td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: center;
-    font-size: 14px;
+  .tabela-historico {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
   }
   
-  .tabela-historico th {
-    background: #004085;
-    color: white;
+  .tabela-historico td, .tabela-historico th {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+
+  .tabela-scroll {
+    overflow-x: auto;
+    width: 100%;
   }
   

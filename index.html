@@ -116,11 +116,15 @@
     <h2>📊 Histórico de Treinos</h2>
 
     <div style="margin-bottom: 20px;">
-      <label for="filtroData">Filtrar por data:</label>
-      <input type="date" id="filtroData" />
+      <label for="filtroDataInicio">De:</label>
+      <input type="date" id="filtroDataInicio" onchange="carregarHistorico()" />
+
+      <label for="filtroDataFim" style="margin-left: 10px;">Até:</label>
+      <input type="date" id="filtroDataFim" onchange="carregarHistorico()" />
+
 
       <label for="filtroMembro" style="margin-left: 20px;">Filtrar por membro:</label>
-      <select id="filtroMembro">
+      <select id="filtroMembro" onchange="carregarHistorico()">
         <option value="">Todos</option>
         <option value="ombro">Ombro</option>
         <option value="core">Core</option>
@@ -132,7 +136,7 @@
       </select>
 
       <label for="filtroObjetivo" style="margin-left: 20px;">Filtrar por objetivo:</label>
-      <select id="filtroObjetivo">
+      <select id="filtroObjetivo" onchange="carregarHistorico()">
         <option value="">Todos</option>
         <option value="forca">Força</option>
         <option value="mobilidade">Mobilidade</option>
@@ -140,20 +144,31 @@
         <option value="condicionamento">Condicionamento</option>
         <option value="resistencia">Resistência</option>
       </select>
+      <label for="filtroIntensidade" style="margin-left: 20px;">Filtrar por intensidade:</label>
+      <select id="filtroIntensidade" onchange="carregarHistorico()">
+        <option value="">Todas</option>
+        <option value="leve">Leve</option>
+        <option value="media">Média</option>
+        <option value="intensa">Intensa</option>
+      </select>
     </div>
 
-    <table class="tabela-historico">
-      <thead>
-        <tr>
-          <th>Data</th>
-          <th>Membro</th>
-          <th>Objetivo</th>
-          <th>Tempo</th>
-          <th>Intensidade</th>
-        </tr>
-      </thead>
-      <tbody id="tabelaHistorico"></tbody>
-    </table>
+    <div class="tabela-scroll">
+
+      <table class="tabela-historico">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Membro</th>
+            <th>Objetivo</th>
+            <th>Tempo</th>
+            <th>Intensidade</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaHistorico"></tbody>
+      </table>
+    </div>
+
 
     <div id="avaliacaoHistorico" style="margin-bottom: 20px;">
       <h3>📈 Avaliação do Histórico</h3>
