@@ -355,6 +355,8 @@ window.onload = async () => {
     if (!perfil.nome || !perfil.locais || !perfil.equipamento || !perfil.objetivos) {
         exibirCard("perfilCard");
     } else {
+        const msg = `<strong>Olá, ${perfil.nome}! Este é seu treino 💪</strong>`;
+        document.getElementById("mensagemBoasVindas").innerHTML = msg;
         document.getElementById("nomePerfil").value = perfil.nome;
         exibirCard("mainCard");
         document.getElementById("tempo").disabled = false;
