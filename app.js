@@ -58,7 +58,7 @@ async function salvarPerfil() {
     localStorage.setItem("perfil_usuario", JSON.stringify(perfil));
     alert("Perfil salvo com sucesso!");
 
-    await iniciar();
+    await iniciar(perfil);
     
 }
 
@@ -346,8 +346,8 @@ function exibirCard(id) {
 }
 
 
-async function iniciar() {    
-    const msg = `<strong>Olá, ${perfil.nom}! Este é seu treino 💪</strong>`;
+async function iniciar(perfil) {    
+    const msg = `<strong>Olá, ${perfil.nome}! Este é seu treino 💪</strong>`;
     document.getElementById("mensagemBoasVindas").innerHTML = msg;
     document.getElementById("nomePerfil").value = perfil.nome;
     
@@ -367,7 +367,7 @@ window.onload = async () => {
     if (!perfil.nome || !perfil.locais || !perfil.equipamento || !perfil.objetivos) {
         exibirCard("perfilCard");
     } else {
-        await iniciar();
+        await iniciar(perfil);
     }
 
     const hoje = new Date();

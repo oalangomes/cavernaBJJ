@@ -68,7 +68,7 @@
     </div>
 
 
-    <button onclick="await salvarPerfil()">💾 Salvar Perfil</button>
+    <button onclick="salvarPerfil()">💾 Salvar Perfil</button>
   </div>
 
   <!-- Card Principal -->
@@ -83,7 +83,7 @@
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
       <div style="flex: 1; min-width: 180px;">
         <label for="tempo"><strong>⏱️ Tempo disponível:</strong></label>
-        <select id="tempo">
+        <select id="tempo" onchange="gerarTreino()">
           <option value="15">15 min</option>
           <option value="30" selected>30 min</option>
           <option value="45">45 min</option>
@@ -92,7 +92,7 @@
       </div>
       <div style="flex: 1; min-width: 180px;">
         <label for="intensidade"><strong>🔥 Intensidade:</strong></label>
-        <select id="intensidade">
+        <select id="intensidade" onchange="gerarTreino()">
           <option value="leve">Leve</option>
           <option value="media" selected>Média</option>
           <option value="intensa">Intensa</option>
