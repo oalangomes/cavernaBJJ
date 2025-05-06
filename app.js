@@ -39,7 +39,7 @@ function getPerfil() {
     return JSON.parse(localStorage.getItem("perfil_usuario") || "{}");
 }
 
-function salvarPerfil() {
+async function salvarPerfil() {
     function getMarcados(id) {
         return Array.from(document.querySelectorAll(`#${id} input:checked`)).map(el => el.value);
     }
@@ -58,7 +58,8 @@ function salvarPerfil() {
     localStorage.setItem("perfil_usuario", JSON.stringify(perfil));
     alert("Perfil salvo com sucesso!");
 
-    exibirCard("mainCard");
+    await iniciar();
+    
 }
 
 function editarPerfil() {
@@ -345,8 +346,19 @@ function exibirCard(id) {
 }
 
 
+async function iniciar() {    
+    const msg = `<strong>Olá, ${perfil.nom}! Este é seu treino 💪</strong>`;
+    document.getElementById("mensagemBoasVindas").innerHTML = msg;
+    document.getElementById("nomePerfil").value = perfil.nome;
+    
+    document.getElementById("tempo").disabled = false;
+    document.getElementById("intensidade").disabled = false;
+    document.querySelector("button[onclick*='gerarTreino']").disabled = false;
+    document.querySelector("button[onclick*='sugerirGrupo']").disabled = false;
+    exibirCard("mainCard");
 
-
+    await carregarDados();
+}
 
 // 🟢 Início
 window.onload = async () => {
@@ -355,16 +367,7 @@ window.onload = async () => {
     if (!perfil.nome || !perfil.locais || !perfil.equipamento || !perfil.objetivos) {
         exibirCard("perfilCard");
     } else {
-        const msg = `<strong>Olá, ${perfil.nome}! Este é seu treino 💪</strong>`;
-        document.getElementById("mensagemBoasVindas").innerHTML = msg;
-        document.getElementById("nomePerfil").value = perfil.nome;
-        exibirCard("mainCard");
-        document.getElementById("tempo").disabled = false;
-        document.getElementById("intensidade").disabled = false;
-        document.querySelector("button[onclick*='gerarTreino']").disabled = false;
-        document.querySelector("button[onclick*='sugerirGrupo']").disabled = false;
-
-        await carregarDados();
+        await iniciar();
     }
 
     const hoje = new Date();
@@ -373,7 +376,6 @@ window.onload = async () => {
 
     document.getElementById("filtroDataInicio").value = seteDiasAtras.toISOString().slice(0, 10);
     document.getElementById("filtroDataFim").value = hoje.toISOString().slice(0, 10);
-
 
 };
 
