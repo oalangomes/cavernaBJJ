@@ -184,6 +184,17 @@
   <!-- Scripts -->
   <script src="dados.js"></script>
   <script src="app.js"></script>
+
+  <!-- Modal de Exibição de Exercício -->
+<div id="modalExercicio" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close" onclick="fecharModal()">&times;</span>
+    <h3 id="modalTitulo"></h3>
+    <p id="modalDescricao"></p>
+    <iframe id="modalVideo" width="100%" height="240" style="border:none; display: none;" allowfullscreen></iframe>
+  </div>
+</div>
+
 </body>
 
 </html>

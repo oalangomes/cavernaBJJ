@@ -201,7 +201,8 @@ function mostrarTreino(dia, chave = null) {
     }
     const lista = t.lista.map((ex, i) => {
         const c = t.feitos.includes(i) ? "checked" : "";
-        return `<li><label><input type="checkbox" onchange="check(${i}, '${chaveFinal}')" ${c}/> ${ex.nome}</label></li>`;
+        return `<li><label><input type="checkbox" onchange="check(${i}, '${chave}')" ${c}/> <span onclick="abrirModalExercicio('${ex.nome.replace(/'/g, "\\'")}')" style="cursor:pointer; text-decoration:underline;">${ex.nome}</span></label></li>`;
+       // return `<li><label><input type="checkbox" onchange="check(${i}, '${chaveFinal}')" ${c}/> ${ex.nome}</label></li>`;
     }).join("");
     document.getElementById("treino").innerHTML = `<h3>${dia} - ${t.grupo.toUpperCase()}</h3><p>${t.tempo}min | ${t.intensidade}</p><ul class="checklist">${lista}</ul>`;
 }
@@ -359,6 +360,25 @@ async function iniciar(perfil) {
 
     await carregarDados();
 }
+
+function abrirModalExercicio(nome) {
+    const todosExercicios = Object.values(dadosTreinos).flat();
+    const ex = todosExercicios.find(e => e.nome === nome);
+    if (!ex) return;
+  
+    document.getElementById("modalTitulo").textContent = ex.nome;
+    document.getElementById("modalDescricao").textContent = ex.descricao || "Sem descrição.";
+    document.getElementById("modalVideo").style.display = "none";
+    document.getElementById("modalDescricao").innerHTML += `<br><br><a href="${ex.video}" target="_blank" style="color:blue; text-decoration:underline;">▶️ Ver vídeo no YouTube</a>`;
+
+    document.getElementById("modalExercicio").style.display = "flex";
+  }
+  
+  function fecharModal() {
+    document.getElementById("modalExercicio").style.display = "none";
+    document.getElementById("modalVideo").src = ""; // Para parar o vídeo
+  }
+  
 
 // 🟢 Início
 window.onload = async () => {
