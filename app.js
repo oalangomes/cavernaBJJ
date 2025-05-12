@@ -378,6 +378,23 @@ function abrirModalExercicio(nome) {
     document.getElementById("modalExercicio").style.display = "none";
     document.getElementById("modalVideo").src = ""; // Para parar o vídeo
   }
+
+  function verificarVideoYouTube(videoId) {
+    const url = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`;
+  
+    fetch(url)
+      .then(response => {
+        if (response.ok) {
+          console.log('O vídeo existe.');
+        } else {
+          console.log('O vídeo não existe ou está indisponível.');
+        }
+      })
+      .catch(error => {
+        console.error('Erro ao verificar o vídeo:', error);
+      });
+  }
+  
   
 
 // 🟢 Início
