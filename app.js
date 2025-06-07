@@ -169,7 +169,11 @@ function gerarTreino() {
     const fatorI = { leve: 1, media: 2, intensa: 3 }[intensidade];
 
     const base = dadosTreinos[grupo].filter(ex => {
-        return !perfil.equipamento?.length || ex.equipamentos.every(eq => perfil.equipamento.includes(eq));
+        const equipamentosOk = !perfil.equipamento?.length ||
+            ex.equipamentos.every(eq => perfil.equipamento.includes(eq));
+        const localAcademia = perfil.locais?.includes("Academia");
+        const exclusivoOk = !ex.exclusivoAcademia || localAcademia;
+        return equipamentosOk && exclusivoOk;
     });
 
     const qtd = Math.min(Math.ceil((tempo / 15) + fatorI), base.length);
@@ -379,21 +383,6 @@ function abrirModalExercicio(nome) {
     document.getElementById("modalVideo").src = ""; // Para parar o vídeo
   }
 
-  function verificarVideoYouTube(videoId) {
-    const url = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`;
-  
-    fetch(url)
-      .then(response => {
-        if (response.ok) {
-          console.log('O vídeo existe.');
-        } else {
-          console.log('O vídeo não existe ou está indisponível.');
-        }
-      })
-      .catch(error => {
-        console.error('Erro ao verificar o vídeo:', error);
-      });
-  }
   
   
 

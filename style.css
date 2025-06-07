@@ -92,13 +92,6 @@ button.secondary:hover {
     background: #5a6268;
 }
 
-button.refresh {
-    background: #e4e6eb;
-    color: #333;
-    font-size: 14px;
-    padding: 10px;
-    margin-top: 10px;
-}
 
 button:disabled,
 select:disabled {
