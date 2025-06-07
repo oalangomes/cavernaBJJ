@@ -15,8 +15,9 @@ O **Caverna BJJ** é um app leve, responsivo e offline para gerar treinos funcio
   - Balanceamento automático por intensidade, tempo e volume
 
 - 🏋️ **Geração de Treino do Dia**
-  - Variação de exercícios com base no histórico
-  - Evita repetição dos mesmos movimentos no mesmo dia
+- Variação de exercícios com base no histórico
+- Evita repetição dos mesmos movimentos no mesmo dia
+- Respeita exercícios marcados como exclusivos de academia de acordo com seu perfil
 
 - 📋 **Checklist interativo**
   - Marcação de exercícios feitos
@@ -95,7 +96,7 @@ Criado por **Alan Gomes**, faixa branca apaixonado por Jiu-Jitsu, pai e dev auto
 
 ## 📜 Licença
 
-Uso pessoal e livre. Modifique como quiser, mas lembre-se de respeitar os vídeos originais usados via YouTube.
+Distribuído sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ---
 
