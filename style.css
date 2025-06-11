@@ -292,9 +292,9 @@ strong {
   
 /* Botão de troca de tema */
 #toggleTema {
-    position: absolute;
-    top: 8px;
-    right: 8px;
+    position: fixed;
+    top: 10px;
+    right: 10px;
     background: transparent;
     border: none;
     font-size: 20px;
