@@ -290,3 +290,74 @@ strong {
     cursor: pointer;
   }
   
+/* Botão de troca de tema */
+#toggleTema {
+    position: fixed;
+    top: 8px;
+    right: 8px;
+    z-index: 1000;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Estilos para modo escuro */
+body.dark {
+    background: #121212;
+    color: #e1e1e1;
+}
+
+body.dark h1,
+body.dark .app-header h1 {
+    color: #79baff;
+}
+
+body.dark .card {
+    background: #1e1e1e;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+body.dark button {
+    background: #004085;
+}
+
+body.dark button:hover {
+    background: #002b5c;
+}
+
+body.dark .tag-group label {
+    background: #001a33;
+    border-color: #004085;
+}
+
+body.dark .tag-group span {
+    color: #79baff;
+}
+
+body.dark .tag-group input[type="checkbox"]:checked+span {
+    background: #004085;
+    color: white;
+}
+
+body.dark .tabela-historico thead {
+    background-color: #004085;
+    color: white;
+}
+
+body.dark .tabela-historico tbody tr:nth-child(even) {
+    background-color: #222;
+}
+
+body.dark .tabela-historico td,
+body.dark .tabela-historico th {
+    border-color: #444;
+}
+
+body.dark .modal-content {
+    background: #1e1e1e;
+}
+
+body.dark .resumoHistorico li {
+    color: #ddd;
+}
