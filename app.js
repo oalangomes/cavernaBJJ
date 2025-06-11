@@ -383,11 +383,32 @@ function abrirModalExercicio(nome) {
     document.getElementById("modalVideo").src = ""; // Para parar o vídeo
   }
 
+// 🌙 Tema escuro
+function aplicarTema() {
+    const tema = localStorage.getItem("tema") || "light";
+    const isDark = tema === "dark";
+    document.body.classList.toggle("dark", isDark);
+    const btn = document.getElementById("toggleTema");
+    if (btn) btn.textContent = isDark ? "☀️" : "🌙";
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', isDark ? '#121212' : '#002b5c');
+}
+
+function alternarTema() {
+    const isDark = document.body.classList.toggle("dark");
+    localStorage.setItem("tema", isDark ? "dark" : "light");
+    const btn = document.getElementById("toggleTema");
+    if (btn) btn.textContent = isDark ? "☀️" : "🌙";
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', isDark ? '#121212' : '#002b5c');
+}
+
   
   
 
 // 🟢 Início
 window.onload = async () => {
+    aplicarTema();
     const perfil = getPerfil();
 
     if (!perfil.nome || !perfil.locais || !perfil.equipamento || !perfil.objetivos) {

@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="App de treinos funcionais personalizados para praticantes de Jiu-Jitsu.">
+  <meta name="theme-color" content="#002b5c">
   <title>Caverna BJJ</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icon-192.png" />
@@ -11,9 +13,10 @@
 </head>
 
 <body>
-  <div class="app-header">
+  <div class="app-header" style="position: relative;">
     <img src="icon-192.png" alt="Ícone do app" class="app-icon" />
     <h1>Caverna BJJ</h1>
+    <button id="toggleTema" onclick="alternarTema()" aria-label="Alternar tema">🌙</button>
   </div>
 
 
