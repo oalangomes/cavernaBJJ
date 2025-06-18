@@ -426,4 +426,14 @@ window.onload = async () => {
 
 };
 
-// 🔄 Carregar dados ao iniciar  
+// 🔄 Carregar dados ao iniciar
+
+// Exports para testes em ambiente Node
+if (typeof module !== 'undefined') {
+  module.exports = {
+    gerarTreino,
+    calcularSequenciaDias,
+    embaralharArray,
+    __setDadosTreinos: d => dadosTreinos = d
+  };
+}

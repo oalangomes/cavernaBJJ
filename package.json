@@ -1,0 +1,11 @@
+{
+  "name": "cavernabjj",
+  "version": "1.0.0",
+  "description": "Test setup",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
