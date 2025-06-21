@@ -24,7 +24,6 @@ describe('gerarTreino', () => {
       ]
     });
     global.grupoSugerido = 'core';
-    global.mostrarTreino = jest.fn();
   });
 
   test('cria entrada no localStorage para o treino', () => {
@@ -35,6 +34,6 @@ describe('gerarTreino', () => {
     expect(stored).toBeTruthy();
     expect(stored.grupo).toBe('core');
     expect(stored.tempo).toBe(30);
-    expect(mostrarTreino).toHaveBeenCalled();
+    expect(document.getElementById('treino').innerHTML).not.toBe('');
   });
 });
