@@ -3,6 +3,7 @@ let dadosTreinos = {};
 
 async function carregarDados() {
     dadosTreinos = await getDados();
+    popularSelectGrupo();
     const hoje = new Date().toISOString().slice(0, 10);
 
     if (hasTreinoHoje()) {
@@ -59,7 +60,15 @@ async function salvarPerfil() {
     alert("Perfil salvo com sucesso!");
 
     await iniciar(perfil);
-    
+
+}
+
+function popularSelectGrupo() {
+    const sel = document.getElementById("grupoSelect");
+    if (!sel) return;
+    sel.innerHTML = Object.keys(dadosTreinos)
+        .map(g => `<option value="${g}">${g.toUpperCase()}</option>`)
+        .join("");
 }
 
 function editarPerfil() {
@@ -141,6 +150,8 @@ async function sugerirGrupo() {
     const escolhido = empatados[Math.floor(Math.random() * empatados.length)].grupo;
 
     window.grupoSugerido = escolhido;
+    const selGrupo = document.getElementById("grupoSelect");
+    if (selGrupo) selGrupo.value = escolhido;
 
     let saida = `<h3>📌 Grupo Sugerido: ${escolhido.toUpperCase()}</h3>`;
     saida += `<p>📅 <strong> Treinos Recentes:</strong> ${cooldown.join(", ") || "nenhum"}</p>`;
@@ -162,7 +173,8 @@ function limparTreino() {
 function gerarTreino() {
     const tempo = parseInt(document.getElementById("tempo").value);
     const intensidade = document.getElementById("intensidade").value;
-    const grupo = window.grupoSugerido || "core";
+    const sel = document.getElementById("grupoSelect");
+    const grupo = sel && sel.value ? sel.value : (window.grupoSugerido || "core");
     const dia = new Date().toISOString().slice(0, 10);
     const chave = "treino_" + dia + grupo;
     const perfil = getPerfil();

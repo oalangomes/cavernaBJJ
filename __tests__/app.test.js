@@ -13,6 +13,7 @@ describe('gerarTreino', () => {
     document.body.innerHTML = `
       <input id="tempo" value="30" />
       <select id="intensidade"><option value="media" selected>media</option></select>
+      <select id="grupoSelect"><option value="core" selected>core</option></select>
       <div id="treino"></div>
     `;
     localStorage.setItem('perfil_usuario', JSON.stringify({equipamento: [], locais:['Casa']}));
