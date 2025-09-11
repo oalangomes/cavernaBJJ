@@ -160,6 +160,11 @@ select:disabled {
     color: #004085;
 }
 
+body.dark .sugestao h3,
+body.dark .treino h3 {
+    color: #79baff;
+}
+
 ul {
     padding-left: 20px;
 }
@@ -262,6 +267,10 @@ strong {
     color: #004085;
 }
 
+body.dark .resumoHistorico li strong {
+    color: #79baff;
+}
+
 .modal {
     position: fixed;
     z-index: 100;
@@ -293,7 +302,7 @@ strong {
   
 /* Botão de troca de tema */
 #toggleTema {
-    position: absolute;
+    position: fixed;
     top: 10px;
     right: 10px;
     background: transparent;
@@ -301,6 +310,9 @@ strong {
     font-size: 20px;
     cursor: pointer;
     color: #002b5c;
+    width: auto;
+    height: auto;
+    z-index: 1000;
 }
 
 body.dark #toggleTema {
@@ -316,6 +328,14 @@ body.dark {
 body.dark h1,
 body.dark .app-header h1 {
     color: #79baff;
+}
+
+body.dark h2 {
+    color: #e1e1e1;
+}
+
+body.dark strong {
+    color: #ddd;
 }
 
 body.dark .card {
