@@ -1,6 +1,6 @@
-# 🥋 Caverna BJJ - Web App de Treinos Funcionais para Jiu-Jitsu
+# 🏋️ Caverna BJJ - Web App de Treinos Funcionais
 
-O **Caverna BJJ** é um app leve, responsivo e offline para gerar treinos funcionais adaptados para praticantes de Jiu-Jitsu. Totalmente baseado no navegador e com armazenamento local, é ideal para treinar em casa, na praça ou na academia, mesmo sem internet.
+O **Caverna BJJ** é um app leve, responsivo e offline para gerar treinos funcionais. Embora tenha nascido focado em Jiu-Jitsu, hoje contempla um conjunto mais amplo de exercícios gerais. Totalmente baseado no navegador e com armazenamento local, é ideal para treinar em casa, na praça ou na academia, mesmo sem internet.
 
 ---
 
@@ -74,7 +74,7 @@ cavernaBJJ/
 
 ## 🧠 Inspiração
 
-Criado por **Alan Gomes**, faixa branca apaixonado por Jiu-Jitsu, pai e dev autodidata. O app foi idealizado para tornar os treinos mais eficientes, variados e personalizados — mesmo com pouco tempo ou estrutura.
+Criado por **Alan Gomes**, faixa branca apaixonado por Jiu-Jitsu, pai e dev autodidata. O app foi idealizado para tornar os treinos mais eficientes, variados e personalizados — mesmo com pouco tempo ou estrutura — e hoje atende também quem busca condicionamento geral.
 
 ---
 

@@ -66,8 +66,13 @@ async function salvarPerfil() {
 function popularSelectGrupo() {
     const sel = document.getElementById("grupoSelect");
     if (!sel) return;
+    const nomes = { bracos: 'Braços' };
     sel.innerHTML = Object.keys(dadosTreinos)
-        .map(g => `<option value="${g}">${g.toUpperCase()}</option>`)
+        .sort()
+        .map(g => {
+            const label = nomes[g] || g;
+            return `<option value="${g}">${label.toUpperCase()}</option>`;
+        })
         .join("");
 }
 

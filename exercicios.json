@@ -737,5 +737,53 @@
                 "video": "https://www.youtube.com/watch?v=yKqYi8BbJxY",
                 "exclusivoAcademia": false
             }
+        ],
+        "peito": [
+            {
+                "nome": "Flexão de braços (3x12)",
+                "subgrupo": "forca",
+                "equipamentos": [],
+                "objetivo": ["forca"],
+                "peso": 3,
+                "descricao": "Realize flexões mantendo o corpo alinhado e descendo até próximo ao chão.",
+                "video": "https://www.youtube.com/watch?v=IODxDxX7oi4",
+                "exclusivoAcademia": false
+            }
+        ],
+        "costas": [
+            {
+                "nome": "Remada curvada com halteres (3x10)",
+                "subgrupo": "forca",
+                "equipamentos": ["halteres"],
+                "objetivo": ["forca"],
+                "peso": 3,
+                "descricao": "Com tronco inclinado, puxe os halteres em direção ao abdômen.",
+                "video": "https://www.youtube.com/watch?v=vT2GjY_Umpw",
+                "exclusivoAcademia": false
+            }
+        ],
+        "bracos": [
+            {
+                "nome": "Rosca direta com halteres (3x12)",
+                "subgrupo": "forca",
+                "equipamentos": ["halteres"],
+                "objetivo": ["forca"],
+                "peso": 3,
+                "descricao": "Em pé, flexione os cotovelos levantando os halteres até a altura dos ombros.",
+                "video": "https://www.youtube.com/watch?v=ykJmrZ5v0Oo",
+                "exclusivoAcademia": false
+            }
+        ],
+        "hiit": [
+            {
+                "nome": "Burpee (4x10)",
+                "subgrupo": "cardio",
+                "equipamentos": [],
+                "objetivo": ["hiit", "condicionamento"],
+                "peso": 3,
+                "descricao": "Do agachamento à flexão e salto, execute o movimento de forma explosiva.",
+                "video": "https://www.youtube.com/watch?v=TU8QYVW0gDU",
+                "exclusivoAcademia": false
+            }
         ]
     }

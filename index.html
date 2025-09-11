@@ -68,6 +68,7 @@
       <label><input type="checkbox" value="realismo"><span>🎯 Realismo</span></label>
       <label><input type="checkbox" value="pegada"><span>✊ Pegada</span></label>
       <label><input type="checkbox" value="controle"><span>🧘 Controle</span></label>
+      <label><input type="checkbox" value="hiit"><span>⚡ HIIT</span></label>
     </div>
 
 
@@ -103,7 +104,19 @@
       </div>
       <div style="flex: 1; min-width: 180px;">
         <label for="grupoSelect"><strong>🏋️ Grupo:</strong></label>
-        <select id="grupoSelect" onchange="gerarTreino()"></select>
+        <select id="grupoSelect" onchange="gerarTreino()">
+          <option value="cardio">CARDIO</option>
+          <option value="core">CORE</option>
+          <option value="dedos">DEDOS</option>
+          <option value="fullbody">FULLBODY</option>
+          <option value="joelho">JOELHO</option>
+          <option value="ombro">OMBRO</option>
+          <option value="pernas">PERNAS</option>
+          <option value="peito">PEITO</option>
+          <option value="costas">COSTAS</option>
+          <option value="bracos">BRAÇOS</option>
+          <option value="hiit">HIIT</option>
+        </select>
       </div>
 
     </div>
