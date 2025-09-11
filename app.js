@@ -98,11 +98,11 @@ function getUltimosTreinos() {
         .map(k => ({
             data: k.replace("treino_", ""),
             feitos: JSON.parse(localStorage[k]).feitos,
-            grupo: JSON.parse(localStorage[k]).grupo
+            grupos: JSON.parse(localStorage[k]).grupos || [JSON.parse(localStorage[k]).grupo]
         }))
         .filter(t => t.data !== hoje && t.feitos && t.feitos.length > 0)
         .sort((a, b) => b.data.localeCompare(a.data))
-        .map(t => t.grupo);
+        .flatMap(t => t.grupos);
 }
 
 async function sugerirGrupo() {
@@ -115,7 +115,6 @@ async function sugerirGrupo() {
         .filter(k => k.startsWith("treino_"))
         .forEach(k => {
             try {
-
                 const t = JSON.parse(localStorage.getItem(k));
                 // ✅ Remove se não houver exercícios marcados como feitos
                 if (!t.feitos || t.feitos.length === 0) {
@@ -125,10 +124,13 @@ async function sugerirGrupo() {
                 }
 
                 // ✅ Processa score normalmente
-                if (t?.grupo && Array.isArray(t.lista)) {
+                if (t?.grupos && Array.isArray(t.lista)) {
                     const fatorI = { leve: 1, media: 2, intensa: 3 }[t.intensidade] || 1;
                     const fatorT = t.tempo / 15 || 1;
-                    score[t.grupo] += t.lista.reduce((s, ex) => s + (ex.peso || 2), 0) * fatorI * fatorT;
+                    const peso = t.lista.reduce((s, ex) => s + (ex.peso || 2), 0) * fatorI * fatorT;
+                    t.grupos.forEach(g => {
+                        score[g] += peso;
+                    });
                 }
             } catch (e) {
                 console.warn(`Erro ao processar treino ${k}`, e);
@@ -156,7 +158,9 @@ async function sugerirGrupo() {
 
     window.grupoSugerido = escolhido;
     const selGrupo = document.getElementById("grupoSelect");
-    if (selGrupo) selGrupo.value = escolhido;
+    if (selGrupo) {
+        Array.from(selGrupo.options).forEach(o => o.selected = o.value === escolhido);
+    }
 
     let saida = `<h3>📌 Grupo Sugerido: ${escolhido.toUpperCase()}</h3>`;
     saida += `<p>📅 <strong> Treinos Recentes:</strong> ${cooldown.join(", ") || "nenhum"}</p>`;
@@ -179,24 +183,33 @@ function gerarTreino() {
     const tempo = parseInt(document.getElementById("tempo").value);
     const intensidade = document.getElementById("intensidade").value;
     const sel = document.getElementById("grupoSelect");
-    const grupo = sel && sel.value ? sel.value : (window.grupoSugerido || "core");
+    const grupos = sel && sel.selectedOptions.length
+        ? Array.from(sel.selectedOptions).map(o => o.value)
+        : [window.grupoSugerido || "core"]; // fallback
     const dia = new Date().toISOString().slice(0, 10);
-    const chave = "treino_" + dia + grupo;
+    const chave = "treino_" + dia;
     const perfil = getPerfil();
     const fatorI = { leve: 1, media: 2, intensa: 3 }[intensidade];
 
-    const base = dadosTreinos[grupo].filter(ex => {
-        const equipamentosOk = !perfil.equipamento?.length ||
-            ex.equipamentos.every(eq => perfil.equipamento.includes(eq));
-        const localAcademia = perfil.locais?.includes("Academia");
-        const exclusivoOk = !ex.exclusivoAcademia || localAcademia;
-        return equipamentosOk && exclusivoOk;
+    let base = [];
+    grupos.forEach(grupo => {
+        const filtrados = dadosTreinos[grupo].filter(ex => {
+            const equipamentosOk = !perfil.equipamento?.length ||
+                ex.equipamentos.every(eq => perfil.equipamento.includes(eq));
+            const localAcademia = perfil.locais?.includes("Academia");
+            const exclusivoOk = !ex.exclusivoAcademia || localAcademia;
+            return equipamentosOk && exclusivoOk;
+        });
+        base = base.concat(filtrados);
     });
+
+    // Remove duplicados pelo nome
+    base = Array.from(new Map(base.map(ex => [ex.nome, ex])).values());
 
     const qtd = Math.min(Math.ceil((tempo / 15) + fatorI), base.length);
     const lista = embaralharArray(base).slice(0, qtd);
 
-    localStorage.setItem(chave, JSON.stringify({ tempo, intensidade, grupo, feitos: [], lista }));
+    localStorage.setItem(chave, JSON.stringify({ tempo, intensidade, grupos, feitos: [], lista }));
     mostrarTreino(dia, chave);
 }
 
@@ -213,19 +226,18 @@ function embaralharArray(arr) {
 
 // ✅ Exibir treino
 function mostrarTreino(dia, chave = null) {
-    const grupo = window.grupoSugerido || "core";
-    const chaveFinal = chave || ("treino_" + dia + grupo);
+    const chaveFinal = chave || ("treino_" + dia);
     const t = JSON.parse(localStorage.getItem(chaveFinal));
+    const gruposTxt = (t?.grupos || []).map(g => g.toUpperCase()).join(", ");
     if (!t || !t.lista?.length) {
-        document.getElementById("treino").innerHTML = `<h3>${dia} - ${t?.grupo?.toUpperCase() || ""}</h3><p>Nenhum treino encontrado</p>`;
+        document.getElementById("treino").innerHTML = `<h3>${dia} - ${gruposTxt}</h3><p>Nenhum treino encontrado</p>`;
         return;
     }
     const lista = t.lista.map((ex, i) => {
         const c = t.feitos.includes(i) ? "checked" : "";
-        return `<li><label><input type="checkbox" onchange="check(${i}, '${chave}')" ${c}/> <span onclick="abrirModalExercicio('${ex.nome.replace(/'/g, "\\'")}')" style="cursor:pointer; text-decoration:underline;">${ex.nome}</span></label></li>`;
-       // return `<li><label><input type="checkbox" onchange="check(${i}, '${chaveFinal}')" ${c}/> ${ex.nome}</label></li>`;
+        return `<li><label><input type="checkbox" onchange="check(${i}, '${chaveFinal}')" ${c}/> <span onclick="abrirModalExercicio('${ex.nome.replace(/'/g, "\\'")}')" style="cursor:pointer; text-decoration:underline;">${ex.nome}</span></label></li>`;
     }).join("");
-    document.getElementById("treino").innerHTML = `<h3>${dia} - ${t.grupo.toUpperCase()}</h3><p>${t.tempo}min | ${t.intensidade}</p><ul class="checklist">${lista}</ul>`;
+    document.getElementById("treino").innerHTML = `<h3>${dia} - ${gruposTxt}</h3><p>${t.tempo}min | ${t.intensidade}</p><ul class="checklist">${lista}</ul>`;
 }
 
 
@@ -243,7 +255,8 @@ function exportarTreino() {
     Object.keys(localStorage).filter(k => k.startsWith("treino_")).sort().forEach(k => {
         const dia = k.replace("treino_", "");
         const t = JSON.parse(localStorage.getItem(k));
-        txt += `=== ${dia} ===\nGrupo: ${t.grupo}\nTempo: ${t.tempo}min | Intensidade: ${t.intensidade}\n`;
+        const grupos = (t.grupos || []).join(", ");
+        txt += `=== ${dia} ===\nGrupos: ${grupos}\nTempo: ${t.tempo}min | Intensidade: ${t.intensidade}\n`;
         t.lista.forEach((ex, i) => {
             const mark = t.feitos.includes(i) ? "✓" : "☐";
             txt += `${mark} ${ex.nome}\n`;
@@ -263,7 +276,8 @@ function exportarTreino() {
 function carregarHistorico() {
     const dataInicio = document.getElementById("filtroDataInicio").value;
     const dataFim = document.getElementById("filtroDataFim").value;
-    const membroFiltro = document.getElementById("filtroMembro").value.toLowerCase();
+    const membrosFiltro = Array.from(document.getElementById("filtroMembro").selectedOptions)
+        .map(o => o.value.toLowerCase());
     const objetivoFiltro = document.getElementById("filtroObjetivo").value.toLowerCase();
     const intensidadeFiltro = document.getElementById("filtroIntensidade").value.toLowerCase();
 
@@ -273,16 +287,16 @@ function carregarHistorico() {
             const t = JSON.parse(localStorage.getItem(k));
             const raw = k.replace("treino_", "");
             const data = raw.slice(0, 10); // ISO date
-            const grupo = t.grupo || raw.slice(10);
-            return { data, grupo, ...t };
+            const grupos = t.grupos || [t.grupo || raw.slice(10)];
+            return { data, grupos, ...t };
         })
         .filter(t => {
-            const { data, grupo, lista, intensidade } = t;
+            const { data, grupos, lista, intensidade } = t;
 
             const dataValida = (!dataInicio || data >= dataInicio) &&
                 (!dataFim || data <= dataFim);
 
-            const membroValido = !membroFiltro || grupo.toLowerCase() === membroFiltro;
+            const membroValido = !membrosFiltro.length || grupos.some(g => membrosFiltro.includes(g.toLowerCase()));
 
             const objetivoValido = !objetivoFiltro || lista.some(e =>
                 e.objetivo.map(o => o.toLowerCase()).includes(objetivoFiltro)
@@ -298,7 +312,7 @@ function carregarHistorico() {
         ? historico.map(t => `
             <tr>
                 <td>${t.data}</td>
-                <td>${t.grupo.toUpperCase()}</td>
+                <td>${t.grupos.map(g => g.toUpperCase()).join(", ")}</td>
                 <td>${t.lista.map(e => e.objetivo.join(", ")).join("; ")}</td>
                 <td>${t.tempo} min</td>
                 <td>${t.intensidade}</td>
@@ -344,12 +358,13 @@ function calcularSequenciaDias(datas) {
 }
 
 function exportarHistorico() {
-    let txt = "Data,Membro,Objetivo,Tempo,Intensidade\n";
+    let txt = "Data,Grupos,Objetivo,Tempo,Intensidade\n";
     Object.keys(localStorage).filter(k => k.startsWith("treino_")).forEach(k => {
         const t = JSON.parse(localStorage.getItem(k));
         const data = k.replace("treino_", "");
         const objetivo = t.lista.map(e => e.objetivo.join(", ")).join("; ");
-        txt += `${data},${t.grupo},${objetivo},${t.tempo},${t.intensidade}\n`;
+        const grupos = (t.grupos || []).join("|");
+        txt += `${data},${grupos},${objetivo},${t.tempo},${t.intensidade}\n`;
     });
     const blob = new Blob([txt], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
