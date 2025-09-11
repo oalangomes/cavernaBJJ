@@ -89,7 +89,7 @@
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
       <div style="flex: 1; min-width: 180px;">
         <label for="tempo"><strong>⏱️ Tempo disponível:</strong></label>
-        <select id="tempo" onchange="gerarTreino()">
+        <select id="tempo" onchange="limitarSelecaoGrupos(); gerarTreino()">
           <option value="15">15 min</option>
           <option value="30" selected>30 min</option>
           <option value="45">45 min</option>
@@ -106,7 +106,7 @@
       </div>
       <div style="flex: 1; min-width: 180px;">
         <label for="grupoSelect"><strong>🏋️ Grupo:</strong></label>
-        <select id="grupoSelect" multiple size="5" onchange="gerarTreino()">
+        <select id="grupoSelect" multiple size="5" onchange="limitarSelecaoGrupos(); gerarTreino()">
           <option value="cardio">CARDIO</option>
           <option value="core">CORE</option>
           <option value="dedos">DEDOS</option>
