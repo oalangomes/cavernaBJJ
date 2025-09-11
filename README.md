@@ -39,6 +39,11 @@ O **Caverna BJJ** é um app leve, responsivo e offline para gerar treinos funcio
   - Pode ser adicionado à tela inicial no celular
   - Funciona offline com dados salvos no dispositivo
 
+- 🔄 **Modo Retorno/Beginner**
+  - Ative no perfil para focar em exercícios leves e de reabilitação
+  - Seleciona apenas movimentos com `subgrupo` "reabilitação" ou `peso` ≤ 2
+  - Ao manter constância (5 treinos na semana) o app sugere mais tempo e intensidade
+
 ---
 
 ## 🧩 Tecnologias
@@ -69,6 +74,17 @@ cavernaBJJ/
 1. Clone ou baixe os arquivos
 2. Abra o `index.html` no navegador
 3. Configure seu perfil e comece a treinar! 💪
+
+---
+
+## 🔄 Modo Retorno/Beginner
+
+No cartão de perfil há uma opção **Retorno/Beginner**. Quando ativada:
+
+1. O gerador considera apenas exercícios com `subgrupo` "reabilitação" ou com `peso` menor ou igual a 2.
+2. Mantendo constância (5 treinos registrados nos últimos 7 dias), o app aumenta automaticamente a intensidade (até o limite "intensa") e adiciona 15 minutos ao tempo, limitado a 60 min.
+
+Esse modo facilita o retorno gradual após pausas ou lesões.
 
 ---
 

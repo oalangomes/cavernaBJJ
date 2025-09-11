@@ -51,11 +51,12 @@ async function salvarPerfil() {
     const locais = getMarcados("locais");
     const equipamentos = getMarcados("equipamentos");
     const objetivos = getMarcados("objetivos");
+    const retorno = document.getElementById("modoRetorno").checked;
 
     if (!locais.length || !equipamentos.length || !objetivos.length)
         return alert("Selecione ao menos uma opção em todos os campos.");
 
-    const perfil = { nome, locais, equipamento: equipamentos, objetivos };
+    const perfil = { nome, locais, equipamento: equipamentos, objetivos, retorno };
     localStorage.setItem("perfil_usuario", JSON.stringify(perfil));
     alert("Perfil salvo com sucesso!");
 
@@ -85,6 +86,8 @@ function editarPerfil() {
             input.checked = (perfil[grupo] || perfil.equipamento || []).includes(input.value);
         });
     });
+
+    document.getElementById("modoRetorno").checked = perfil.retorno || false;
 
     exibirCard("perfilCard");
 }
@@ -178,10 +181,41 @@ function limparTreino() {
     document.getElementById("treino").innerHTML = "";
 }
 
+function contarTreinosRecentes(dias) {
+    const hoje = new Date();
+    let count = 0;
+    for (let i = 1; i <= dias; i++) {
+        const d = new Date(hoje);
+        d.setDate(d.getDate() - i);
+        const chave = "treino_" + d.toISOString().slice(0, 10);
+        try {
+            const t = JSON.parse(localStorage.getItem(chave));
+            if (t?.feitos && t.feitos.length > 0) count++;
+        } catch (e) {
+            console.warn("Erro ao ler treino", chave, e);
+        }
+    }
+    return count;
+}
+
+function ajustarProgressao(tempo, intensidade) {
+    const feitos = contarTreinosRecentes(7);
+    if (feitos >= 5) {
+        tempo = Math.min(tempo + 15, 60);
+        intensidade = intensidade === "leve" ? "media" : (intensidade === "media" ? "intensa" : "intensa");
+    }
+    return { tempo, intensidade };
+}
+
 // ✅ Gerar treino
 function gerarTreino() {
-    const tempo = parseInt(document.getElementById("tempo").value);
-    const intensidade = document.getElementById("intensidade").value;
+    let tempo = parseInt(document.getElementById("tempo").value);
+    let intensidade = document.getElementById("intensidade").value;
+    const ajustados = ajustarProgressao(tempo, intensidade);
+    tempo = ajustados.tempo;
+    intensidade = ajustados.intensidade;
+    document.getElementById("tempo").value = tempo;
+    document.getElementById("intensidade").value = intensidade;
     const sel = document.getElementById("grupoSelect");
     const grupos = sel && sel.selectedOptions.length
         ? Array.from(sel.selectedOptions).map(o => o.value)
@@ -198,7 +232,8 @@ function gerarTreino() {
                 ex.equipamentos.every(eq => perfil.equipamento.includes(eq));
             const localAcademia = perfil.locais?.includes("Academia");
             const exclusivoOk = !ex.exclusivoAcademia || localAcademia;
-            return equipamentosOk && exclusivoOk;
+            const retornoOk = !perfil.retorno || ex.subgrupo === "reabilitação" || ex.peso <= 2;
+            return equipamentosOk && exclusivoOk && retornoOk;
         });
         base = base.concat(filtrados);
     });
