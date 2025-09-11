@@ -53,7 +53,8 @@ label {
 
 select,
 input[type="text"],
-input[type="date"] {
+input[type="date"],
+input[type="number"] {
     width: 100%;
     padding: 10px 12px;
     font-size: 15px;
@@ -95,13 +96,16 @@ button.secondary:hover {
 
 
 button:disabled,
-select:disabled {
-    background-color: #ccc !important;
-    color: #777 !important;
+select:disabled,
+input[type="text"]:disabled,
+input[type="date"]:disabled,
+input[type="number"]:disabled {
+    background-color: #ccc;
+    color: #777;
     cursor: not-allowed;
     opacity: 0.7;
     pointer-events: none;
-    border: none;
+    border: 1px solid #bbb;
 }
 
 
@@ -329,6 +333,28 @@ body.dark button {
 
 body.dark button:hover {
     background: #002b5c;
+}
+
+body.dark select,
+body.dark input[type="text"],
+body.dark input[type="date"],
+body.dark input[type="number"] {
+    background-color: #333;
+    color: #e1e1e1;
+    border: 1px solid #555;
+}
+
+body.dark ::placeholder {
+    color: #aaa;
+}
+
+body.dark select:disabled,
+body.dark input[type="text"]:disabled,
+body.dark input[type="date"]:disabled,
+body.dark input[type="number"]:disabled {
+    background-color: #444 !important;
+    color: #777 !important;
+    border-color: #555;
 }
 
 body.dark .tag-group label {
