@@ -32,17 +32,29 @@ describe('gerarTreino', () => {
     global.grupoSugerido = 'core';
   });
 
-  test('cria entrada no localStorage para o treino', () => {
-    gerarTreino();
-    const dia = new Date().toISOString().slice(0,10);
-    const chave = `treino_${dia}`;
-    const stored = JSON.parse(localStorage.getItem(chave));
-    expect(stored).toBeTruthy();
-    expect(stored.grupos.length).toBe(2);
-    expect(stored.grupos).toEqual(expect.arrayContaining(['core','cardio']));
-    const nomes = stored.lista.map(e => e.nome);
-    expect(new Set(nomes).size).toBe(nomes.length);
-    expect(stored.tempo).toBe(30);
-    expect(document.getElementById('treino').innerHTML).not.toBe('');
+    test('cria entrada no localStorage para o treino', () => {
+      gerarTreino();
+      const dia = new Date().toISOString().slice(0,10);
+      const chave = `treino_${dia}`;
+      const stored = JSON.parse(localStorage.getItem(chave));
+      expect(stored).toBeTruthy();
+      expect(stored.grupos.length).toBe(2);
+      expect(stored.grupos).toEqual(expect.arrayContaining(['core','cardio']));
+      const nomes = stored.lista.map(e => e.nome);
+      expect(new Set(nomes).size).toBe(nomes.length);
+      expect(stored.tempo).toBe(30);
+      expect(document.getElementById('treino').innerHTML).not.toBe('');
+    });
+
+    test('limita grupos conforme tempo disponível', () => {
+      document.getElementById('tempo').value = '15';
+      const sel = document.getElementById('grupoSelect');
+      sel.options[0].selected = true;
+      sel.options[1].selected = true;
+      gerarTreino();
+      const dia = new Date().toISOString().slice(0,10);
+      const stored = JSON.parse(localStorage.getItem(`treino_${dia}`));
+      expect(stored.grupos.length).toBe(1);
+      expect(stored.grupos[0]).toBe('core');
+    });
   });
-});

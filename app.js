@@ -207,6 +207,25 @@ function ajustarProgressao(tempo, intensidade) {
     return { tempo, intensidade };
 }
 
+function limitarSelecaoGrupos() {
+    const tempo = parseInt(document.getElementById("tempo").value) || 0;
+    const limite = Math.max(1, Math.floor(tempo / 15));
+    const sel = document.getElementById("grupoSelect");
+    if (!sel) return [];
+    let selecionados = Array.from(sel.selectedOptions);
+    if (selecionados.length > limite) {
+        selecionados.slice(limite).forEach(o => o.selected = false);
+        const isJsdom = typeof navigator !== 'undefined' && /jsdom/i.test(navigator.userAgent);
+        if (typeof alert === 'function' && !isJsdom) {
+            try {
+                alert(`Para ${tempo} minutos, selecione no máximo ${limite} grupos.`);
+            } catch (e) {}
+        }
+        selecionados = Array.from(sel.selectedOptions);
+    }
+    return selecionados.map(o => o.value);
+}
+
 // ✅ Gerar treino
 function gerarTreino() {
     let tempo = parseInt(document.getElementById("tempo").value);
@@ -216,10 +235,10 @@ function gerarTreino() {
     intensidade = ajustados.intensidade;
     document.getElementById("tempo").value = tempo;
     document.getElementById("intensidade").value = intensidade;
-    const sel = document.getElementById("grupoSelect");
-    const grupos = sel && sel.selectedOptions.length
-        ? Array.from(sel.selectedOptions).map(o => o.value)
-        : [window.grupoSugerido || "core"]; // fallback
+    let grupos = limitarSelecaoGrupos();
+    if (!grupos.length) {
+        grupos = [window.grupoSugerido || "core"]; // fallback
+    }
     const dia = new Date().toISOString().slice(0, 10);
     const chave = "treino_" + dia;
     const perfil = getPerfil();
