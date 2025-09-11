@@ -331,6 +331,24 @@ body.dark button:hover {
     background: #002b5c;
 }
 
+body.dark select,
+body.dark input[type="text"],
+body.dark input[type="date"],
+body.dark input[type="number"] {
+    background-color: #333;
+    color: #e1e1e1;
+    border: 1px solid #555;
+}
+
+body.dark select:disabled,
+body.dark input[type="text"]:disabled,
+body.dark input[type="date"]:disabled,
+body.dark input[type="number"]:disabled {
+    background-color: #444 !important;
+    color: #777 !important;
+    border-color: #555;
+}
+
 body.dark .tag-group label {
     background: #001a33;
     border-color: #004085;
