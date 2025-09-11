@@ -104,7 +104,7 @@
       </div>
       <div style="flex: 1; min-width: 180px;">
         <label for="grupoSelect"><strong>🏋️ Grupo:</strong></label>
-        <select id="grupoSelect" onchange="gerarTreino()">
+        <select id="grupoSelect" multiple size="5" onchange="gerarTreino()">
           <option value="cardio">CARDIO</option>
           <option value="core">CORE</option>
           <option value="dedos">DEDOS</option>
@@ -145,9 +145,8 @@
       <input type="date" id="filtroDataFim" onchange="carregarHistorico()" />
 
 
-      <label for="filtroMembro" style="margin-left: 20px;">Filtrar por membro:</label>
-      <select id="filtroMembro" onchange="carregarHistorico()">
-        <option value="">Todos</option>
+      <label for="filtroMembro" style="margin-left: 20px;">Filtrar por grupos:</label>
+      <select id="filtroMembro" multiple size="5" onchange="carregarHistorico()">
         <option value="ombro">Ombro</option>
         <option value="core">Core</option>
         <option value="pernas">Pernas</option>
