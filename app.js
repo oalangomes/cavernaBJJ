@@ -109,6 +109,15 @@ function getUltimosTreinos() {
 }
 
 async function sugerirGrupo() {
+    const selGrupo = document.getElementById("grupoSelect");
+    if (selGrupo) {
+        const selecionados = Array.from(selGrupo.selectedOptions);
+        if (selecionados.length > 1) {
+            const confirmar = confirm("Mais de um grupo está selecionado. Sugerir outro grupo irá limpar a seleção atual. Deseja continuar?");
+            if (!confirmar) return;
+        }
+    }
+
     const cooldown = getUltimosTreinos();
     const score = {};
 
@@ -160,7 +169,6 @@ async function sugerirGrupo() {
     const escolhido = empatados[Math.floor(Math.random() * empatados.length)].grupo;
 
     window.grupoSugerido = escolhido;
-    const selGrupo = document.getElementById("grupoSelect");
     if (selGrupo) {
         Array.from(selGrupo.options).forEach(o => o.selected = o.value === escolhido);
     }
@@ -520,6 +528,7 @@ if (typeof module !== 'undefined') {
     gerarTreino,
     calcularSequenciaDias,
     embaralharArray,
+    sugerirGrupo,
     __setDadosTreinos: d => dadosTreinos = d
   };
 }
