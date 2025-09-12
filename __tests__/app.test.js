@@ -1,4 +1,4 @@
-const { gerarTreino, calcularSequenciaDias, __setDadosTreinos } = require('../app');
+const { gerarTreino, calcularSequenciaDias, __setDadosTreinos, sugerirGrupo } = require('../app');
 
 describe('calcularSequenciaDias', () => {
   test('calcula maior sequencia', () => {
@@ -56,5 +56,22 @@ describe('gerarTreino', () => {
       const stored = JSON.parse(localStorage.getItem(`treino_${dia}`));
       expect(stored.grupos.length).toBe(1);
       expect(stored.grupos[0]).toBe('core');
-    });
   });
+});
+
+describe('sugerirGrupo', () => {
+  test('pede confirmação ao limpar múltiplos grupos selecionados', async () => {
+    localStorage.clear();
+    document.body.innerHTML = `
+      <select id="grupoSelect" multiple>
+        <option value="core" selected>core</option>
+        <option value="cardio" selected>cardio</option>
+      </select>
+    `;
+
+    const spy = jest.spyOn(global, 'confirm').mockReturnValue(false);
+    await sugerirGrupo();
+    expect(spy).toHaveBeenCalled();
+    spy.mockRestore();
+  });
+});
