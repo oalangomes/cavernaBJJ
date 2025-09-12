@@ -748,6 +748,36 @@
                 "descricao": "Realize flexões mantendo o corpo alinhado e descendo até próximo ao chão.",
                 "video": "https://www.youtube.com/watch?v=IODxDxX7oi4",
                 "exclusivoAcademia": false
+            },
+            {
+                "nome": "Supino com halteres (3x10)",
+                "subgrupo": "forca",
+                "equipamentos": ["halteres"],
+                "objetivo": ["forca"],
+                "peso": 3,
+                "descricao": "Deite-se em um banco e empurre os halteres para cima até estender os braços.",
+                "video": "https://www.youtube.com/watch?v=1lTaarNqmE4",
+                "exclusivoAcademia": false
+            },
+            {
+                "nome": "Crucifixo com halteres (3x12)",
+                "subgrupo": "forca",
+                "equipamentos": ["halteres"],
+                "objetivo": ["forca", "mobilidade"],
+                "peso": 3,
+                "descricao": "Com os braços semiflexionados, abra-os lateralmente até o nível do peito e retorne.",
+                "video": "https://www.youtube.com/watch?v=eozdVDA78K0",
+                "exclusivoAcademia": false
+            },
+            {
+                "nome": "Flexão de braços na parede (3x15)",
+                "subgrupo": "forca",
+                "equipamentos": [],
+                "objetivo": ["forca"],
+                "peso": 1,
+                "descricao": "Apoie as mãos na parede e realize a flexão mantendo o corpo alinhado, ideal para iniciantes.",
+                "video": "https://www.youtube.com/watch?v=VVEbD8ReG5s",
+                "exclusivoAcademia": false
             }
         ],
         "costas": [
@@ -759,6 +789,36 @@
                 "peso": 3,
                 "descricao": "Com tronco inclinado, puxe os halteres em direção ao abdômen.",
                 "video": "https://www.youtube.com/watch?v=vT2GjY_Umpw",
+                "exclusivoAcademia": false
+            },
+            {
+                "nome": "Barra fixa (3x8)",
+                "subgrupo": "forca",
+                "equipamentos": ["barra"],
+                "objetivo": ["forca"],
+                "peso": 3,
+                "descricao": "Segure a barra com as palmas voltadas para frente e eleve o corpo até o queixo ultrapassar a barra.",
+                "video": "https://www.youtube.com/watch?v=eGo4IYlbE5g",
+                "exclusivoAcademia": false
+            },
+            {
+                "nome": "Superman (3x15)",
+                "subgrupo": "estabilidade",
+                "equipamentos": [],
+                "objetivo": ["estabilidade", "jiujitsu"],
+                "peso": 2,
+                "descricao": "Deitado de barriga para baixo, eleve simultaneamente braços e pernas, mantendo alguns segundos no ar.",
+                "video": "https://www.youtube.com/watch?v=z6PJMT2y8GQ",
+                "exclusivoAcademia": false
+            },
+            {
+                "nome": "Remada com elástico sentado (3x15)",
+                "subgrupo": "forca",
+                "equipamentos": ["elastico"],
+                "objetivo": ["forca"],
+                "peso": 2,
+                "descricao": "Sente-se com as pernas estendidas, prenda o elástico nos pés e puxe as extremidades em direção ao tronco.",
+                "video": "https://www.youtube.com/watch?v=LyRA47PlP-A",
                 "exclusivoAcademia": false
             }
         ],
@@ -772,6 +832,36 @@
                 "descricao": "Em pé, flexione os cotovelos levantando os halteres até a altura dos ombros.",
                 "video": "https://www.youtube.com/watch?v=ykJmrZ5v0Oo",
                 "exclusivoAcademia": false
+            },
+            {
+                "nome": "Tríceps mergulho (3x12)",
+                "subgrupo": "forca",
+                "equipamentos": ["banco"],
+                "objetivo": ["forca"],
+                "peso": 3,
+                "descricao": "Apoie as mãos atrás do corpo em um banco e desça o tronco flexionando os cotovelos.",
+                "video": "https://www.youtube.com/watch?v=0326dy_-CzM",
+                "exclusivoAcademia": false
+            },
+            {
+                "nome": "Extensão de tríceps com elástico (3x15)",
+                "subgrupo": "resistencia",
+                "equipamentos": ["elastico"],
+                "objetivo": ["resistencia"],
+                "peso": 2,
+                "descricao": "Prenda o elástico acima da cabeça e estenda os braços para baixo até ficarem alinhados ao corpo.",
+                "video": "https://www.youtube.com/watch?v=6SS6K3lAwZ8",
+                "exclusivoAcademia": false
+            },
+            {
+                "nome": "Rosca com elástico (3x15)",
+                "subgrupo": "resistencia",
+                "equipamentos": ["elastico"],
+                "objetivo": ["resistencia"],
+                "peso": 2,
+                "descricao": "Pise sobre o elástico segurando as pontas e flexione os cotovelos, trazendo as mãos em direção aos ombros.",
+                "video": "https://www.youtube.com/watch?v=MsAN5XgkjnA",
+                "exclusivoAcademia": false
             }
         ],
         "hiit": [
@@ -783,6 +873,36 @@
                 "peso": 3,
                 "descricao": "Do agachamento à flexão e salto, execute o movimento de forma explosiva.",
                 "video": "https://www.youtube.com/watch?v=TU8QYVW0gDU",
+                "exclusivoAcademia": false
+            },
+            {
+                "nome": "Mountain climbers (4x20)",
+                "subgrupo": "cardio",
+                "equipamentos": [],
+                "objetivo": ["hiit", "condicionamento"],
+                "peso": 3,
+                "descricao": "Em posição de prancha, alterne rapidamente os joelhos em direção ao peito.",
+                "video": "https://www.youtube.com/watch?v=nmwgirgXLYM",
+                "exclusivoAcademia": false
+            },
+            {
+                "nome": "Sprint estacionário (6x15s)",
+                "subgrupo": "cardio",
+                "equipamentos": [],
+                "objetivo": ["hiit", "condicionamento"],
+                "peso": 3,
+                "descricao": "Corra no lugar na maior velocidade possível por 15 segundos e descanse entre as séries.",
+                "video": "https://www.youtube.com/watch?v=2v0RhvZ3lvY",
+                "exclusivoAcademia": false
+            },
+            {
+                "nome": "Polichinelos (4x30)",
+                "subgrupo": "cardio",
+                "equipamentos": [],
+                "objetivo": ["hiit", "condicionamento"],
+                "peso": 2,
+                "descricao": "Salte abrindo e fechando braços e pernas de forma contínua, mantendo ritmo acelerado.",
+                "video": "https://www.youtube.com/watch?v=c4DAnQ6DtF8",
                 "exclusivoAcademia": false
             }
         ]
