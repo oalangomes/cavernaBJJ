@@ -67,7 +67,7 @@ async function salvarPerfil() {
 function popularSelectGrupo() {
     const sel = document.getElementById("grupoSelect");
     if (!sel) return;
-    const nomes = { bracos: 'Braços' };
+    const nomes = { biceps: 'Bíceps', triceps: 'Tríceps' };
     sel.innerHTML = Object.keys(dadosTreinos)
         .sort()
         .map(g => {
