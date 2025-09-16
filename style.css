@@ -148,6 +148,27 @@ select:disabled {
     transform: scale(1.3);
 }
 
+.checklist .equip-hint {
+    display: block;
+    font-size: 12px;
+    color: #555;
+    margin-left: 28px;
+    margin-top: 4px;
+}
+
+.checklist .equip-hint--alternativa {
+    color: #0c5460;
+    font-weight: 600;
+}
+
+body.dark .checklist .equip-hint {
+    color: #cfd9e6;
+}
+
+body.dark .checklist .equip-hint--alternativa {
+    color: #9bd3ff;
+}
+
 /* Sugestão e treino */
 .sugestao,
 .treino {

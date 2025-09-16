@@ -138,6 +138,21 @@
       "descricao": "Durante a flexão, ao final do movimento, empurre ainda mais o chão, ativando o serrátil.",
       "video": "https://www.youtube.com/watch?v=R4h7uYgU0YQ",
       "exclusivoAcademia": false
+    },
+    {
+      "nome": "Desenvolvimento alternado com garrafas (3x12)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "garrafa"
+      ],
+      "objetivo": [
+        "forca",
+        "mobilidade"
+      ],
+      "peso": 2,
+      "descricao": "Segure garrafas cheias e pressione acima da cabeça alternando os braços, mantendo o tronco estável.",
+      "video": "https://www.youtube.com/watch?v=qEwKCR5JCog",
+      "exclusivoAcademia": false
     }
   ],
   "core": [
@@ -273,6 +288,36 @@
       "descricao": "Deitado, mantenha tronco e pernas elevadas com o abdômen totalmente contraído.",
       "video": "https://www.youtube.com/watch?v=ZJ8Zdj0OPMI",
       "exclusivoAcademia": false
+    },
+    {
+      "nome": "Prancha com mochila nas costas (3x40s)",
+      "subgrupo": "estabilidade",
+      "equipamentos": [
+        "mochila"
+      ],
+      "objetivo": [
+        "core",
+        "resistencia"
+      ],
+      "peso": 3,
+      "descricao": "Posicione uma mochila com livros nas costas para aumentar a carga mantendo a prancha firme.",
+      "video": "https://www.youtube.com/watch?v=pSHjTRCQxIw",
+      "exclusivoAcademia": false
+    },
+    {
+      "nome": "Elevação de quadril no colchonete (3x15)",
+      "subgrupo": "estabilidade",
+      "equipamentos": [
+        "colchonete"
+      ],
+      "objetivo": [
+        "core",
+        "estabilidade"
+      ],
+      "peso": 2,
+      "descricao": "Deitado sobre o colchonete, eleve o quadril contraindo glúteos e abdômen, segurando 2 segundos no topo.",
+      "video": "https://www.youtube.com/watch?v=8bbE64NuDTU",
+      "exclusivoAcademia": false
     }
   ],
   "pernas": [
@@ -318,6 +363,21 @@
       "peso": 2,
       "descricao": "Com o elástico preso nas pernas, aproxime uma da outra, ativando a musculatura interna da coxa.",
       "video": "https://www.youtube.com/watch?v=GZRIxtTRz18",
+      "exclusivoAcademia": false
+    },
+    {
+      "nome": "Caminhada lateral com miniband (3x12 passos)",
+      "subgrupo": "estabilidade",
+      "equipamentos": [
+        "miniband"
+      ],
+      "objetivo": [
+        "estabilidade",
+        "mobilidade"
+      ],
+      "peso": 2,
+      "descricao": "Coloque a miniband acima dos joelhos, agache levemente e dê passos laterais mantendo a tensão constante.",
+      "video": "https://www.youtube.com/watch?v=UpZDYrs0VHA",
       "exclusivoAcademia": false
     },
     {
@@ -388,6 +448,21 @@
       "peso": 4,
       "descricao": "Fique em pé com um pé apoiado atrás em um banco. Com o tronco reto, agache com a perna da frente até o joelho formar um ângulo de 90°. Volte à posição inicial e repita.",
       "video": "https://www.youtube.com/watch?v=uh1xK1oInJ4",
+      "exclusivoAcademia": false
+    },
+    {
+      "nome": "Afundo búlgaro na cadeira (3x10 cada lado)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "cadeira"
+      ],
+      "objetivo": [
+        "forca",
+        "equilibrio"
+      ],
+      "peso": 3,
+      "descricao": "Use uma cadeira firme para apoiar o pé de trás e realize o afundo controlando a descida e mantendo o tronco ereto.",
+      "video": "https://www.youtube.com/watch?v=2C-uNgKwPLE",
       "exclusivoAcademia": false
     },
     {
@@ -651,6 +726,21 @@
       "descricao": "Agache com os halteres nos ombros e, ao subir, empurre-os para cima em um único movimento explosivo.",
       "video": "https://www.youtube.com/watch?v=q4ZUlNfKNEw",
       "exclusivoAcademia": false
+    },
+    {
+      "nome": "Thruster com garrafas (3x12)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "garrafa"
+      ],
+      "objetivo": [
+        "forca",
+        "cardio"
+      ],
+      "peso": 3,
+      "descricao": "Use garrafas cheias como carga para realizar o agachamento seguido do empurrão acima da cabeça em movimento contínuo.",
+      "video": "https://www.youtube.com/watch?v=q4ZUlNfKNEw",
+      "exclusivoAcademia": false
     }
   ],
   "cardio": [
@@ -666,6 +756,21 @@
       "peso": 3,
       "descricao": "Pule corda em ritmo constante por 1 minuto. Mantenha os cotovelos junto ao corpo e gire a corda com os punhos.",
       "video": "https://www.youtube.com/watch?v=1BZM7e8Lyk8",
+      "exclusivoAcademia": false
+    },
+    {
+      "nome": "Polichinelo com miniband (3x30s)",
+      "subgrupo": "cardio",
+      "equipamentos": [
+        "miniband"
+      ],
+      "objetivo": [
+        "condicionamento",
+        "resistencia"
+      ],
+      "peso": 3,
+      "descricao": "Posicione a miniband acima dos tornozelos e execute o polichinelo mantendo a tensão da faixa durante todo o movimento.",
+      "video": "https://www.youtube.com/watch?v=s0nT_fHj4yQ",
       "exclusivoAcademia": false
     },
     {
@@ -898,6 +1003,21 @@
       "descricao": "Suba com uma perna sobre um banco ou degrau e traga a outra, depois retorne com controle.",
       "video": "https://www.youtube.com/watch?v=xM8bB1qLOuY",
       "exclusivoAcademia": false
+    },
+    {
+      "nome": "Step-up na cadeira (3x12 cada perna)",
+      "subgrupo": "estabilidade",
+      "equipamentos": [
+        "cadeira"
+      ],
+      "objetivo": [
+        "estabilidade",
+        "equilibrio"
+      ],
+      "peso": 2,
+      "descricao": "Use uma cadeira firme como apoio para subir e descer controlando o movimento e mantendo o joelho alinhado.",
+      "video": "https://www.youtube.com/watch?v=QAFD9lJe4iw",
+      "exclusivoAcademia": false
     }
   ],
   "dedos": [
@@ -1069,6 +1189,21 @@
       "descricao": "Com as mãos próximas formando um triângulo, desça o corpo mantendo os cotovelos junto ao tronco.",
       "video": "https://www.youtube.com/watch?v=J0DnG1_S92I",
       "exclusivoAcademia": false
+    },
+    {
+      "nome": "Flexão inclinada na cadeira (3x12)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "cadeira"
+      ],
+      "objetivo": [
+        "forca",
+        "estabilidade"
+      ],
+      "peso": 2,
+      "descricao": "Apoie as mãos na cadeira para reduzir a carga da flexão, mantendo o corpo alinhado durante todo o movimento.",
+      "video": "https://www.youtube.com/watch?v=J0DnG1_S92I",
+      "exclusivoAcademia": false
     }
   ],
   "costas": [
@@ -1083,6 +1218,20 @@
       ],
       "peso": 3,
       "descricao": "Com tronco inclinado, puxe os halteres em direção ao abdômen.",
+      "video": "https://www.youtube.com/watch?v=vT2GjY_Umpw",
+      "exclusivoAcademia": false
+    },
+    {
+      "nome": "Remada curvada com mochila (3x12)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "mochila"
+      ],
+      "objetivo": [
+        "forca"
+      ],
+      "peso": 3,
+      "descricao": "Carregue uma mochila com livros e puxe em direção ao abdômen mantendo a coluna neutra.",
       "video": "https://www.youtube.com/watch?v=vT2GjY_Umpw",
       "exclusivoAcademia": false
     },
@@ -1139,6 +1288,21 @@
       "peso": 3,
       "descricao": "Apoie uma mão e um joelho em um banco e puxe o halter ao lado do tronco.",
       "video": "https://www.youtube.com/watch?v=8OO4sJ9Ek98",
+      "exclusivoAcademia": false
+    },
+    {
+      "nome": "Remada invertida no suspensor (3x10)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "suspensor"
+      ],
+      "objetivo": [
+        "forca",
+        "estabilidade"
+      ],
+      "peso": 3,
+      "descricao": "Segure as alças do suspensor com o corpo inclinado e puxe o peito em direção às mãos mantendo o corpo alinhado.",
+      "video": "https://www.youtube.com/results?search_query=remada+invertida+trx",
       "exclusivoAcademia": false
     }
   ],
@@ -1206,6 +1370,21 @@
       "peso": 3,
       "descricao": "Corra no lugar elevando os joelhos alternadamente na altura do quadril.",
       "video": "https://www.youtube.com/watch?v=8BcPHWGQO44",
+      "exclusivoAcademia": false
+    },
+    {
+      "nome": "Swing com kettlebell (4x20)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "kettlebell"
+      ],
+      "objetivo": [
+        "hiit",
+        "forca"
+      ],
+      "peso": 3,
+      "descricao": "Empurre o quadril para trás e projete o kettlebell à frente com explosão, mantendo a coluna neutra.",
+      "video": "https://www.youtube.com/watch?v=ysqG5WZcgGQ",
       "exclusivoAcademia": false
     }
   ],
@@ -1293,6 +1472,20 @@
       "descricao": "Em pé, segure a barra com as palmas para cima e flexione os cotovelos até a altura dos ombros.",
       "video": "https://www.youtube.com/watch?v=kwG2ipFRgfo",
       "exclusivoAcademia": false
+    },
+    {
+      "nome": "Rosca direta com garrafas (3x15)",
+      "subgrupo": "resistencia",
+      "equipamentos": [
+        "garrafa"
+      ],
+      "objetivo": [
+        "resistencia"
+      ],
+      "peso": 2,
+      "descricao": "Segure garrafas cheias nas mãos e flexione os cotovelos até aproximar as mãos dos ombros mantendo os braços estáveis.",
+      "video": "https://www.youtube.com/watch?v=ykJmrZ5v0Oo",
+      "exclusivoAcademia": false
     }
   ],
   "triceps": [
@@ -1349,6 +1542,20 @@
       ],
       "peso": 3,
       "descricao": "Eleve o halter acima da cabeça e flexione os cotovelos levando o peso atrás da nuca.",
+      "video": "https://www.youtube.com/watch?v=TYlT3MGn0A0",
+      "exclusivoAcademia": false
+    },
+    {
+      "nome": "Tríceps francês com mochila (3x12)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "mochila"
+      ],
+      "objetivo": [
+        "forca"
+      ],
+      "peso": 3,
+      "descricao": "Segure uma mochila pelas alças acima da cabeça e realize o movimento de flexão e extensão dos cotovelos controlando o peso.",
       "video": "https://www.youtube.com/watch?v=TYlT3MGn0A0",
       "exclusivoAcademia": false
     },

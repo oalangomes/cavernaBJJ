@@ -1,6 +1,84 @@
 // 🔁 Dados dos treinos
 let dadosTreinos = {};
 
+const NOMES_EQUIPAMENTOS = {
+    halteres: "Halteres",
+    elastico: "Elástico de resistência",
+    saco: "Saco de pancada",
+    barra: "Barra fixa",
+    banco: "Banco abdominal",
+    tornozeleira: "Tornozeleira de peso",
+    corda: "Corda de pular",
+    pegador: "Pegador de mão",
+    "pinça": "Pinça de pegada",
+    toalha: "Toalha",
+    kimono: "Kimono",
+    kettlebell: "Kettlebell",
+    miniband: "Mini band",
+    suspensor: "Suspensor/TRX",
+    mochila: "Mochila com peso",
+    colchonete: "Colchonete ou tapete",
+    cadeira: "Cadeira firme",
+    garrafa: "Garrafas com peso"
+};
+
+const EQUIPAMENTOS_EQUIVALENTES = {
+    halteres: ["kettlebell", "mochila", "garrafa", "barra"],
+    kettlebell: ["halteres", "mochila"],
+    mochila: ["halteres", "kettlebell", "garrafa", "saco"],
+    garrafa: ["halteres", "mochila"],
+    elastico: ["miniband", "suspensor", "toalha"],
+    miniband: ["elastico"],
+    suspensor: ["elastico", "barra"],
+    barra: ["halteres", "suspensor"],
+    banco: ["cadeira"],
+    cadeira: ["banco"],
+    colchonete: ["toalha"],
+    toalha: ["colchonete", "elastico"],
+    saco: ["mochila"]
+};
+
+function formatEquipamento(chave) {
+    if (!chave) return "";
+    return NOMES_EQUIPAMENTOS[chave] || chave.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
+}
+
+function obterAlternativasEquipamento(equipamento) {
+    const alternativas = EQUIPAMENTOS_EQUIVALENTES[equipamento] || [];
+    return [...new Set(alternativas.filter(Boolean))];
+}
+
+function possuiEquipamentoOuAlternativa(equipamento, disponiveis) {
+    if (disponiveis.has(equipamento)) return true;
+    return obterAlternativasEquipamento(equipamento).some(alt => disponiveis.has(alt));
+}
+
+function detalharEquipamentos(exercicio, disponiveis) {
+    if (!exercicio?.equipamentos?.length) {
+        return { equipamentosDetalhes: [], substituicoesTexto: "" };
+    }
+
+    const detalhes = exercicio.equipamentos.map(equip => {
+        const alternativas = obterAlternativasEquipamento(equip);
+        const possuiPrincipal = disponiveis.has(equip);
+        const alternativaUsada = possuiPrincipal ? null : alternativas.find(alt => disponiveis.has(alt)) || null;
+        return {
+            principal: equip,
+            utilizado: possuiPrincipal ? equip : alternativaUsada,
+            alternativas
+        };
+    });
+
+    const substituicoes = detalhes
+        .filter(item => item.utilizado && item.utilizado !== item.principal)
+        .map(item => `${formatEquipamento(item.utilizado)} no lugar de ${formatEquipamento(item.principal)}`);
+
+    return {
+        equipamentosDetalhes: detalhes,
+        substituicoesTexto: substituicoes.join('; ')
+    };
+}
+
 async function carregarDados() {
     dadosTreinos = await getDados();
     popularSelectGrupo();
@@ -251,12 +329,13 @@ function gerarTreino() {
     const chave = "treino_" + dia;
     const perfil = getPerfil();
     const fatorI = { leve: 1, media: 2, intensa: 3 }[intensidade];
+    const equipamentosDisponiveis = new Set(perfil.equipamento || []);
 
     let base = [];
     grupos.forEach(grupo => {
         const filtrados = dadosTreinos[grupo].filter(ex => {
             const equipamentosOk = !perfil.equipamento?.length ||
-                ex.equipamentos.every(eq => perfil.equipamento.includes(eq));
+                (ex.equipamentos || []).every(eq => possuiEquipamentoOuAlternativa(eq, equipamentosDisponiveis));
             const localAcademia = perfil.locais?.includes("Academia");
             const exclusivoOk = !ex.exclusivoAcademia || localAcademia;
             const retornoOk = !perfil.retorno || ex.subgrupo === "reabilitação" || ex.peso <= 2;
@@ -270,8 +349,16 @@ function gerarTreino() {
 
     const qtd = Math.min(Math.ceil((tempo / 15) + fatorI), base.length);
     const lista = embaralharArray(base).slice(0, qtd);
+    const listaDetalhada = lista.map(exercicio => {
+        const detalhes = detalharEquipamentos(exercicio, equipamentosDisponiveis);
+        return {
+            ...exercicio,
+            equipamentosDetalhes: detalhes.equipamentosDetalhes,
+            substituicoesTexto: detalhes.substituicoesTexto
+        };
+    });
 
-    localStorage.setItem(chave, JSON.stringify({ tempo, intensidade, grupos, feitos: [], lista }));
+    localStorage.setItem(chave, JSON.stringify({ tempo, intensidade, grupos, feitos: [], lista: listaDetalhada }));
     mostrarTreino(dia, chave);
 }
 
@@ -291,14 +378,47 @@ function mostrarTreino(dia, chave = null) {
     const chaveFinal = chave || ("treino_" + dia);
     const t = JSON.parse(localStorage.getItem(chaveFinal));
     const gruposTxt = (t?.grupos || []).map(g => g.toUpperCase()).join(", ");
+    const perfil = getPerfil();
+    const equipamentosDisponiveis = new Set(perfil.equipamento || []);
+    let precisaPersistir = false;
     if (!t || !t.lista?.length) {
         document.getElementById("treino").innerHTML = `<h3>${dia} - ${gruposTxt}</h3><p>Nenhum treino encontrado</p>`;
         return;
     }
     const lista = t.lista.map((ex, i) => {
         const c = t.feitos.includes(i) ? "checked" : "";
-        return `<li><label><input type="checkbox" onchange="check(${i}, '${chaveFinal}')" ${c}/> <span onclick="abrirModalExercicio('${ex.nome.replace(/'/g, "\\'")}')" style="cursor:pointer; text-decoration:underline;">${ex.nome}</span></label></li>`;
+        const nomeSanitizado = ex.nome.replace(/'/g, "\\'");
+        const detalhes = ex.equipamentosDetalhes
+            ? { equipamentosDetalhes: ex.equipamentosDetalhes, substituicoesTexto: ex.substituicoesTexto }
+            : detalharEquipamentos(ex, equipamentosDisponiveis);
+
+        if (!ex.equipamentosDetalhes && detalhes.equipamentosDetalhes.length) {
+            t.lista[i] = { ...ex, equipamentosDetalhes: detalhes.equipamentosDetalhes, substituicoesTexto: detalhes.substituicoesTexto };
+            precisaPersistir = true;
+        }
+
+        const equipamentosTexto = (detalhes.equipamentosDetalhes || [])
+            .map(item => {
+                const principal = formatEquipamento(item.principal);
+                if (!item.alternativas.length) return principal;
+                const alternativasTxt = item.alternativas.map(formatEquipamento).join(", ");
+                return `${principal} (alternativas: ${alternativasTxt})`;
+            })
+            .join(" • ");
+
+        const equipamentoHint = equipamentosTexto
+            ? `<small class="equip-hint">${equipamentosTexto}</small>`
+            : "";
+
+        const substitutoHint = detalhes.substituicoesTexto
+            ? `<small class="equip-hint equip-hint--alternativa">${detalhes.substituicoesTexto}</small>`
+            : "";
+
+        return `<li><label><input type="checkbox" onchange="check(${i}, '${chaveFinal}')" ${c}/> <span onclick="abrirModalExercicio('${nomeSanitizado}')" style="cursor:pointer; text-decoration:underline;">${ex.nome}</span></label>${equipamentoHint}${substitutoHint}</li>`;
     }).join("");
+    if (precisaPersistir) {
+        localStorage.setItem(chaveFinal, JSON.stringify(t));
+    }
     document.getElementById("treino").innerHTML = `<h3>${dia} - ${gruposTxt}</h3><p>${t.tempo}min | ${t.intensidade}</p><ul class="checklist">${lista}</ul>`;
 }
 
@@ -463,11 +583,36 @@ function abrirModalExercicio(nome) {
     const todosExercicios = Object.values(dadosTreinos).flat();
     const ex = todosExercicios.find(e => e.nome === nome);
     if (!ex) return;
-  
+
+    const perfil = getPerfil();
+    const detalhes = detalharEquipamentos(ex, new Set(perfil.equipamento || []));
+    let html = ex.descricao || "Sem descrição.";
+
+    if (ex.equipamentos?.length) {
+        const itens = detalhes.equipamentosDetalhes.map(item => {
+            const principal = formatEquipamento(item.principal);
+            const alternativas = item.alternativas.map(formatEquipamento);
+            const alternativasTxt = alternativas.length ? ` (alternativas: ${alternativas.join(', ')})` : "";
+            const usoAlternativo = item.utilizado && item.utilizado !== item.principal
+                ? ` — use ${formatEquipamento(item.utilizado)}`
+                : "";
+            return `<li>${principal}${alternativasTxt}${usoAlternativo}</li>`;
+        }).join("");
+        if (itens) {
+            html += `<br><br><strong>Equipamentos:</strong><ul>${itens}</ul>`;
+        }
+    }
+
+    if (detalhes.substituicoesTexto) {
+        html += `<em>${detalhes.substituicoesTexto}</em>`;
+    }
+
+    html += `<br><br><a href="${ex.video}" target="_blank" style="color:blue; text-decoration:underline;">▶️ Ver vídeo no YouTube</a>`;
+
     document.getElementById("modalTitulo").textContent = ex.nome;
-    document.getElementById("modalDescricao").textContent = ex.descricao || "Sem descrição.";
+    const modalDescricao = document.getElementById("modalDescricao");
+    modalDescricao.innerHTML = html;
     document.getElementById("modalVideo").style.display = "none";
-    document.getElementById("modalDescricao").innerHTML += `<br><br><a href="${ex.video}" target="_blank" style="color:blue; text-decoration:underline;">▶️ Ver vídeo no YouTube</a>`;
 
     document.getElementById("modalExercicio").style.display = "flex";
   }
