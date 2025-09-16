@@ -57,6 +57,24 @@ describe('gerarTreino', () => {
       expect(stored.grupos.length).toBe(1);
       expect(stored.grupos[0]).toBe('core');
   });
+
+    test('considera alternativas de equipamento ao filtrar exercícios', () => {
+      const select = document.getElementById('grupoSelect');
+      Array.from(select.options).forEach((opt, idx) => opt.selected = idx === 0);
+      localStorage.setItem('perfil_usuario', JSON.stringify({ equipamento: ['mochila'], locais: ['Casa'] }));
+      __setDadosTreinos({
+        core: [
+          { nome: 'halter substituido', equipamentos: ['halteres'], objetivo: ['forca'], exclusivoAcademia: false, peso: 2 }
+        ]
+      });
+
+      gerarTreino();
+      const dia = new Date().toISOString().slice(0,10);
+      const stored = JSON.parse(localStorage.getItem(`treino_${dia}`));
+      expect(stored.lista).toHaveLength(1);
+      expect(stored.lista[0].equipamentosDetalhes[0]).toMatchObject({ principal: 'halteres', utilizado: 'mochila' });
+      expect(stored.lista[0].substituicoesTexto).toMatch(/Mochila com peso/);
+    });
 });
 
 describe('sugerirGrupo', () => {
