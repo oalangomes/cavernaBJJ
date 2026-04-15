@@ -1,4 +1,4 @@
-const { gerarTreino, calcularSequenciaDias, __setDadosTreinos, sugerirGrupo } = require('../app');
+const { gerarTreino, calcularSequenciaDias, __setDadosTreinos, sugerirGrupo, expandirEquipamentosSelecionados } = require('../app');
 
 describe('calcularSequenciaDias', () => {
   test('calcula maior sequencia', () => {
@@ -13,6 +13,7 @@ describe('gerarTreino', () => {
     document.body.innerHTML = `
       <input id="tempo" value="30" />
       <select id="intensidade"><option value="media" selected>media</option></select>
+      <input id="academiaOnlyModo" type="checkbox" />
       <select id="grupoSelect" multiple>
         <option value="core" selected>core</option>
         <option value="cardio" selected>cardio</option>
@@ -75,6 +76,49 @@ describe('gerarTreino', () => {
       expect(stored.lista[0].equipamentosDetalhes[0]).toMatchObject({ principal: 'halteres', utilizado: 'mochila' });
       expect(stored.lista[0].substituicoesTexto).toMatch(/Mochila com peso/);
     });
+
+    test('expande equipamento de academia para equivalentes base', () => {
+      const select = document.getElementById('grupoSelect');
+      Array.from(select.options).forEach((opt, idx) => opt.selected = idx === 0);
+      localStorage.setItem('perfil_usuario', JSON.stringify({ equipamento: ['maquina_polia'], locais: ['Academia'] }));
+      __setDadosTreinos({
+        core: [
+          { nome: 'puxada', equipamentos: ['barra'], objetivo: ['forca'], exclusivoAcademia: true, peso: 3 }
+        ]
+      });
+
+      gerarTreino();
+      const dia = new Date().toISOString().slice(0,10);
+      const stored = JSON.parse(localStorage.getItem(`treino_${dia}`));
+      expect(stored.lista).toHaveLength(1);
+      expect(stored.lista[0].nome).toBe('puxada');
+    });
+
+    test('filtra apenas exercícios exclusivos quando academia only está ativo', () => {
+      const select = document.getElementById('grupoSelect');
+      Array.from(select.options).forEach((opt, idx) => opt.selected = idx === 0);
+      document.getElementById('academiaOnlyModo').checked = true;
+      localStorage.setItem('perfil_usuario', JSON.stringify({ equipamento: ['barra'], locais: ['Academia'] }));
+      __setDadosTreinos({
+        core: [
+          { nome: 'academia', equipamentos: ['barra'], objetivo: ['forca'], exclusivoAcademia: true, peso: 3 },
+          { nome: 'casa', equipamentos: [], objetivo: ['forca'], exclusivoAcademia: false, peso: 2 }
+        ]
+      });
+
+      gerarTreino();
+      const dia = new Date().toISOString().slice(0,10);
+      const stored = JSON.parse(localStorage.getItem(`treino_${dia}`));
+      expect(stored.academiaOnly).toBe(true);
+      expect(stored.lista.every(ex => ex.exclusivoAcademia)).toBe(true);
+    });
+});
+
+describe('expandirEquipamentosSelecionados', () => {
+  test('inclui equivalentes dos equipamentos de academia', () => {
+    const result = expandirEquipamentosSelecionados(['maquina_guiada']);
+    expect(result).toEqual(expect.arrayContaining(['maquina_guiada', 'barra', 'halteres']));
+  });
 });
 
 describe('sugerirGrupo', () => {

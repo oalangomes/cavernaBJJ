@@ -153,6 +153,21 @@
       "descricao": "Segure garrafas cheias e pressione acima da cabeça alternando os braços, mantendo o tronco estável.",
       "video": "https://www.youtube.com/watch?v=qEwKCR5JCog",
       "exclusivoAcademia": false
+    },
+    {
+      "nome": "Elevação lateral na máquina (3x12)",
+      "subgrupo": "isolamento",
+      "equipamentos": [
+        "halteres"
+      ],
+      "objetivo": [
+        "forca",
+        "hipertrofia"
+      ],
+      "peso": 3,
+      "descricao": "Sente-se com o peito apoiado e eleve os braços lateralmente até a linha dos ombros, mantendo controle na descida.",
+      "video": "https://www.youtube.com/watch?v=3VcKaXpzqRo",
+      "exclusivoAcademia": true
     }
   ],
   "core": [
@@ -318,6 +333,21 @@
       "descricao": "Deitado sobre o colchonete, eleve o quadril contraindo glúteos e abdômen, segurando 2 segundos no topo.",
       "video": "https://www.youtube.com/watch?v=8bbE64NuDTU",
       "exclusivoAcademia": false
+    },
+    {
+      "nome": "Prancha com anilha nas costas (3x40s)",
+      "subgrupo": "estabilidade",
+      "equipamentos": [
+        "banco"
+      ],
+      "objetivo": [
+        "core",
+        "resistencia"
+      ],
+      "peso": 3,
+      "descricao": "Mantenha a prancha enquanto uma anilha é posicionada nas costas, preservando alinhamento de tronco e quadril.",
+      "video": "https://www.youtube.com/watch?v=pSHjTRCQxIw",
+      "exclusivoAcademia": true
     }
   ],
   "pernas": [
@@ -521,6 +551,21 @@
       "descricao": "Fique de pé com uma perna só e eleve o calcanhar o máximo possível, contraindo a panturrilha. Desça lentamente e repita. Apoie-se levemente em uma parede se precisar.",
       "video": "https://www.youtube.com/watch?v=YMmgqO8Jo-k",
       "exclusivoAcademia": false
+    },
+    {
+      "nome": "Cadeira flexora (4x12)",
+      "subgrupo": "isolamento",
+      "equipamentos": [
+        "banco"
+      ],
+      "objetivo": [
+        "forca",
+        "hipertrofia"
+      ],
+      "peso": 4,
+      "descricao": "Deite-se na máquina e flexione os joelhos até contrair posteriores de coxa, retornando lentamente.",
+      "video": "https://www.youtube.com/watch?v=1Tq3QdYUuHs",
+      "exclusivoAcademia": true
     }
   ],
   "fullbody": [
@@ -741,6 +786,21 @@
       "descricao": "Use garrafas cheias como carga para realizar o agachamento seguido do empurrão acima da cabeça em movimento contínuo.",
       "video": "https://www.youtube.com/watch?v=q4ZUlNfKNEw",
       "exclusivoAcademia": false
+    },
+    {
+      "nome": "Levantamento terra com barra (4x6)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "barra"
+      ],
+      "objetivo": [
+        "forca",
+        "condicionamento"
+      ],
+      "peso": 4,
+      "descricao": "Com a barra próxima às canelas, estenda joelhos e quadril mantendo coluna neutra para trabalhar corpo inteiro.",
+      "video": "https://www.youtube.com/watch?v=ytGaGIn3SjE",
+      "exclusivoAcademia": true
     }
   ],
   "cardio": [
@@ -911,6 +971,21 @@
       "descricao": "Marque cones ou objetos no chão e corra em zigue-zague entre eles o mais rápido que puder. Use espaços como corredores ou garagens.",
       "video": "https://www.youtube.com/watch?v=35FWZ_eiMEg",
       "exclusivoAcademia": false
+    },
+    {
+      "nome": "Escada ergométrica (8x1min)",
+      "subgrupo": "cardio",
+      "equipamentos": [
+        "banco"
+      ],
+      "objetivo": [
+        "condicionamento",
+        "resistencia"
+      ],
+      "peso": 3,
+      "descricao": "Faça intervalos de 1 minuto intenso na escada com 1 minuto de recuperação ativa.",
+      "video": "https://www.youtube.com/watch?v=f6T4VQf7dK0",
+      "exclusivoAcademia": true
     }
   ],
   "joelho": [
@@ -1018,6 +1093,21 @@
       "descricao": "Use uma cadeira firme como apoio para subir e descer controlando o movimento e mantendo o joelho alinhado.",
       "video": "https://www.youtube.com/watch?v=QAFD9lJe4iw",
       "exclusivoAcademia": false
+    },
+    {
+      "nome": "Extensão de joelho unilateral na máquina (3x12)",
+      "subgrupo": "reabilitação",
+      "equipamentos": [
+        "banco"
+      ],
+      "objetivo": [
+        "estabilidade",
+        "forca"
+      ],
+      "peso": 2,
+      "descricao": "Execute com carga leve e foco no controle para reforçar quadríceps e estabilidade patelar.",
+      "video": "https://www.youtube.com/watch?v=YyvSfVjQeL0",
+      "exclusivoAcademia": true
     }
   ],
   "dedos": [
@@ -1122,6 +1212,22 @@
       "descricao": "Segure o pano do kimono firmemente com ambas as mãos e mantenha a contração por 20 segundos.",
       "video": "https://www.youtube.com/watch?v=yKqYi8BbJxY",
       "exclusivoAcademia": false
+    },
+    {
+      "nome": "Hang em barra com toalha (4x20s)",
+      "subgrupo": "pegada",
+      "equipamentos": [
+        "barra",
+        "toalha"
+      ],
+      "objetivo": [
+        "pegada",
+        "resistencia"
+      ],
+      "peso": 3,
+      "descricao": "Pendure duas toalhas na barra e sustente o corpo para fortalecer dedos e antebraços.",
+      "video": "https://www.youtube.com/watch?v=5bP9f5X2K8M",
+      "exclusivoAcademia": true
     }
   ],
   "peito": [
@@ -1204,6 +1310,53 @@
       "descricao": "Apoie as mãos na cadeira para reduzir a carga da flexão, mantendo o corpo alinhado durante todo o movimento.",
       "video": "https://www.youtube.com/watch?v=J0DnG1_S92I",
       "exclusivoAcademia": false
+    },
+    {
+      "nome": "Supino reto com barra (4x8)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "barra",
+        "banco"
+      ],
+      "objetivo": [
+        "forca",
+        "hipertrofia"
+      ],
+      "peso": 4,
+      "descricao": "Deite no banco reto, segure a barra com pegada média, desça controlando até a linha do peito e empurre até estender os braços.",
+      "video": "https://www.youtube.com/watch?v=rT7DgCr-3pg",
+      "exclusivoAcademia": true
+    },
+    {
+      "nome": "Crossover no cabo (3x12)",
+      "subgrupo": "isolamento",
+      "equipamentos": [
+        "elastico"
+      ],
+      "objetivo": [
+        "hipertrofia",
+        "forca"
+      ],
+      "peso": 3,
+      "descricao": "Com o tronco levemente inclinado, traga as mãos à frente do corpo em arco, mantendo tensão constante no peitoral.",
+      "video": "https://www.youtube.com/watch?v=taI4XduLpTk",
+      "exclusivoAcademia": true
+    },
+    {
+      "nome": "Supino inclinado com halteres (3x10)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "halteres",
+        "banco"
+      ],
+      "objetivo": [
+        "forca",
+        "hipertrofia"
+      ],
+      "peso": 4,
+      "descricao": "No banco inclinado, desça os halteres até a linha do peito alto e empurre de forma controlada.",
+      "video": "https://www.youtube.com/watch?v=8iPEnn-ltC8",
+      "exclusivoAcademia": true
     }
   ],
   "costas": [
@@ -1304,6 +1457,51 @@
       "descricao": "Segure as alças do suspensor com o corpo inclinado e puxe o peito em direção às mãos mantendo o corpo alinhado.",
       "video": "https://www.youtube.com/results?search_query=remada+invertida+trx",
       "exclusivoAcademia": false
+    },
+    {
+      "nome": "Puxada frontal na polia (4x10)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "barra"
+      ],
+      "objetivo": [
+        "forca",
+        "hipertrofia"
+      ],
+      "peso": 4,
+      "descricao": "Sente-se na máquina, segure a barra com pegada aberta e puxe até a altura do peito, mantendo o tronco estável.",
+      "video": "https://www.youtube.com/watch?v=CAwf7n6Luuc",
+      "exclusivoAcademia": true
+    },
+    {
+      "nome": "Remada baixa sentada (3x12)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "barra"
+      ],
+      "objetivo": [
+        "forca",
+        "postura"
+      ],
+      "peso": 3,
+      "descricao": "Na estação de remada baixa, puxe o cabo em direção ao abdômen sem arredondar a lombar e retorne com controle.",
+      "video": "https://www.youtube.com/watch?v=UCXxvVItLoM",
+      "exclusivoAcademia": true
+    },
+    {
+      "nome": "Remada cavalinho (3x10)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "barra"
+      ],
+      "objetivo": [
+        "forca",
+        "hipertrofia"
+      ],
+      "peso": 4,
+      "descricao": "Com o tronco inclinado e coluna neutra, puxe a barra em direção ao abdômen focando na retração escapular.",
+      "video": "https://www.youtube.com/watch?v=9efgcAjQe7E",
+      "exclusivoAcademia": true
     }
   ],
   "hiit": [
@@ -1386,6 +1584,21 @@
       "descricao": "Empurre o quadril para trás e projete o kettlebell à frente com explosão, mantendo a coluna neutra.",
       "video": "https://www.youtube.com/watch?v=ysqG5WZcgGQ",
       "exclusivoAcademia": false
+    },
+    {
+      "nome": "Assault bike sprint (10x15s)",
+      "subgrupo": "cardio",
+      "equipamentos": [
+        "banco"
+      ],
+      "objetivo": [
+        "hiit",
+        "condicionamento"
+      ],
+      "peso": 4,
+      "descricao": "Realize tiros máximos de 15 segundos na bike com descanso de 45 segundos entre séries.",
+      "video": "https://www.youtube.com/watch?v=R3A9Bf7lV5A",
+      "exclusivoAcademia": true
     }
   ],
   "biceps": [
@@ -1486,6 +1699,22 @@
       "descricao": "Segure garrafas cheias nas mãos e flexione os cotovelos até aproximar as mãos dos ombros mantendo os braços estáveis.",
       "video": "https://www.youtube.com/watch?v=ykJmrZ5v0Oo",
       "exclusivoAcademia": false
+    },
+    {
+      "nome": "Rosca martelo alternada no banco inclinado (3x12)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "halteres",
+        "banco"
+      ],
+      "objetivo": [
+        "forca",
+        "hipertrofia"
+      ],
+      "peso": 3,
+      "descricao": "Com tronco apoiado no banco inclinado, realize rosca martelo alternada sem balançar os ombros.",
+      "video": "https://www.youtube.com/watch?v=zC3nLlEvin4",
+      "exclusivoAcademia": true
     }
   ],
   "triceps": [
@@ -1586,6 +1815,22 @@
       "descricao": "Em barras paralelas, desça e suba o corpo estendendo os cotovelos.",
       "video": "https://www.youtube.com/watch?v=2z8JmcrW-As",
       "exclusivoAcademia": false
+    },
+    {
+      "nome": "Tríceps testa com barra W (3x10)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "barra",
+        "banco"
+      ],
+      "objetivo": [
+        "forca",
+        "hipertrofia"
+      ],
+      "peso": 3,
+      "descricao": "Deitado no banco, flexione os cotovelos levando a barra próxima à testa e estenda sem abrir os cotovelos.",
+      "video": "https://www.youtube.com/watch?v=d_KZxkY_0cM",
+      "exclusivoAcademia": true
     }
   ]
 }
