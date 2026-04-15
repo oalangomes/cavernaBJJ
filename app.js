@@ -120,6 +120,20 @@ function atualizarVisibilidadeEquipamentosAcademia() {
     }
 }
 
+function atualizarVisibilidadeAcademiaOnly() {
+    const container = document.getElementById("academiaOnlyContainer");
+    const toggle = document.getElementById("academiaOnlyToggle");
+    if (!container || !toggle) return;
+
+    const perfil = getPerfil();
+    const temAcademia = Array.isArray(perfil.locais) && perfil.locais.includes("Academia");
+    container.style.display = temAcademia ? "block" : "none";
+
+    if (!temAcademia) {
+        toggle.checked = false;
+    }
+}
+
 async function carregarDados() {
     dadosTreinos = await getDados();
     popularSelectGrupo();
@@ -227,6 +241,7 @@ function editarPerfil() {
 
     document.getElementById("modoRetorno").checked = perfil.retorno || false;
     atualizarVisibilidadeEquipamentosAcademia();
+    atualizarVisibilidadeAcademiaOnly();
 
     exibirCard("perfilCard");
 }
@@ -392,6 +407,8 @@ function gerarTreino() {
     const academiaOnly = document.getElementById("academiaOnlyModo")?.checked || false;
     const fatorI = { leve: 1, media: 2, intensa: 3 }[intensidade];
     const equipamentosDisponiveis = new Set(perfil.equipamento || []);
+    const academiaOnly = document.getElementById("academiaOnlyToggle")?.checked;
+    const localAcademia = perfil.locais?.includes("Academia");
 
     if (academiaOnly && !perfil.locais?.includes("Academia")) {
         alert("Para usar 'Academia only', marque Academia no seu perfil.");
@@ -405,9 +422,8 @@ function gerarTreino() {
         const filtrados = dadosTreinos[grupo].filter(ex => {
             const equipamentosOk = !perfil.equipamento?.length ||
                 (ex.equipamentos || []).every(eq => possuiEquipamentoOuAlternativa(eq, equipamentosDisponiveis));
-            const localAcademia = perfil.locais?.includes("Academia");
             const exclusivoOk = !ex.exclusivoAcademia || localAcademia;
-            const academiaOnlyOk = !academiaOnly || ex.exclusivoAcademia === true;
+            const academiaOnlyOk = !academiaOnly || (localAcademia && ex.exclusivoAcademia);
             const retornoOk = !perfil.retorno || ex.subgrupo === "reabilitação" || ex.peso <= 2;
             return equipamentosOk && exclusivoOk && academiaOnlyOk && retornoOk;
         });
@@ -428,7 +444,14 @@ function gerarTreino() {
         };
     });
 
-    localStorage.setItem(chave, JSON.stringify({ tempo, intensidade, grupos, feitos: [], lista: listaDetalhada, academiaOnly }));
+    localStorage.setItem(chave, JSON.stringify({
+        tempo,
+        intensidade,
+        grupos,
+        feitos: [],
+        lista: listaDetalhada,
+        modoLocal: academiaOnly ? "academia_only" : "misto"
+    }));
     mostrarTreino(dia, chave);
 }
 
@@ -645,6 +668,7 @@ async function iniciar(perfil) {
     document.getElementById("intensidade").disabled = false;
     document.querySelector("button[onclick*='gerarTreino']").disabled = false;
     document.querySelector("button[onclick*='sugerirGrupo']").disabled = false;
+    atualizarVisibilidadeAcademiaOnly();
     exibirCard("mainCard");
 
     await carregarDados();
@@ -737,6 +761,7 @@ window.onload = async () => {
         input.addEventListener("change", atualizarVisibilidadeEquipamentosAcademia);
     });
     atualizarVisibilidadeEquipamentosAcademia();
+    atualizarVisibilidadeAcademiaOnly();
 
 };
 
