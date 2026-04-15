@@ -120,6 +120,20 @@ function atualizarVisibilidadeEquipamentosAcademia() {
     }
 }
 
+function atualizarVisibilidadeAcademiaOnly() {
+    const container = document.getElementById("academiaOnlyContainer");
+    const toggle = document.getElementById("academiaOnlyToggle");
+    if (!container || !toggle) return;
+
+    const perfil = getPerfil();
+    const temAcademia = Array.isArray(perfil.locais) && perfil.locais.includes("Academia");
+    container.style.display = temAcademia ? "block" : "none";
+
+    if (!temAcademia) {
+        toggle.checked = false;
+    }
+}
+
 async function carregarDados() {
     dadosTreinos = await getDados();
     popularSelectGrupo();
@@ -227,6 +241,7 @@ function editarPerfil() {
 
     document.getElementById("modoRetorno").checked = perfil.retorno || false;
     atualizarVisibilidadeEquipamentosAcademia();
+    atualizarVisibilidadeAcademiaOnly();
 
     exibirCard("perfilCard");
 }
@@ -391,19 +406,33 @@ function gerarTreino() {
     const perfil = getPerfil();
     const fatorI = { leve: 1, media: 2, intensa: 3 }[intensidade];
     const equipamentosDisponiveis = new Set(perfil.equipamento || []);
+    const academiaOnly = document.getElementById("academiaOnlyToggle")?.checked;
+    const localAcademia = perfil.locais?.includes("Academia");
 
     let base = [];
-    grupos.forEach(grupo => {
-        const filtrados = dadosTreinos[grupo].filter(ex => {
-            const equipamentosOk = !perfil.equipamento?.length ||
-                (ex.equipamentos || []).every(eq => possuiEquipamentoOuAlternativa(eq, equipamentosDisponiveis));
-            const localAcademia = perfil.locais?.includes("Academia");
-            const exclusivoOk = !ex.exclusivoAcademia || localAcademia;
-            const retornoOk = !perfil.retorno || ex.subgrupo === "reabilitação" || ex.peso <= 2;
-            return equipamentosOk && exclusivoOk && retornoOk;
+    const montarBase = (somenteExclusivoAcademia) => {
+        let acumulado = [];
+        grupos.forEach(grupo => {
+            const filtrados = dadosTreinos[grupo].filter(ex => {
+                const equipamentosOk = !perfil.equipamento?.length ||
+                    (ex.equipamentos || []).every(eq => possuiEquipamentoOuAlternativa(eq, equipamentosDisponiveis));
+                const exclusivoOk = !ex.exclusivoAcademia || localAcademia;
+                const academiaOnlyOk = !somenteExclusivoAcademia || (localAcademia && ex.exclusivoAcademia);
+                const retornoOk = !perfil.retorno || ex.subgrupo === "reabilitação" || ex.peso <= 2;
+                return equipamentosOk && exclusivoOk && academiaOnlyOk && retornoOk;
+            });
+            acumulado = acumulado.concat(filtrados);
         });
-        base = base.concat(filtrados);
-    });
+        return acumulado;
+    };
+
+    base = montarBase(academiaOnly);
+
+    // Fallback: se não houver exercícios marcados como exclusivos de academia,
+    // usa exercícios gerais compatíveis com o perfil para não deixar o treino vazio.
+    if (academiaOnly && base.length === 0) {
+        base = montarBase(false);
+    }
 
     // Remove duplicados pelo nome
     base = Array.from(new Map(base.map(ex => [ex.nome, ex])).values());
@@ -419,7 +448,14 @@ function gerarTreino() {
         };
     });
 
-    localStorage.setItem(chave, JSON.stringify({ tempo, intensidade, grupos, feitos: [], lista: listaDetalhada }));
+    localStorage.setItem(chave, JSON.stringify({
+        tempo,
+        intensidade,
+        grupos,
+        feitos: [],
+        lista: listaDetalhada,
+        modoLocal: academiaOnly ? "academia_only" : "misto"
+    }));
     mostrarTreino(dia, chave);
 }
 
@@ -635,6 +671,7 @@ async function iniciar(perfil) {
     document.getElementById("intensidade").disabled = false;
     document.querySelector("button[onclick*='gerarTreino']").disabled = false;
     document.querySelector("button[onclick*='sugerirGrupo']").disabled = false;
+    atualizarVisibilidadeAcademiaOnly();
     exibirCard("mainCard");
 
     await carregarDados();
@@ -727,6 +764,7 @@ window.onload = async () => {
         input.addEventListener("change", atualizarVisibilidadeEquipamentosAcademia);
     });
     atualizarVisibilidadeEquipamentosAcademia();
+    atualizarVisibilidadeAcademiaOnly();
 
 };
 
