@@ -113,6 +113,25 @@ describe('gerarTreino', () => {
       expect(stored.lista[0].nome).toBe('leg press');
       expect(stored.modoLocal).toBe('academia_only');
     });
+
+    test('faz fallback para exercícios gerais quando academia only não encontra exclusivos', () => {
+      const select = document.getElementById('grupoSelect');
+      Array.from(select.options).forEach((opt, idx) => opt.selected = idx === 0);
+      document.getElementById('academiaOnlyToggle').checked = true;
+      localStorage.setItem('perfil_usuario', JSON.stringify({ equipamento: [], locais: ['Academia'] }));
+      __setDadosTreinos({
+        core: [
+          { nome: 'prancha', equipamentos: [], objetivo: ['core'], exclusivoAcademia: false, peso: 2 }
+        ]
+      });
+
+      gerarTreino();
+      const dia = new Date().toISOString().slice(0,10);
+      const stored = JSON.parse(localStorage.getItem(`treino_${dia}`));
+      expect(stored.lista).toHaveLength(1);
+      expect(stored.lista[0].nome).toBe('prancha');
+      expect(stored.modoLocal).toBe('academia_only');
+    });
 });
 
 describe('expandirEquipamentosSelecionados', () => {

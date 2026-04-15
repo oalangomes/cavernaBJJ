@@ -410,17 +410,29 @@ function gerarTreino() {
     const localAcademia = perfil.locais?.includes("Academia");
 
     let base = [];
-    grupos.forEach(grupo => {
-        const filtrados = dadosTreinos[grupo].filter(ex => {
-            const equipamentosOk = !perfil.equipamento?.length ||
-                (ex.equipamentos || []).every(eq => possuiEquipamentoOuAlternativa(eq, equipamentosDisponiveis));
-            const exclusivoOk = !ex.exclusivoAcademia || localAcademia;
-            const academiaOnlyOk = !academiaOnly || (localAcademia && ex.exclusivoAcademia);
-            const retornoOk = !perfil.retorno || ex.subgrupo === "reabilitação" || ex.peso <= 2;
-            return equipamentosOk && exclusivoOk && academiaOnlyOk && retornoOk;
+    const montarBase = (somenteExclusivoAcademia) => {
+        let acumulado = [];
+        grupos.forEach(grupo => {
+            const filtrados = dadosTreinos[grupo].filter(ex => {
+                const equipamentosOk = !perfil.equipamento?.length ||
+                    (ex.equipamentos || []).every(eq => possuiEquipamentoOuAlternativa(eq, equipamentosDisponiveis));
+                const exclusivoOk = !ex.exclusivoAcademia || localAcademia;
+                const academiaOnlyOk = !somenteExclusivoAcademia || (localAcademia && ex.exclusivoAcademia);
+                const retornoOk = !perfil.retorno || ex.subgrupo === "reabilitação" || ex.peso <= 2;
+                return equipamentosOk && exclusivoOk && academiaOnlyOk && retornoOk;
+            });
+            acumulado = acumulado.concat(filtrados);
         });
-        base = base.concat(filtrados);
-    });
+        return acumulado;
+    };
+
+    base = montarBase(academiaOnly);
+
+    // Fallback: se não houver exercícios marcados como exclusivos de academia,
+    // usa exercícios gerais compatíveis com o perfil para não deixar o treino vazio.
+    if (academiaOnly && base.length === 0) {
+        base = montarBase(false);
+    }
 
     // Remove duplicados pelo nome
     base = Array.from(new Map(base.map(ex => [ex.nome, ex])).values());
