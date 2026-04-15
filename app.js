@@ -38,6 +38,17 @@ const EQUIPAMENTOS_EQUIVALENTES = {
     saco: ["mochila"]
 };
 
+const EQUIPAMENTOS_ACADEMIA_MAP = {
+    maquina_polia: ["elastico", "barra"],
+    maquina_guiada: ["barra", "halteres"],
+    torre_puxada: ["barra", "elastico"],
+    leg_press: ["banco"],
+    cadeira_extensora: ["banco"],
+    cadeira_flexora: ["banco"],
+    esteira: ["corda"],
+    bike_ergometrica: ["corda"]
+};
+
 function formatEquipamento(chave) {
     if (!chave) return "";
     return NOMES_EQUIPAMENTOS[chave] || chave.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase());
@@ -79,6 +90,36 @@ function detalharEquipamentos(exercicio, disponiveis) {
     };
 }
 
+function expandirEquipamentosSelecionados(equipamentos = []) {
+    const selecionados = Array.isArray(equipamentos) ? equipamentos : [];
+    const expandidos = new Set(selecionados);
+    selecionados.forEach(eq => {
+        (EQUIPAMENTOS_ACADEMIA_MAP[eq] || []).forEach(base => expandidos.add(base));
+    });
+    return [...expandidos];
+}
+
+function apenasAcademiaSelecionada(locais = []) {
+    return Array.isArray(locais) && locais.length === 1 && locais[0] === "Academia";
+}
+
+function atualizarVisibilidadeEquipamentosAcademia() {
+    const container = document.getElementById("equipamentosAcademiaExtras");
+    const locaisMarcados = Array
+        .from(document.querySelectorAll('#locais input:checked'))
+        .map(el => el.value);
+
+    if (!container) return;
+    const mostrar = apenasAcademiaSelecionada(locaisMarcados);
+    container.style.display = mostrar ? "block" : "none";
+
+    if (!mostrar) {
+        container.querySelectorAll('input[type="checkbox"]').forEach(input => {
+            input.checked = false;
+        });
+    }
+}
+
 async function carregarDados() {
     dadosTreinos = await getDados();
     popularSelectGrupo();
@@ -115,7 +156,9 @@ function hasTreinoHoje() {
 
 // 🔐 Perfil
 function getPerfil() {
-    return JSON.parse(localStorage.getItem("perfil_usuario") || "{}");
+    const perfil = JSON.parse(localStorage.getItem("perfil_usuario") || "{}");
+    perfil.equipamento = expandirEquipamentosSelecionados(perfil.equipamento || []);
+    return perfil;
 }
 
 async function salvarPerfil() {
@@ -127,14 +170,24 @@ async function salvarPerfil() {
     if (!nome) return alert("Por favor, preencha o campo de nome.");
 
     const locais = getMarcados("locais");
-    const equipamentos = getMarcados("equipamentos");
+    const equipamentosBase = getMarcados("equipamentos");
+    const equipamentosAcademia = getMarcados("equipamentosAcademia");
+    const equipamentos = [...new Set([...equipamentosBase, ...equipamentosAcademia])];
     const objetivos = getMarcados("objetivos");
     const retorno = document.getElementById("modoRetorno").checked;
 
     if (!locais.length || !equipamentos.length || !objetivos.length)
         return alert("Selecione ao menos uma opção em todos os campos.");
 
-    const perfil = { nome, locais, equipamento: equipamentos, objetivos, retorno };
+    const equipamentosExpandidos = expandirEquipamentosSelecionados(equipamentos);
+    const perfil = {
+        nome,
+        locais,
+        equipamento: equipamentosExpandidos,
+        equipamentoSelecionado: equipamentos,
+        objetivos,
+        retorno
+    };
     localStorage.setItem("perfil_usuario", JSON.stringify(perfil));
     alert("Perfil salvo com sucesso!");
 
@@ -161,11 +214,19 @@ function editarPerfil() {
 
     ["locais", "equipamentos", "objetivos"].forEach(grupo => {
         document.querySelectorAll(`#${grupo} input[type=checkbox]`).forEach(input => {
-            input.checked = (perfil[grupo] || perfil.equipamento || []).includes(input.value);
+            const selecionados = grupo === "equipamentos"
+                ? (perfil.equipamentoSelecionado || perfil.equipamento || [])
+                : (perfil[grupo] || []);
+            input.checked = selecionados.includes(input.value);
         });
+    });
+    document.querySelectorAll('#equipamentosAcademia input[type=checkbox]').forEach(input => {
+        const selecionados = perfil.equipamentoSelecionado || perfil.equipamento || [];
+        input.checked = selecionados.includes(input.value);
     });
 
     document.getElementById("modoRetorno").checked = perfil.retorno || false;
+    atualizarVisibilidadeEquipamentosAcademia();
 
     exibirCard("perfilCard");
 }
@@ -662,6 +723,10 @@ window.onload = async () => {
 
     document.getElementById("filtroDataInicio").value = seteDiasAtras.toISOString().slice(0, 10);
     document.getElementById("filtroDataFim").value = hoje.toISOString().slice(0, 10);
+    document.querySelectorAll('#locais input[type="checkbox"]').forEach(input => {
+        input.addEventListener("change", atualizarVisibilidadeEquipamentosAcademia);
+    });
+    atualizarVisibilidadeEquipamentosAcademia();
 
 };
 
@@ -674,6 +739,7 @@ if (typeof module !== 'undefined') {
     calcularSequenciaDias,
     embaralharArray,
     sugerirGrupo,
-    __setDadosTreinos: d => dadosTreinos = d
+    __setDadosTreinos: d => dadosTreinos = d,
+    expandirEquipamentosSelecionados
   };
 }
