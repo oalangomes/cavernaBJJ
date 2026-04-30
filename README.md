@@ -117,3 +117,10 @@ Distribuído sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais det
 ---
 
 > "Na caverna que você teme entrar está o treino que pode te transformar."
+
+
+## Convenção de imagens de exercícios
+
+- Campo opcional no `exercicios.json`: `imagem`.
+- Aceita caminho relativo (ex.: `assets/exercicios/rosca-scott-maquina.jpg`) ou URL externa.
+- Padrão recomendado para arquivos locais: `assets/exercicios/<slug-do-exercicio>.jpg`.

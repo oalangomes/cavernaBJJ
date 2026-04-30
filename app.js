@@ -708,6 +708,18 @@ function abrirModalExercicio(nome) {
     html += `<br><br><a href="${ex.video}" target="_blank" style="color:blue; text-decoration:underline;">▶️ Ver vídeo no YouTube</a>`;
 
     document.getElementById("modalTitulo").textContent = ex.nome;
+    const modalImagem = document.getElementById("modalImagem");
+    if (modalImagem) {
+        if (ex.imagem) {
+            modalImagem.src = ex.imagem;
+            modalImagem.alt = `Imagem do exercício ${ex.nome}`;
+            modalImagem.style.display = "block";
+        } else {
+            modalImagem.removeAttribute("src");
+            modalImagem.style.display = "none";
+        }
+    }
+
     const modalDescricao = document.getElementById("modalDescricao");
     modalDescricao.innerHTML = html;
     document.getElementById("modalVideo").style.display = "none";
@@ -718,6 +730,11 @@ function abrirModalExercicio(nome) {
   function fecharModal() {
     document.getElementById("modalExercicio").style.display = "none";
     document.getElementById("modalVideo").src = ""; // Para parar o vídeo
+    const modalImagem = document.getElementById("modalImagem");
+    if (modalImagem) {
+        modalImagem.removeAttribute("src");
+        modalImagem.style.display = "none";
+    }
   }
 
 // 🌙 Tema escuro
@@ -778,6 +795,7 @@ if (typeof module !== 'undefined') {
     embaralharArray,
     sugerirGrupo,
     __setDadosTreinos: d => dadosTreinos = d,
-    expandirEquipamentosSelecionados
+    expandirEquipamentosSelecionados,
+    abrirModalExercicio
   };
 }
