@@ -45,6 +45,7 @@ const EQUIPAMENTOS_ACADEMIA_MAP = {
     leg_press: ["banco"],
     cadeira_extensora: ["banco"],
     cadeira_flexora: ["banco"],
+    cadeira_adutora: ["miniband"],
     esteira: ["corda"],
     bike_ergometrica: ["corda"]
 };

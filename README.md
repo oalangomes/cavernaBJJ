@@ -39,6 +39,10 @@ O **Caverna BJJ** é um app leve, responsivo e offline para gerar treinos funcio
   - Pode ser adicionado à tela inicial no celular
   - Funciona offline com dados salvos no dispositivo
 
+- 🏢 **Cobertura de máquinas de academia**
+  - Novos exercícios contemplam equipamentos como cadeira adutora e máquina guiada
+  - Mantém compatibilidade com filtros de equipamentos no gerador
+
 - 🔄 **Modo Retorno/Beginner**
   - Ative no perfil para focar em exercícios leves e de reabilitação
   - Seleciona apenas movimentos com `subgrupo` "reabilitação" ou `peso` ≤ 2
