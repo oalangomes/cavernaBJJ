@@ -566,6 +566,53 @@
       "descricao": "Deite-se na máquina e flexione os joelhos até contrair posteriores de coxa, retornando lentamente.",
       "video": "https://www.youtube.com/watch?v=1Tq3QdYUuHs",
       "exclusivoAcademia": true
+    },
+    {
+      "nome": "Adução na máquina (4x12)",
+      "subgrupo": "isolamento",
+      "equipamentos": [
+        "cadeira_adutora"
+      ],
+      "objetivo": [
+        "forca",
+        "adutores",
+        "hipertrofia"
+      ],
+      "peso": 4,
+      "descricao": "Sente-se na cadeira adutora, ajuste o encosto e as almofadas na parte interna das coxas. Feche as pernas contra a resistência, contraindo os adutores, e retorne devagar sem perder o controle.",
+      "video": "https://www.youtube.com/watch?v=yB_vNfN4mP8",
+      "exclusivoAcademia": true
+    },
+    {
+      "nome": "Cadeira extensora unilateral (3x12 por perna)",
+      "subgrupo": "isolamento",
+      "equipamentos": [
+        "cadeira_extensora"
+      ],
+      "objetivo": [
+        "forca",
+        "hipertrofia",
+        "equilibrio"
+      ],
+      "peso": 4,
+      "descricao": "Sente-se na cadeira extensora com boa postura. Estenda uma perna por vez até quase travar o joelho, contraindo quadríceps, e retorne de forma controlada.",
+      "video": "https://www.youtube.com/watch?v=YyvSfVjQeL0",
+      "exclusivoAcademia": true
+    },
+    {
+      "nome": "Leg press 45° (4x10)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "leg_press"
+      ],
+      "objetivo": [
+        "forca",
+        "hipertrofia"
+      ],
+      "peso": 5,
+      "descricao": "Posicione os pés na largura dos ombros na plataforma. Flexione joelhos até o limite confortável e empurre sem estender totalmente, mantendo lombar apoiada.",
+      "video": "https://www.youtube.com/watch?v=IZxyjW7MPJQ",
+      "exclusivoAcademia": true
     }
   ],
   "fullbody": [
@@ -800,6 +847,22 @@
       "peso": 4,
       "descricao": "Com a barra próxima às canelas, estenda joelhos e quadril mantendo coluna neutra para trabalhar corpo inteiro.",
       "video": "https://www.youtube.com/watch?v=ytGaGIn3SjE",
+      "exclusivoAcademia": true
+    },
+    {
+      "nome": "Remada baixa na máquina (3x12)",
+      "subgrupo": "forca",
+      "equipamentos": [
+        "maquina_polia"
+      ],
+      "objetivo": [
+        "forca",
+        "postura",
+        "condicionamento"
+      ],
+      "peso": 4,
+      "descricao": "Sente-se na máquina, mantenha peito aberto e puxe a alça em direção ao abdômen, aproximando escápulas. Retorne com controle sem perder alinhamento.",
+      "video": "https://www.youtube.com/watch?v=GZbfZ033f74",
       "exclusivoAcademia": true
     }
   ],
@@ -1714,6 +1777,36 @@
       "peso": 3,
       "descricao": "Com tronco apoiado no banco inclinado, realize rosca martelo alternada sem balançar os ombros.",
       "video": "https://www.youtube.com/watch?v=zC3nLlEvin4",
+      "exclusivoAcademia": true
+    },
+    {
+      "nome": "Rosca Scott na máquina (4x10)",
+      "subgrupo": "isolamento",
+      "equipamentos": [
+        "maquina_guiada"
+      ],
+      "objetivo": [
+        "forca",
+        "hipertrofia"
+      ],
+      "peso": 4,
+      "descricao": "Ajuste o banco Scott para apoiar totalmente os braços. Com pegada confortável, flexione os cotovelos elevando a carga sem tirar o braço do apoio e desça lentamente até quase estender.",
+      "video": "https://www.youtube.com/watch?v=9M9tV5j7xP8",
+      "exclusivoAcademia": true
+    },
+    {
+      "nome": "Rosca na polia baixa com barra reta (3x12)",
+      "subgrupo": "isolamento",
+      "equipamentos": [
+        "maquina_polia"
+      ],
+      "objetivo": [
+        "forca",
+        "hipertrofia"
+      ],
+      "peso": 4,
+      "descricao": "Em pé, segure a barra reta na polia baixa com cotovelos próximos ao tronco. Flexione os cotovelos elevando a barra e desça lentamente sem balançar o corpo.",
+      "video": "https://www.youtube.com/watch?v=kwG2ipFRgfo",
       "exclusivoAcademia": true
     }
   ],
