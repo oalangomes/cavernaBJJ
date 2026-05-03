@@ -1,4 +1,4 @@
-const { gerarTreino, calcularSequenciaDias, __setDadosTreinos, sugerirGrupo, expandirEquipamentosSelecionados } = require('../app');
+const { gerarTreino, calcularSequenciaDias, __setDadosTreinos, sugerirGrupo, expandirEquipamentosSelecionados, abrirModalExercicio } = require('../app');
 
 describe('calcularSequenciaDias', () => {
   test('calcula maior sequencia', () => {
@@ -155,5 +155,45 @@ describe('sugerirGrupo', () => {
     await sugerirGrupo();
     expect(spy).toHaveBeenCalled();
     spy.mockRestore();
+  });
+});
+
+
+describe('abrirModalExercicio', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    document.body.innerHTML = `
+      <div id="modalExercicio" style="display:none;"></div>
+      <h3 id="modalTitulo"></h3>
+      <img id="modalImagem" style="display:none;" />
+      <p id="modalDescricao"></p>
+      <iframe id="modalVideo" style="display:none;"></iframe>
+    `;
+    localStorage.setItem('perfil_usuario', JSON.stringify({ equipamento: [], locais: ['Casa'] }));
+  });
+
+  test('exibe imagem quando o exercício possui campo imagem', () => {
+    __setDadosTreinos({
+      core: [{ nome: 'prancha', descricao: 'desc', video: 'https://example.com', imagem: 'assets/exercicios/prancha.jpg', equipamentos: [] }]
+    });
+
+    abrirModalExercicio('prancha');
+
+    const imagem = document.getElementById('modalImagem');
+    expect(imagem.style.display).toBe('block');
+    expect(imagem.getAttribute('src')).toBe('assets/exercicios/prancha.jpg');
+    expect(imagem.getAttribute('alt')).toContain('prancha');
+  });
+
+  test('oculta imagem quando o exercício não possui campo imagem', () => {
+    __setDadosTreinos({
+      core: [{ nome: 'canivete', descricao: 'desc', video: 'https://example.com', equipamentos: [] }]
+    });
+
+    abrirModalExercicio('canivete');
+
+    const imagem = document.getElementById('modalImagem');
+    expect(imagem.style.display).toBe('none');
+    expect(imagem.getAttribute('src')).toBeNull();
   });
 });
