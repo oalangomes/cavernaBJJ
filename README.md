@@ -1,130 +1,159 @@
-# 🏋️ Caverna BJJ - Web App de Treinos Funcionais
+# Caverna BJJ
 
-O **Caverna BJJ** é um app leve, responsivo e offline para gerar treinos funcionais. Embora tenha nascido focado em Jiu-Jitsu, hoje contempla um conjunto mais amplo de exercícios gerais. Totalmente baseado no navegador e com armazenamento local, é ideal para treinar em casa, na praça ou na academia, mesmo sem internet.
+**A lightweight, offline-first workout PWA built around a real training use case.**
 
----
+Caverna BJJ started as a personal tool for generating varied conditioning workouts around Brazilian Jiu-Jitsu training. It deliberately avoids a backend, accounts, cloud infrastructure, and unnecessary framework complexity.
 
-## 🚀 Funcionalidades
+The result is a small browser application that works offline, stores data locally, generates workouts from user preferences and recent history, and can be installed as a PWA.
 
-- 👤 **Perfil Personalizado**
-  - Nome, locais de treino, equipamentos e objetivos
-  - Personalização afeta diretamente os treinos sugeridos
+## Why this project exists
 
-- 🧠 **Sugestão Inteligente de Grupos Musculares**
-  - Algoritmo com cooldown de 2 dias
-  - Balanceamento automático por intensidade, tempo e volume
+Training plans are useful only if they are easy to use consistently.
 
-- 🏋️ **Geração de Treino do Dia**
-- Variação de exercícios com base no histórico
-- Evita repetição dos mesmos movimentos no mesmo dia
-- Respeita exercícios marcados como exclusivos de academia de acordo com seu perfil
+For this project, the engineering goal was not to build a fitness platform. It was to make a small tool that:
 
-- 📋 **Checklist interativo**
-  - Marcação de exercícios feitos
-  - Somente treinos com execuções são registrados
+- works on a phone;
+- keeps working without internet access;
+- remembers profile and workout history;
+- avoids excessive exercise repetition;
+- adapts suggestions to available equipment and training context;
+- remains simple to run and maintain.
 
-- 💾 **Histórico de Treinos**
-  - Tabela com filtros por data, grupo, objetivo e intensidade
-  - Exportação em `.csv`
+## Core capabilities
 
-- 📈 **Análise de Evolução**
-  - Tempo total, dias de treino e maior sequência
-  - Painel visual com resumo diário
+- personalized profile with training locations, equipment and goals;
+- workout generation based on exercise metadata and recent history;
+- cooldown logic to reduce repetitive muscle-group selection;
+- configurable workout duration and intensity;
+- interactive workout checklist;
+- local workout history;
+- CSV export;
+- progress summaries such as training days and streaks;
+- exercise descriptions and video references;
+- low-intensity return/beginner mode;
+- installable offline PWA.
 
-- 📹 **Modal com vídeo e descrição**
-  - Clique no nome do exercício para ver instruções e vídeo
-  - Links seguros do YouTube em modal externa
+## Architecture
 
-- 📱 **Instalável como Web App (PWA)**
-  - Pode ser adicionado à tela inicial no celular
-  - Funciona offline com dados salvos no dispositivo
-
-- 🏢 **Cobertura de máquinas de academia**
-  - Novos exercícios contemplam equipamentos como cadeira adutora e máquina guiada
-  - Mantém compatibilidade com filtros de equipamentos no gerador
-
-- 🔄 **Modo Retorno/Beginner**
-  - Ative no perfil para focar em exercícios leves e de reabilitação
-  - Seleciona apenas movimentos com `subgrupo` "reabilitação" ou `peso` ≤ 2
-  - Ao manter constância (5 treinos na semana) o app sugere mais tempo e intensidade
-
----
-
-## 🧩 Tecnologias
-
-- HTML5 + CSS3
-- JavaScript (Vanilla)
-- `localStorage` para persistência
-- PWA com manifest.json (ícone e instalação)
-
----
-
-## 📁 Estrutura do Projeto
-
-```plaintext
-cavernaBJJ/
-├── index.html             # Página principal
-├── app.js                 # Lógica de treino, histórico e perfil
-├── dados.js               # Banco de dados de exercícios com descrição e vídeo
-├── style.css              # Estilização responsiva
-├── manifest.json          # Arquivo PWA
-├── icon-192.png           # Ícone do app
+```text
+browser
+   │
+   ├── profile + workout history
+   │        └── localStorage
+   │
+   ├── workout generation
+   │        ├── app.js
+   │        └── exercise dataset
+   │
+   └── offline shell
+            ├── manifest.json
+            └── service worker
 ```
 
----
+The application is intentionally **local-first**.
 
-## 🛠️ Como usar
+There is no application server or remote database in the core product. User state is persisted in `localStorage`, while the service worker caches the static application shell for offline use.
 
-1. Clone ou baixe os arquivos
-2. Abra o `index.html` no navegador
-3. Configure seu perfil e comece a treinar! 💪
+This keeps deployment and operation simple and makes the trade-off explicit: data stays on the device, but there is no cross-device synchronization.
 
----
+## Tech stack
 
-## 🔄 Modo Retorno/Beginner
+- HTML5
+- CSS3
+- Vanilla JavaScript
+- `localStorage`
+- Web App Manifest
+- Service Worker
+- Jest + jsdom
+- GitHub Actions
 
-No cartão de perfil há uma opção **Retorno/Beginner**. Quando ativada:
+## Project structure
 
-1. O gerador considera apenas exercícios com `subgrupo` "reabilitação" ou com `peso` menor ou igual a 2.
-2. Mantendo constância (5 treinos registrados nos últimos 7 dias), o app aumenta automaticamente a intensidade (até o limite "intensa") e adiciona 15 minutos ao tempo, limitado a 60 min.
+```text
+cavernaBJJ/
+├── index.html
+├── app.js
+├── dados.js
+├── exercicios.json
+├── style.css
+├── manifest.json
+├── sw.js
+├── __tests__/
+└── .github/workflows/test.yml
+```
 
-Esse modo facilita o retorno gradual após pausas ou lesões.
+## Run locally
 
----
+There is no application build step.
 
-## 🧠 Inspiração
+Clone the repository and serve the directory with any local static server. For example:
 
-Criado por **Alan Gomes**, faixa branca apaixonado por Jiu-Jitsu, pai e dev autodidata. O app foi idealizado para tornar os treinos mais eficientes, variados e personalizados — mesmo com pouco tempo ou estrutura — e hoje atende também quem busca condicionamento geral.
+```bash
+git clone https://github.com/oalangomes/cavernaBJJ.git
+cd cavernaBJJ
+python -m http.server 8080
+```
 
----
+Then open:
 
-## 🧪 Em breve
+```text
+http://localhost:8080
+```
 
-- [ ] Compartilhamento de treinos
-- [ ] Avaliação de performance por músculo
-- [ ] Análise por IA com base nas lutas (futuro)
+A local HTTP server is recommended because PWA/service-worker behavior is not reliably exercised by opening `index.html` directly from the filesystem.
 
----
+## Tests
 
-## 📷 Capturas de tela
+Install the development dependencies and run:
 
-| Treino do Dia            | Modal de Exercício          | Histórico de Treinos          |
-|--------------------------|-----------------------------|--------------------------------|
-| ![treino](screens/treino.png) | ![modal](screens/modal.png) | ![historico](screens/historico.png) |
+```bash
+npm install
+npm test
+```
 
----
+The Jest suite uses `jsdom` to exercise browser-oriented behavior such as workout state and `localStorage` persistence.
 
-## 📜 Licença
+GitHub Actions runs the test suite on pushes and pull requests.
 
-Distribuído sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+## Design decisions
 
----
+### No backend by default
 
-> "Na caverna que você teme entrar está o treino que pode te transformar."
+The product does not need authentication, server-side persistence, queues, or APIs to solve its core problem. Keeping those out reduces cost, failure modes and maintenance.
 
+### Vanilla JavaScript
 
-## Convenção de imagens de exercícios
+The application remains small enough that a framework would add more operational and dependency surface than product value.
 
-- Campo opcional no `exercicios.json`: `imagem`.
-- Aceita caminho relativo (ex.: `assets/exercicios/rosca-scott-maquina.jpg`) ou URL externa.
-- Padrão recomendado para arquivos locais: `assets/exercicios/<slug-do-exercicio>.jpg`.
+### Offline-first
+
+The workout flow should remain available in places with poor connectivity. Static assets are cached by the service worker and user state remains on the device.
+
+### Heuristics instead of pretending to be AI
+
+Workout suggestions are produced by explicit application rules and exercise metadata. The project does not label deterministic heuristics as artificial intelligence.
+
+## Limitations
+
+- no account or cloud synchronization;
+- browser storage can be cleared by the user or browser;
+- no server-side backup;
+- workout generation is heuristic, not a physiological optimization model;
+- exercise content and videos require manual maintenance;
+- the project is a training utility, not medical or rehabilitation guidance.
+
+## Screenshots
+
+| Workout | Exercise detail | History |
+|---|---|---|
+| ![Workout](screens/treino.png) | ![Exercise detail](screens/modal.png) | ![History](screens/historico.png) |
+
+## License
+
+MIT. See [LICENSE](LICENSE).
+
+## Author
+
+**Alan Gomes**
+
+Built from a real personal use case as an exercise in keeping product scope and architecture proportional to the problem.
